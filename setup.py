@@ -13,12 +13,13 @@ setup(
     include_package_data=True,
     zip_safe=False,
     install_requires=[
-        'flask',
+        'flask==0.10.1',
+        'flask_login==0.2.11',
         'flask-admin==1.0.8',
-        'flask-wtf',
-        'flask-security',
+        'flask-wtf==0.9.5',
+        'flask-security==1.7.3',
         'flask-sqlalchemy',
-        'wtforms<2.0',
+        'wtforms==1.0.5',
         'py-bcrypt'
     ]
 )
