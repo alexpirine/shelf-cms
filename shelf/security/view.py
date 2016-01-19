@@ -35,8 +35,8 @@ class UserModelView(SQLAModelView):
     def is_accessible(self):
         if request.endpoint == "userview.edit_view" and \
                 int(request.args['id']) == current_user.id:
-            return current_user.is_authenticated() and \
+            return current_user.is_authenticated and \
                     (current_user.has_role('admin') or \
                     current_user.has_role('superadmin'))
-        return current_user.is_authenticated() and \
+        return current_user.is_authenticated and \
                 current_user.has_role('superadmin')

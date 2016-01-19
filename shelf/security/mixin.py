@@ -3,13 +3,13 @@ from flask import redirect, url_for, abort
 
 class LoginMixin:
     def _handle_view(self, name, **kwargs):
-        if not self.is_accessible() and current_user.is_anonymous():
+        if not self.is_accessible() and current_user.is_anonymous:
             return redirect(url_for_security('login', next=url_for(".%s" % name)))
-        if not self.is_accessible() and current_user.is_authenticated():
+        if not self.is_accessible and current_user.is_authenticated:
             abort(403) 
 
     def is_accessible(self):
-        return current_user.is_authenticated() and \
+        return current_user.is_authenticated and \
                 (current_user.has_role('admin') or \
                  current_user.has_role('superadmin'))
        

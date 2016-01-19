@@ -2,7 +2,7 @@ from setuptools import setup, find_packages
 
 setup(
     name='ShelfCMS',
-    version='0.9.1',
+    version='0.9.1.dev',
     url='https://github.com/iriahi/shelf-cms',
     license='BSD',
     author='Ismael Riahi',
@@ -13,13 +13,12 @@ setup(
     include_package_data=True,
     zip_safe=False,
     install_requires=[
-        'flask==0.10.1',
-        'flask_login==0.2.11',
-        'flask-admin==1.0.8',
-        'flask-wtf==0.9.5',
-        'flask-security==1.7.3',
+        'flask',
+        'flask-admin',
+        'flask-wtf',
+        'flask-security',
         'flask-sqlalchemy',
-        'wtforms==1.0.5',
+        'wtforms',
         'py-bcrypt'
     ]
 )

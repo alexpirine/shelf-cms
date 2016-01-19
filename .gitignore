@@ -26,6 +26,9 @@ lib64
 # Installer logs
 pip-log.txt
 
+# Databases
+*.db
+
 # Unit test / coverage reports
 .coverage
 .tox

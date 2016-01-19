@@ -49,7 +49,7 @@
                         </a>
                         <ul class="dropdown-menu">
                             <li class="dropdown-header">Hello, {{ current_user.email }}</li>
-                            <li><a href="{{ url_for('userview.edit_view', id=current_user.id, url=return_url) }}">My profile</a></li>
+                            <li><a href="{{ url_for('user.edit_view', id=current_user.id, url=return_url) }}">My profile</a></li>
                             {% if security.changeable %}
                                 <li><a href="{{ url_for_security('change_password', next=return_url) }}">Change password</a></li>
                             {% endif %}

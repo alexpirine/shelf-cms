@@ -5,7 +5,6 @@ from flask_admin.base import expose
 import os
 from operator import itemgetter
 import os.path as op
-from flask.ext.admin.contrib.fileadmin import UploadForm, NameForm
 from flask.ext.admin import helpers
 from werkzeug import secure_filename
 from base64 import b64decode
@@ -338,7 +337,7 @@ class FileAdmin(LoginMixin, fileadmin.FileAdmin):
             flash(gettext(gettext('Permission denied.')))
             return redirect(self._get_dir_url('.index'))
 
-        form = UploadForm(self)
+        form = self.upload_form()
 
         #print form, helpers.validate_form_on_submit(form), form.data
         if helpers.validate_form_on_submit(form):
