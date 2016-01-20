@@ -44,7 +44,7 @@ class Page:
         self.config = config
 
     def init_app(self, app):
-        self.bp = Blueprint("page", __name__, url_prefix="/page",
+        self.bp = Blueprint("shelfpage", __name__, url_prefix="/page",
             static_folder="static", template_folder="templates")
         app.register_blueprint(self.bp)
 

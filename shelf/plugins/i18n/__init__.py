@@ -161,7 +161,8 @@ class LocalizedField(FieldList):
         self.last_index = index
         name = '%s-%s' % (self.short_name, self.langs[index])
         id = '%s-%s' % (self.id, self.langs[index])
-        field = self.unbound_field.bind(form=None, name=name, prefix=self._prefix, id=id)
+        field = self.unbound_field.bind(form=None, name=name, prefix=self._prefix, id=id, _meta=self.meta,
+                                        translations=self._translations)
         field.process(formdata, data)
         self.entries.append(field)
         return field

@@ -58,7 +58,7 @@ class SQLAModelView(LoginMixin, sqla.ModelView, ActionsMixin):
             for mixin in self.sort_overrides:                
                 if issubclass(sort_field.mapper.class_, mixin):
                     return self.sort_overrides[mixin](query, joins, sort_field, sort_desc)
-        query, joins = sqla.ModelView._order_by(self, query, joins, sort_field, sort_desc)
+        query, joins = sqla.ModelView._order_by(self, query, joins, dict(), sort_field, sort_desc)
         return query, joins
 
     def extend_view(self, endpoint, block, template):
