@@ -1,6 +1,7 @@
 {% extends 'admin/master.html' %}
+{% import 'admin/static.html' as admin_static with context%}
+{% import 'admin/lib.html' as admin_lib with context %}
 {% import 'shelf/lib.html' as lib with context %}
-{% import 'admin/static.html' as admin_static with context %}
 {% import 'shelf/model/layout.html' as model_layout with context %}
 
 {% macro extra_btn() %}
@@ -16,9 +17,8 @@
 
 {% block head %}
     {{ super() }}
-    <link href="{{ admin_static.url(filename='select2/select2.css') }}" rel="stylesheet">
+    {{ admin_lib.form_css() }}
     <link href="{{ url_for('shelf.static', filename='switchery/switchery.min.css') }}" rel="stylesheet">
-    <link href="{{ admin_static.url(filename='datetimepicker/bootstrap-datetimepicker.css') }}" rel="stylesheet">
 {% endblock %}
 
 {% block body %}
@@ -43,10 +43,12 @@
 {% endblock %}
 
 {% block tail_js %}
+    <!-- super -->
     {{ super() }}
-    <script src="{{ admin_static.url(filename='datetimepicker/bootstrap-datetimepicker.js') }}"></script>
+    <!-- hey -->
+    {{ admin_lib.form_js() }}
+    <!-- ho -->
     <script src="{{ url_for('shelf.static', filename='switchery/switchery.min.js') }}"></script>
-    <script src="{{ admin_static.url(filename='admin/js/form.js') }}"></script>
     <script language="javascript">
         (function($) {
             $('a.save-model').click(function (e) {

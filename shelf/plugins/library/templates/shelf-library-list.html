@@ -1,4 +1,5 @@
 {% extends 'admin/master.html' %}
+{% import 'admin/lib.html' as admin_lib with context %}
 {% import 'shelf/lib.html' as lib with context %}
 {% import 'shelf/actions.html' as actionlib with context %}
 
@@ -194,8 +195,8 @@
         
 {% block tail %}
     {{ super() }}
-    <script src="{{ url_for('admin.static', filename='datetimepicker/bootstrap-datetimepicker.js') }}"></script>
-    <script src="{{ url_for('shelf.static', filename='shelf/js/form.js') }}"></script>
+    {{ admin_lib.form_js() }}
+    
     <script src="{{ url_for('admin.static', filename='admin/js/filters.js') }}"></script>
 
     {{ actionlib.script(_gettext('Please select at least one model.'),
