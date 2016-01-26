@@ -9,8 +9,8 @@
 					tinymce.init({
 						selector: "#" + $(event.target).attr('id') + " .wysiwyg-classic",
 			            menubar: false,
-			            toolbar: "bold italic | bullist numlist blockquote | paste link nonbreaking | code",
-			            plugins: "paste,link,code,nonbreaking,autoresize",
+			            toolbar: "bold italic | bullist numlist blockquote | link nonbreaking | code",
+			            plugins: "link,code,nonbreaking,autoresize",
 			            paste_as_text: true,
 			            statusbar: false
 					});
@@ -21,7 +21,7 @@
 						selector: "#" + $(event.target).attr('id') + " .wysiwyg-full",
 			            toolbar: false,
 			            statusbar: false,
-						plugins: "autoresize,paste,image,link,code,searchreplace,table,media"
+						plugins: "autoresize,image,link,code,searchreplace,table,media"
 					});
 				}
 			}
@@ -30,8 +30,8 @@
 		tinymce.init({
 			selector: ".wysiwyg-classic",
             menubar: false,
-            toolbar: "bold italic | bullist numlist blockquote | paste link nonbreaking | code",
-            plugins: "paste,link,code,nonbreaking,autoresize",
+            toolbar: "bold italic | bullist numlist blockquote | link nonbreaking | code",
+            plugins: "link,code,nonbreaking,autoresize",
             paste_as_text: true,
             statusbar: false,
 		});
@@ -39,7 +39,7 @@
 			selector: ".wysiwyg-full",
             toolbar: false,
             statusbar: false,
-			plugins: "autoresize,paste,image,link,code,searchreplace,table,media"
+			plugins: "autoresize,image,link,code,searchreplace,table,media"
 		});
 	})(jQuery);
 </script>
