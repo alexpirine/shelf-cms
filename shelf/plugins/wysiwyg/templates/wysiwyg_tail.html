@@ -10,7 +10,7 @@
 						selector: "#" + $(event.target).attr('id') + " .wysiwyg-classic",
 			            menubar: false,
 			            toolbar: "bold italic | bullist numlist blockquote | link nonbreaking | code",
-			            plugins: "link,code,nonbreaking,autoresize",
+			            plugins: "paste,link,code,nonbreaking,autoresize",
 			            paste_as_text: true,
 			            statusbar: false
 					});
@@ -21,7 +21,9 @@
 						selector: "#" + $(event.target).attr('id') + " .wysiwyg-full",
 			            toolbar: false,
 			            statusbar: false,
-						plugins: "autoresize,image,link,code,searchreplace,table,media"
+						plugins: "paste,autoresize,image,link,code,searchreplace,table,media",
+						paste_as_text: true,
+						removed_menuitems: 'cut paste pastetext'
 					});
 				}
 			}
@@ -31,7 +33,7 @@
 			selector: ".wysiwyg-classic",
             menubar: false,
             toolbar: "bold italic | bullist numlist blockquote | link nonbreaking | code",
-            plugins: "link,code,nonbreaking,autoresize",
+            plugins: "paste,link,code,nonbreaking,autoresize",
             paste_as_text: true,
             statusbar: false,
 		});
@@ -39,7 +41,9 @@
 			selector: ".wysiwyg-full",
             toolbar: false,
             statusbar: false,
-			plugins: "autoresize,image,link,code,searchreplace,table,media"
+			plugins: "paste,autoresize,image,link,code,searchreplace,table,media",
+			paste_as_text: true,
+			removed_menuitems: 'cut paste pastetext'
 		});
 	})(jQuery);
 </script>
