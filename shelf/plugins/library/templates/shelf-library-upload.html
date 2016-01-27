@@ -16,9 +16,9 @@
                     <input type="hidden" name="async" id="async" value="">
                     <div class="form-group" style="text-align: center; margin-bottom: 0px; padding: 10px; background: url({{ url_for('shelf.static', filename='shelf-admin/img/motif_up.png') }}); color: #fff">
                         <i class="fa fa-arrow-circle-down fa-2x"></i><br><br>
-                        <input type="file" name="upload" id="upload" size="chars" style="margin-left: auto; margin-right: auto"><br>
-                        <label for="file">Drag file or upload from your harddrive</label>
+                        <button type="button" class="btn btn-primary" id="upload">Drag file or upload from your harddrive</button>
                     </div>
+                    <input type="file" name="upload" id="upload" size="chars" style="visibility:hidden;">
                 </form>
         </div>
     </div>
@@ -39,7 +39,7 @@
                             </p>
                         </h4>
                             <div class="progress progress-striped active" style="height: 6px; width: 100%">
-                                <div class="progress-bar" role="progressbar progress-success" aria-valuenow="0" aria-valuemin="0" aria-valuemax="100" style="width: 0%;">
+                                <div class="progress-bar progress-success" role="progressbar" aria-valuenow="0" aria-valuemin="0" aria-valuemax="100" style="width: 0%;">
                                     <span class="sr-only">0% Complete</span>
                                 </div>                                    
                             </div>
@@ -58,7 +58,7 @@
                             </p>
                         </h4>
                         <div class="progress progress-striped active" style="height: 6px; width: 100%">
-                            <div class="progress-bar " role="progressbar" aria-valuenow="0" aria-valuemin="0" aria-valuemax="100" style="width: 100%;">
+                            <div class="progress-bar progress-success" role="progressbar" aria-valuenow="0" aria-valuemin="0" aria-valuemax="100" style="width: 0%;">
                             <span class="sr-only">0% Complete</span>
                             </div>
                         </div>
@@ -151,6 +151,13 @@
         }
 
         function upload(files) {
+            $('#files-uploading').show();
+            
+            $('li.actions.validate').addClass('disabled').unbind('click').on('click', function(e) {
+                e.preventDefault();
+                return false;
+            });
+            
             for (var j=0; j < files.length; j++)
             {
                 // Only process image files.
@@ -161,7 +168,20 @@
                 
                 var reader = new FileReader();
                 var f = files[j];
-                 
+                
+                var item = $('#example-file').html();
+                $('#files-list').prepend(item);
+                var el = $('#files-list li').first();
+                el.find('.media-heading .title').html(f.name);
+                
+                documents.push({
+                    'file': f.name,
+                    'size': f.size,
+                    'uploaded': 0,
+                    'type': f.type,
+                    'el': el
+                });
+                
                 reader.onload = (function(f) {
                     return function (evt) {
                         var pic = {};
@@ -217,7 +237,7 @@
             }
         }
         
-        function validate(e) {
+        function validate() {
             var finished = [];
             for (var i=0; i < documents.length; i++)
             {
@@ -228,10 +248,6 @@
             }
             $("input#async").val(JSON.stringify(finished));
             $('#dropfile').submit();
-            
-            if (e) {
-                e.preventDefault();
-            }
         }
         
         $(document).on('dragenter', '#dropfile', function() {
@@ -253,6 +269,14 @@
             return false;
         });
         
+        $('#upload').click(function(e) {
+            $('#jquery_file_fake_selector').click();
+            $('#jquery_file_fake_selector').one('change', function() {
+                upload(this.files);
+                $(this).val('');
+            });
+        });
+        
         $('li.actions.validate').on('click', validate);
         
         $(document).on('drop', '#dropfile', function(e) {
@@ -262,28 +286,6 @@
                     e.preventDefault();
                     e.stopPropagation();
                     $(this).css('background-color', 'black');
-                    for (var i=0; i < e.originalEvent.dataTransfer.files.length; i++)
-                    {
-                        var currentfile = e.originalEvent.dataTransfer.files[i];
-                        
-                        var item = $('#example-file').html();
-                        $('#files-list').prepend(item);
-                        var el = $('#files-list li').first();
-                        el.find('.media-heading .title').html(currentfile.name);
-                        
-                        documents.push({
-                            'file': currentfile.name,
-                            'size': currentfile.size,
-                            'uploaded': 0,
-                            'type': currentfile.type,
-                            'el': el
-                        });
-                        $('#files-uploading').show();
-                        $('li.actions.validate').addClass('disabled').unbind('click').on('click', function(e) {
-                            e.preventDefault();
-                            return false;
-                        });
-                    }
                     
                     // Main function to upload
                     upload(e.originalEvent.dataTransfer.files);
