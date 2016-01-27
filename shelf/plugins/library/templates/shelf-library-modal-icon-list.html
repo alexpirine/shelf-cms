@@ -120,7 +120,7 @@ $('li.actions.validate').click(function() {
     }
     else if ($(this).closest('.form-group').find('input').hasClass('picture'))
     {
-        $(this).closest('.form-group').find('img').attr('src', $('div.thumbnail.selected a').attr('href'));
+        $(this).closest('.form-group').find('img').first().attr('src', $('div.thumbnail.selected a').attr('href'));
         $(this).closest('.form-group').find('input[type=hidden]').val($('div.thumbnail.selected a').attr('href'));
         $(this).closest('.modal').modal('hide');
     }    
