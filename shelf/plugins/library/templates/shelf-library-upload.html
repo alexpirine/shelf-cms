@@ -80,16 +80,10 @@
         {% block model_menu_bar %}
         <ul class="nav navbar-nav navbar-right">
             {% if dir_path %}
-            <li class="actions validate">
-                <a href="{{ url_for('.index', path=dir_path) }}"><i class="fa fa-check"></i>  Validate</a>
-            </li>
             <li class="actions cancel">
                 <a href="{{ url_for('.index', path=dir_path) }}"><i class="fa fa-times"></i>  Cancel</a>
             </li>       
             {% else %}
-            <li class="actions validate">
-                <a href="{{ url_for('.index') }}"><i class="fa fa-check"></i>  Validate</a>
-            </li>
             <li class="actions cancel">
                 <a href="{{ url_for('.index') }}"><i class="fa fa-times"></i>  Cancel</a>
             </li> 
