@@ -110,6 +110,9 @@
                         </tr>
                     {% endfor %}
                 </table>
+                {% if num_pages > 1 %}
+                        {{lib.pager(page, num_pages, pager_url)}}
+                {% endif %}
             {% endblock %}
         </div>
     </div>
@@ -127,17 +130,6 @@
     {{ super() }}
     {% call lib.navbar("%s (%d)" % (admin_view.name, count), pos="bottom") %}
         <ul class="nav navbar-nav">
-            {% if num_pages > 1 %}
-                <li class="dropdown">
-                    <a href="#" class="dropdown-toggle" data-toggle="dropdown">
-                        <i class="fa fa-ellipsis-h"></i> Pagination <b class="caret"></b>
-                    </a>
-                    <div class="dropdown-menu navbar-form form-inline pagination-menu">
-                        {{lib.pager(page, num_pages, pager_url)}}
-                    </div>
-                </li>
-            {% endif %}
-
             {% if filter_groups %}
                 <li>
                     <a href="#" data-toggle="modal" data-target="#filter-modal">
