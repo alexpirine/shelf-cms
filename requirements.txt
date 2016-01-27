@@ -7,6 +7,7 @@ Flask-Principal==0.4.0
 Flask-Security==1.7.5
 Flask-SQLAlchemy==2.1
 Flask-WTF==0.12
+humanize==0.5.1
 itsdangerous==0.24
 Jinja2==2.8
 MarkupSafe==0.23
