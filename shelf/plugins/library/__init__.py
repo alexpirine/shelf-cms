@@ -441,7 +441,7 @@ class FileAdmin(LoginMixin, fileadmin.FileAdmin):
     
     @expose('/list/')
     @expose('/list/b/<path:path>')
-    def list_index(self, path=None):
+    def index(self, path=None):
         """
             Index view method
 

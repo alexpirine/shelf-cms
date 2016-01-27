@@ -75,13 +75,19 @@ var AdminModelActions = function(actionErrorMessage, actionConfirmations) {
         });
 
         $('input.action-checkbox').change(function() {
-            if (this.checked)
-               $(this).closest('tr').addClass('selected');
-            else
+            if (this.checked) {
+                $(this).closest('tr').addClass('selected');
+            }
+            else {
                $(this).closest('tr').removeClass('selected');
+           }
         });
 
         $('.model-list tbody tr').click(function (e) {
+            if ($(this).find('input.action-checkbox').length == 0) {
+                return;
+            }
+            
             /* state switch when row is clicked */
             if ($(this).hasClass('selected'))
             {
