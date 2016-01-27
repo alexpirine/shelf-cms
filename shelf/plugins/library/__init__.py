@@ -202,7 +202,7 @@ class FileAdmin(LoginMixin, fileadmin.FileAdmin):
 
             if self.is_accessible_path(rel_path) and not f.startswith('.'):
                 file_size = op.getsize(fp)
-                file_size = humanize.naturalsize(file_size)
+                file_size = humanize.naturalsize(file_size, format = '%0.f')
                 items.append((f, rel_path, op.isdir(fp), file_size))
                 mimes[rel_path] = 'other'
                 for mime in mime_by_ext:
@@ -274,7 +274,7 @@ class FileAdmin(LoginMixin, fileadmin.FileAdmin):
 
             if self.is_accessible_path(rel_path) and not f.startswith('.'):
                 file_size = op.getsize(fp)
-                file_size = humanize.naturalsize(file_size)
+                file_size = humanize.naturalsize(file_size, format = '%0.f')
                 items.append((f, rel_path, op.isdir(fp), file_size))
                 mimes[rel_path] = 'other'
                 for mime in mime_by_ext:
@@ -411,7 +411,7 @@ class FileAdmin(LoginMixin, fileadmin.FileAdmin):
 
             if self.is_accessible_path(rel_path) and not f.startswith('.'):
                 file_size = op.getsize(fp)
-                file_size = humanize.naturalsize(file_size)
+                file_size = humanize.naturalsize(file_size, format = '%0.f')
                 items.append((f, rel_path, op.isdir(fp), file_size))
                 mimes[rel_path] = 'other'
                 for mime in mime_by_ext:
@@ -484,7 +484,7 @@ class FileAdmin(LoginMixin, fileadmin.FileAdmin):
 
             if self.is_accessible_path(rel_path) and not f.startswith('.'):
                 file_size = op.getsize(fp)
-                file_size = humanize.naturalsize(file_size)
+                file_size = humanize.naturalsize(file_size, format = '%0.f')
                 items.append((f, rel_path, op.isdir(fp), file_size))
                 mimes[rel_path] = 'other'
                 for mime in mime_by_ext:
