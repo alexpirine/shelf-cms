@@ -1,10 +1,12 @@
+import humanize
+import os
+import os.path as op
+
 from flask_admin.contrib import fileadmin
 from flask import Blueprint, flash, url_for, request, json, redirect, render_template
 from flask.ext.admin.babel import gettext, lazy_gettext
 from flask_admin.base import expose
-import os
 from operator import itemgetter
-import os.path as op
 from flask.ext.admin import helpers
 from werkzeug import secure_filename
 from base64 import b64decode
@@ -13,7 +15,6 @@ from flask.ext.admin.form import RenderTemplateWidget
 from shelf.security.mixin import LoginMixin
 
 _unset_value = object()
-
 
 class RemoteFileModelMixin:
     def get_path(self):
@@ -186,7 +187,7 @@ class FileAdmin(LoginMixin, fileadmin.FileAdmin):
                         'image': ('.png', '.jpg', '.jpeg', '.gif'),
                         'video': ('.mpg', '.mpeg', '.wmv', '.mp4', '.flv', '.mov')
                         }
-
+        
         # Parent directory
         if directory != base_path:
             parent_path = op.normpath(op.join(path, '..'))
@@ -194,18 +195,19 @@ class FileAdmin(LoginMixin, fileadmin.FileAdmin):
                 parent_path = None
 
             items.append(('..', parent_path, True, 0))
-
+        
         for f in os.listdir(directory):
             fp = op.join(directory, f)
             rel_path = op.join(path, f)
 
             if self.is_accessible_path(rel_path) and not f.startswith('.'):
-                items.append((f, rel_path, op.isdir(fp), op.getsize(fp)))
+                file_size = op.getsize(fp)
+                file_size = humanize.naturalsize(file_size)
+                items.append((f, rel_path, op.isdir(fp), file_size))
                 mimes[rel_path] = 'other'
                 for mime in mime_by_ext:
                     if op.splitext(rel_path)[1] in mime_by_ext[mime]:
                         mimes[rel_path] = mime
-
 
         # Sort by name
         items.sort(key=itemgetter(0))
@@ -271,7 +273,9 @@ class FileAdmin(LoginMixin, fileadmin.FileAdmin):
             rel_path = op.join(path, f)
 
             if self.is_accessible_path(rel_path) and not f.startswith('.'):
-                items.append((f, rel_path, op.isdir(fp), op.getsize(fp)))
+                file_size = op.getsize(fp)
+                file_size = humanize.naturalsize(file_size)
+                items.append((f, rel_path, op.isdir(fp), file_size))
                 mimes[rel_path] = 'other'
                 for mime in mime_by_ext:
                     if op.splitext(rel_path)[1] in mime_by_ext[mime]:
@@ -406,7 +410,9 @@ class FileAdmin(LoginMixin, fileadmin.FileAdmin):
             rel_path = op.join(path, f)
 
             if self.is_accessible_path(rel_path) and not f.startswith('.'):
-                items.append((f, rel_path, op.isdir(fp), op.getsize(fp)))
+                file_size = op.getsize(fp)
+                file_size = humanize.naturalsize(file_size)
+                items.append((f, rel_path, op.isdir(fp), file_size))
                 mimes[rel_path] = 'other'
                 for mime in mime_by_ext:
                     if op.splitext(rel_path)[1] in mime_by_ext[mime]:
@@ -477,7 +483,9 @@ class FileAdmin(LoginMixin, fileadmin.FileAdmin):
             rel_path = op.join(path, f)
 
             if self.is_accessible_path(rel_path) and not f.startswith('.'):
-                items.append((f, rel_path, op.isdir(fp), op.getsize(fp)))
+                file_size = op.getsize(fp)
+                file_size = humanize.naturalsize(file_size)
+                items.append((f, rel_path, op.isdir(fp), file_size))
                 mimes[rel_path] = 'other'
                 for mime in mime_by_ext:
                     if op.splitext(rel_path)[1] in mime_by_ext[mime]:
