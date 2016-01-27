@@ -161,7 +161,7 @@ class FileAdmin(LoginMixin, fileadmin.FileAdmin):
     upload_template = "shelf-library-upload.html"
     modal_template = "shelf-library-modal-list.html"  
     icon_modal_template = "shelf-library-modal-icon-list.html"
-
+    
     @expose('/modal-icons/')
     @expose('/modal-icons/b/<path:path>')
     def modal_iconic_index(self, path=None):
@@ -374,8 +374,8 @@ class FileAdmin(LoginMixin, fileadmin.FileAdmin):
 
         return self.render(self.upload_template, form=form, dir_path=path)
 
-    @expose('/icons/')
-    @expose('/icons/b/<path:path>')
+    @expose('/')
+    @expose('/b/<path:path>')
     def icon_index(self, path=None):
         # Get path and verify if it is valid
         base_path, directory, path = self._normalize_path(path)
@@ -438,10 +438,10 @@ class FileAdmin(LoginMixin, fileadmin.FileAdmin):
                            mimes=mimes,
                            actions=actions,
                            actions_confirmation=actions_confirmation)
-
-    @expose('/')
-    @expose('/b/<path:path>')
-    def index(self, path=None):
+    
+    @expose('/list/')
+    @expose('/list/b/<path:path>')
+    def list_index(self, path=None):
         """
             Index view method
 
