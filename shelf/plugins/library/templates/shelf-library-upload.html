@@ -39,7 +39,7 @@
                             </p>
                         </h4>
                             <div class="progress progress-striped active" style="height: 6px; width: 100%">
-                                <div class="progress-bar progress-bar-success" role="progressbar" aria-valuenow="0" aria-valuemin="0" aria-valuemax="100" style="width: 0%;">
+                                <div class="progress-bar" role="progressbar progress-success" aria-valuenow="0" aria-valuemin="0" aria-valuemax="100" style="width: 0%;">
                                     <span class="sr-only">0% Complete</span>
                                 </div>                                    
                             </div>
@@ -48,8 +48,7 @@
                         </div>
                     </li>
                 </div>
-
-
+                
                 <ul class="media-list">
                   <li class="media" id="main-progress">
                     <div class="media-body">
@@ -59,7 +58,7 @@
                             </p>
                         </h4>
                         <div class="progress progress-striped active" style="height: 6px; width: 100%">
-                            <div class="progress-bar progress-bar-success" role="progressbar" aria-valuenow="0" aria-valuemin="0" aria-valuemax="100" style="width: 0%;">
+                            <div class="progress-bar " role="progressbar" aria-valuenow="0" aria-valuemin="0" aria-valuemax="100" style="width: 100%;">
                             <span class="sr-only">0% Complete</span>
                             </div>
                         </div>
@@ -105,206 +104,197 @@
     {{ admin_lib.form_js() }}
     
     <script src="{{ url_for('admin.static', filename='admin/js/filters.js') }}"></script>
-
     <script language="javascript">
-        (function($) {
-            var documents = [] // 1 elem au format {'file', 'path', 'size', 'uploaded', 'extension', 'el'}
-            var timer = undefined;
-
-            function updateProgressBar(el, loaded, total)
-            {
-                var percent = (loaded * 100.0) / total;
-                el.find('.progress-bar').width(percent+'%');
-                el.find('.progress-bar').attr({'aria-valuenow': loaded, 'aria-valuemax': total});
+    (function($) {
+        var documents = [] // 1 elem au format {'file', 'path', 'size', 'uploaded', 'extension', 'el'}
+        
+        function updateProgressBar(el, loaded, total, is_total_bar)
+        {
+            var percent = (loaded * 100.0) / total;
+            
+            progress_container = el.find('.progress').first();
+            progress_bar = el.find('.progress-bar').first();
+            check_icon = el.find('.media-heading i').first();
+            
+            progress_bar.width(percent+'%');
+            progress_bar.attr({'aria-valuenow': loaded, 'aria-valuemax': total});
+            progress_bar.addClass('progress-bar-success');
+            
+            if (loaded == total) {
+                check_icon.removeClass('fa-times');
+                check_icon.addClass('fa-check');
+                progress_container.removeClass('active');
+                progress_container.removeClass('progress-striped');
             }
-
-            function updateTotalBar()
-            {
+            else {
+                check_icon.addClass('fa-times');
+                check_icon.removeClass('fa-check');
+                progress_container.addClass('active');
+                progress_container.addClass('progress-striped');
+            }
+            
+            if (!is_total_bar) {
                 var total = 0; 
                 var loaded = 0;
-
+                
                 for (var i in documents)
                 {
                     total += documents[i]['size'];
                     loaded += documents[i]['uploaded'];
                 }
-
-                if (total == loaded)
-                {
-                    $('#main-progress .media-heading i').removeClass('fa-times');
-                    $('#main-progress .media-heading i').addClass('fa-check');
-                    $('#main-progress').find('.progress').removeClass('active');
-                    $('#main-progress').find('.progress').removeClass('progress-striped');
-                }
-                else
-                {
-                    $('#main-progress .media-heading i').addClass('fa-times');
-                    $('#main-progress .media-heading i').removeClass('fa-check');
-                    $('#main-progress').find('.progress').addClass('active');
-                    $('#main-progress').find('.progress').addClass('progress-striped');
-                }
-
-                updateProgressBar($('#main-progress'), loaded, total);
+                
+                updateProgressBar($('#main-progress'), loaded, total, true);
             }
+            else if (total > 0 && loaded == total) {
+                validate()
+            }
+        }
 
-            function upload(files) {
-                for (var j=0; j < files.length; j++)
+        function upload(files) {
+            for (var j=0; j < files.length; j++)
+            {
+                // Only process image files.
+                /*if (!f.type.match('image/jpeg')) {
+                   alert('The file must be a jpeg image') ;
+                   return false ;
+                }*/
+                
+                var reader = new FileReader();
+                var f = files[j];
+                 
+                reader.onload = (function(f) {
+                    return function (evt) {
+                        var pic = {};
+                        pic.file = evt.target.result.split(',')[1];
+                        pic.path = "{{ dir_path }}";
+                        pic.name = f.name;
+                        //pic.filename = evt.target.result.split(',')[0];
+                        
+                        var str = jQuery.param(pic);
+                        var total_upload_size = 0;
+                        
+                        $.ajax({
+                            type: 'POST',
+                            url: '{{ url_for(".async_upload") }}',
+                            data: str,
+                            xhr: function() {
+                                var xhr = new window.XMLHttpRequest();
+                                xhr.upload.addEventListener("progress", function(e) {
+                                    if (!e.lengthComputable) {
+                                        return;
+                                    }
+                                    
+                                    for (var i in documents)
+                                    {
+                                        if (documents[i]['file'] == f.name)
+                                        {                       
+                                            documents[i]['uploaded'] = e.loaded;
+                                            documents[i]['size'] = e.total;
+                                            updateProgressBar(documents[i]['el'], documents[i]['uploaded'], documents[i]['size']);
+                                            break;
+                                        }
+                                    }
+                                }, false);
+                                
+                                return xhr;
+                            },
+                            success: function(data) {
+                                for (var i in documents)
+                                {
+                                    if (documents[i]['file'] == f.name)
+                                    {
+                                        documents[i]['uploaded'] = documents[i]['size'];
+                                        updateProgressBar(documents[i]['el'], documents[i]['uploaded'], documents[i]['size']);
+                                        break;
+                                    }
+                                }
+                            }
+                        });
+                    };
+                })(files[j]);
+              
+                reader.readAsDataURL(f);
+            }
+        }
+        
+        function validate(e) {
+            var finished = [];
+            for (var i=0; i < documents.length; i++)
+            {
+                if (documents[i]['size'] == documents[i]['uploaded'])
                 {
-                     // Only process image files.
-                     /*if (!f.type.match('image/jpeg')) {
-                        alert('The file must be a jpeg image') ;
-                        return false ;
-                     }*/
-
-                     var reader = new FileReader();
-                     var f = files[j];
-
-                     reader.onprogress = (function(f) {
-                        return function(evt) {
-                            for (var i in documents)
-                            {
-                                if (documents[i]['file'] == f.name)
-                                {                       
-                                    if (evt.lengthComputable)
-                                    {
-                                        documents[i]['uploaded'] = evt.loaded;
-                                        documents[i]['size'] = evt.total; 
-                                    }
-
-                                    if (documents[i]['el'] == undefined)
-                                    {
-                                        var item = $('#example-file').html();
-                                        $('#files-list').prepend(item);
-                                        documents[i]['el'] = $('#files-list li').first();
-                                        documents[i]['el'].find('.media-heading .title').html(f.name);
-                                        $('#files-uploading').show();
-                                    }
-                                    updateProgressBar(documents[i]['el'], evt.loaded, evt.total);
-                                    updateTotalBar();
-                                    break;
-                                }
-                            }
-                        };
-                     })(files[j]);
-                  
-                    reader.onload = (function(f) {
-                        return function (evt) {
-                            var pic = {};
-                            pic.file = evt.target.result.split(',')[1];
-                            pic.path = "{{ dir_path }}";
-                            pic.name = f.name;
-                            //pic.filename = evt.target.result.split(',')[0];
-
-                            var str = jQuery.param(pic);
-                            console.log(evt.target.result);
-
-                            console.log(documents, f.name);
-
-                            for (var i in documents)
-                            {
-                                if (documents[i]['file'] == f.name)
-                                {                    
-                                    console.log(f.name, documents[i]['el']);   
-                                    if (documents[i]['el'] == undefined)
-                                    {
-
-                                        var item = $('#example-file').html();
-                                        $('#files-list').prepend(item);
-                                        documents[i]['el'] = $('#files-list li').first();
-                                        documents[i]['el'].find('.media-heading .title').html(fname);
-                                    }
-                                    $('#files-uploading').show();
-                                    updateProgressBar(documents[i]['el'], evt.loaded, evt.total);
-                                    documents[i]['el'].find('.media-heading i').removeClass('fa-times');
-                                    documents[i]['el'].find('.media-heading i').addClass('fa-check');
-                                    documents[i]['el'].find('.progress').removeClass('active');
-                                    documents[i]['el'].find('.progress').removeClass('progress-striped');
-                                    break;
-                                }
-                            }
-                            updateTotalBar();
-                         
-                            $.ajax({
-                                type: 'POST',
-                                url: '{{ url_for(".async_upload") }}',
-                                data: str,
-                                success: function(data) {
-                                    //alert('yes') ;
-                                }
-                            });
-                        };
-                    })(files[j]);
-                  
-                    reader.readAsDataURL(f);
+                    finished.push(documents[i].file);
                 }
             }
-
-            $(document).on('dragenter', '#dropfile', function() {
-                $(this).css('background-color', 'green');
-                return false;
-            });
-             
-            $(document).on('dragover', '#dropfile', function(e){
+            $("input#async").val(JSON.stringify(finished));
+            $('#dropfile').submit();
+            
+            if (e) {
                 e.preventDefault();
-                e.stopPropagation();
-                $(this).css('background-color', 'green');
-                return false;
-            });
-             
-            $(document).on('dragleave', '#dropfile', function(e) {
-                e.preventDefault();
-                e.stopPropagation();
-                $(this).css('background-color', 'black');
-                return false;
-            });
-
-            $('li.actions.validate').click(function () {
-                var finished = [];
-                for (var i=0; i < documents.length; i++)
-                {
-                    if (documents[i]['size'] == documents[i]['uploaded'])
-                    {
-                        finished.push(documents[i].file);
-                    }
-                }
-                $("input#async").val(JSON.stringify(finished));
-                $('#dropfile').submit();
-                event.preventDefault();
-            });
-
-            $(document).on('drop', '#dropfile', function(e) {
-                if(e.originalEvent.dataTransfer){
-                    if(e.originalEvent.dataTransfer.files.length) {
-                       // Stop the propagation of the event
-                       e.preventDefault();
-                       e.stopPropagation();
-                       $(this).css('background-color', 'black');
-
-                       if (timer == undefined)
-                       {
-                            for (var i=0; i < e.originalEvent.dataTransfer.files.length; i++)
-                            {
-                                var currentfile = e.originalEvent.dataTransfer.files[i];
-
-                                console.log(currentfile.name);
-
-                                documents.push({'file': currentfile.name, 'size': currentfile.size, 'uploaded': 0, 'type': currentfile.type, 'el': undefined});
-                            }
-                            
-
-                            updateTotalBar();
-                       }
-
-                       // Main function to upload
-                       upload(e.originalEvent.dataTransfer.files);
-                    }  
-                }
-                else 
-                {
+            }
+        }
+        
+        $(document).on('dragenter', '#dropfile', function() {
+            $(this).css('background-color', 'green');
+            return false;
+        });
+        
+        $(document).on('dragover', '#dropfile', function(e){
+            e.preventDefault();
+            e.stopPropagation();
+            $(this).css('background-color', 'green');
+            return false;
+        });
+        
+        $(document).on('dragleave', '#dropfile', function(e) {
+            e.preventDefault();
+            e.stopPropagation();
+            $(this).css('background-color', 'black');
+            return false;
+        });
+        
+        $('li.actions.validate').on('click', validate);
+        
+        $(document).on('drop', '#dropfile', function(e) {
+            if(e.originalEvent.dataTransfer){
+                if(e.originalEvent.dataTransfer.files.length) {
+                    // Stop the propagation of the event
+                    e.preventDefault();
+                    e.stopPropagation();
                     $(this).css('background-color', 'black');
+                    for (var i=0; i < e.originalEvent.dataTransfer.files.length; i++)
+                    {
+                        var currentfile = e.originalEvent.dataTransfer.files[i];
+                        
+                        var item = $('#example-file').html();
+                        $('#files-list').prepend(item);
+                        var el = $('#files-list li').first();
+                        el.find('.media-heading .title').html(currentfile.name);
+                        
+                        documents.push({
+                            'file': currentfile.name,
+                            'size': currentfile.size,
+                            'uploaded': 0,
+                            'type': currentfile.type,
+                            'el': el
+                        });
+                        $('#files-uploading').show();
+                        $('li.actions.validate').addClass('disabled').unbind('click').on('click', function(e) {
+                            e.preventDefault();
+                            return false;
+                        });
+                    }
+                    
+                    // Main function to upload
+                    upload(e.originalEvent.dataTransfer.files);
                 }
-                return false;
-            });
-        })(jQuery);
+            }
+            else
+            {
+                $(this).css('background-color', 'black');
+            }
+            return false;
+        });
+    })(jQuery);
     </script>
 {% endblock %}
