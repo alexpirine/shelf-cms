@@ -1,3 +1,5 @@
+[![Requirements Status](https://requires.io/github/alexpirine/shelf-cms/requirements.svg?branch=master)](https://requires.io/github/alexpirine/shelf-cms/requirements/?branch=master)
+
 #Shelf CMS
 Enhancing Flask microframework with a beautiful admin and cms-like features 
 ##Uses cases
