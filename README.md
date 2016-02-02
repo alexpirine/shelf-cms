@@ -1,4 +1,4 @@
-[![Requirements Status](https://requires.io/github/alexpirine/shelf-cms/requirements.svg?branch=master)](https://requires.io/github/alexpirine/shelf-cms/requirements/?branch=master)
+[![Build Status](https://travis-ci.org/alexpirine/shelf-cms.svg?branch=master)](https://travis-ci.org/alexpirine/shelf-cms) [![Requirements Status](https://requires.io/github/alexpirine/shelf-cms/requirements.svg?branch=master)](https://requires.io/github/alexpirine/shelf-cms/requirements/?branch=master)
 
 #Shelf CMS
 Enhancing Flask microframework with a beautiful admin and cms-like features 
