@@ -13,12 +13,17 @@ setup(
     include_package_data=True,
     zip_safe=False,
     install_requires=[
-        'flask',
-        'flask-admin',
-        'flask-wtf',
-        'flask-security',
-        'flask-sqlalchemy',
-        'wtforms',
-        'py-bcrypt'
+        'Flask',
+        'Flask-Admin',
+        'Flask-Principal',
+        'Flask-Security',
+        'Flask-SQLAlchemy',
+        'Flask-WTF',
+        'humanize',
+        'Jinja2',
+        'py-bcrypt',
+        'SQLAlchemy',
+        'Werkzeug',
+        'WTForms',
     ]
 )
