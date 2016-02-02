@@ -4,7 +4,8 @@ python:
     - "2.7"
     - "pypy"
 install:
-    - pip install -U pip
-    - python setup.py install
+    - virtualenv ./nodeps
+    - source ./nodeps/bin/activate
+    - ./nodeps/bin/python setup.py install
 script:
-    - python setup.py sdist
+    - ./nodeps/bin/python setup.py sdist
