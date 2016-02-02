@@ -5,7 +5,6 @@ from httplib2 import Http
 from urllib import urlencode
 import datetime
 import calendar
-from flask import current_app
 from shelf.plugins.dashboard.provider import TextProvider, DonutProvider, BarProvider
 
 class AddthisAnalytics:

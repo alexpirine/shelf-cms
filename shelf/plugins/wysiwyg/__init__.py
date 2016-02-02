@@ -1,4 +1,4 @@
-from flask import flash, Blueprint, render_template, render_template_string, current_app
+from flask import flash, Blueprint, render_template, render_template_string
 from wtforms.widgets import TextArea
 from wtforms.fields import TextAreaField
 
