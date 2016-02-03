@@ -15,12 +15,12 @@
                 {% set icons_by_mime = {'image': 'fa-picture-o', 'text': 'fa-file-text', 'video': 'fa-film', 'other': 'fa-file', 'archive': 'fa-save'} %}
                 {% for name, path, is_dir, size in items %}
                     {% if is_dir %}
-                        <div class="col-xs-6"> 
+                        <div class="col-xs-6">
                             <a href="{{ get_dir_url('.modal_iconic_index', path)|safe }}" class="thumbnail link">
                                     <i class="fa fa-folder"></i>
                                     <div class="caption">
                                         <span>{{ name }}</span>
-                                        <br><span class="detail"><!--(nombre sous-éléments)--></span>
+                                        <br><span class="detail"><!--(nombre de sous-éléments)--></span>
                                     </div>
                             </a>
                         </div>
@@ -29,7 +29,7 @@
                             <div style="vertical-align: bottom;" class="thumbnail">               
                                 <img src="{{ get_file_url(path)|safe }}">
                                 <div class="caption">
-                                    <a target="_new" href="{{ get_file_url(path)|safe }}" class="link-file"><span>{{ name }}</span><span class="detail">({{ size }})</span></a>
+                                    <span data-href="{{ get_file_url(path)|safe }}" class="link-file"><span>{{ name }}</span><span class="detail">({{ size }})</span></span>
                                 </div>
                             </div>
                         </div>
@@ -38,7 +38,7 @@
                             <div class="thumbnail">
                                     <i class="fa fa-file"></i>
                                     <div class="caption">
-                                        <a target="_new" href="{{ get_file_url(path)|safe }}" class="link-file"><span>{{ name }}</span><span class="detail">({{ size }})</span></a>
+                                        <span data-href="{{ get_file_url(path)|safe }}" class="link-file"><span>{{ name }}</span><span class="detail">({{ size }})</span></span>
                                     </div>
                             </div>
                         </div>
@@ -110,15 +110,17 @@ $('li.actions.validate').click(function() {
         return;
     }
     
+    var url = $('div.model-icone>div.selected span[data-href]').data('href');
+    
     if ($(this).closest('.form-group').find('input').hasClass('remote-file'))
     {
-        $(this).closest('.form-group').find('input').val($('div.model-icone>div.selected a').attr('href'));
+        $(this).closest('.form-group').find('input').val(url);
         $(this).closest('.modal').modal('hide');
     }
     else if ($(this).closest('.form-group').find('input').hasClass('picture'))
     {
-        $(this).closest('.form-group').find('img').first().attr('src', $('div.model-icone>div.selected a').attr('href'));
-        $(this).closest('.form-group').find('input[type=hidden]').val($('div.model-icone>div.selected a').attr('href'));
+        $(this).closest('.form-group').find('img').first().attr('src', url);
+        $(this).closest('.form-group').find('input[type=hidden]').val(url);
         $(this).closest('.modal').modal('hide');
     }    
 });

@@ -714,9 +714,12 @@ td.center, th.center
     .modalBiblio .model-list tr:not(.file) a {
       font-weight:600;
     }
-    .modalBiblio .model-list a{
+    .modalBiblio .model-list a, .modalBiblio .model-list span[data-href]{
       font-size:1.5rem;
       line-height: 5.5rem;
+    }
+    .modalBiblio .model-list span[data-href] {
+      cursor: pointer;
     }
     .modalBiblio .model-list i{
       color:#4C4C4C;
@@ -791,7 +794,7 @@ td.center, th.center
       .modalBiblio .model-icone .files{
 
       }
-        .modalBiblio .model-icone .link-file{
+        .modalBiblio .model-icone .caption .link-file{
           display:block;
           line-height:1.5rem;
         }

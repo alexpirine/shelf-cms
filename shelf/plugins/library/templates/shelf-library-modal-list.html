@@ -1,30 +1,30 @@
 <div class="modal-dialog">
     <div class="modal-content" style='border-radius: 0px'>
         <div class="modal-header">
-            <button type="button" class="close" data-dismiss="modal" aria-hidden="true"><i class="fa fa-times fa-lg"></i></button>
-            {% if dir_path %}
-            <h1>/{{ dir_path.upper() }}</h1>
-            {% else %}
-            <h1>{{ admin_view.name.upper() }}</h1>
-            {% endif %}
+            <button aria-hidden="true" data-dismiss="modal" class="close" type="button"><i class="fa fa-times fa-lg"></i></button>
+            <h1 class="modalBiblio--title">{{ _gettext("Choose") }}</h1>
+            <div class="modalBiblio--arborescence">
+                <span>{{ _gettext("Root") }}</span><span>{{ dir_path }}</span>
+            </div>
         </div>
-
-
+        {% if dir_path %}
+        <a class="modalBiblio--backParent link" href="{{ get_dir_url('.modal_index', parent_path)|safe }}"><i class="fa fa-arrow-circle-o-left"></i>Dossier parent</a>
+        {% endif %}
         <div class="modal-body"  style="padding: 0px; overflow: hidden">
             <table class="table table-hover model-list modal-img">
                 {% for name, path, is_dir, size in items %}
                 <tr {% if not is_dir %}class="file"{% endif %}>
                     {% if is_dir %}
-                    <td colspan="2">
-                        <i style="width: 20px" class="fa fa-folder"></i> 
-                        <a href="{{ get_dir_url('.modal_index', path)|safe }}" class="link"><span>{{ name }}</span></a>
-                    </td>
+                        <td>
+                            <i style="width: 20px" class="fa fa-folder"></i> 
+                            <a href="{{ get_dir_url('.modal_index', path)|safe }}" class="link"><span>{{ name }}</span><span class="detail"><!--(nombre de sous-éléments)--></span></a>
+                        </td>
                     {% else %}
-                    <td>
-                        {% set icons_by_mime = {'image': 'fa-picture-o', 'text': 'fa-file-text', 'video': 'fa-film', 'other': 'fa-file', 'archive': 'fa-save'} %}
-                        <i style="width: 20px" class="fa {{ icons_by_mime[mimes[path]] }}"></i> 
-                        <a href="{{ get_file_url(path)|safe }}" target="_new"><span>{{ name }}</span></a>
-                    </td>
+                        <td>
+                            {% set icons_by_mime = {'image': 'fa-picture-o', 'text': 'fa-file-text', 'video': 'fa-film', 'other': 'fa-file', 'archive': 'fa-save'} %}
+                            <i style="width: 20px" class="fa {{ icons_by_mime[mimes[path]] }}"></i> 
+                            <span data-href="{{ get_file_url(path)|safe }}"><span>{{ name }}</span><span class="detail">({{ size }})</span></span>
+                        </td>
                     {% endif %}
                 </tr>
                 {% endfor %}
@@ -96,15 +96,21 @@ $('li.actions.cancel').click(function() {
 });
 
 $('li.actions.validate').click(function() {
+    if ($(this).hasClass('disabled')) {
+        return;
+    }
+    
+    var url = $('tr.selected span[data-href]').data('href');
+    
     if ($(this).closest('.form-group').find('input').hasClass('remote-file'))
     {
-        $(this).closest('.form-group').find('input').val($('tr.selected a').attr('href'));
+        $(this).closest('.form-group').find('input').val(url);
         $(this).closest('.modal').modal('hide');
     }
     else if ($(this).closest('.form-group').find('input').hasClass('picture'))
     {
-        $(this).closest('.form-group').find('img').attr('src', $('tr.selected a').attr('href'));
-        $(this).closest('.form-group').find('input[type=hidden]').val($('tr.selected a').attr('href'));
+        $(this).closest('.form-group').find('img').attr('src', url);
+        $(this).closest('.form-group').find('input[type=hidden]').val(url);
         $(this).closest('.modal').modal('hide');
     }    
 });
