@@ -189,12 +189,11 @@ class FileAdmin(LoginMixin, fileadmin.FileAdmin):
                         }
         
         # Parent directory
+        parent_path = None
         if directory != base_path:
             parent_path = op.normpath(op.join(path, '..'))
             if parent_path == '.':
                 parent_path = None
-
-            items.append(('..', parent_path, True, 0))
         
         for f in os.listdir(directory):
             fp = op.join(directory, f)
@@ -226,7 +225,7 @@ class FileAdmin(LoginMixin, fileadmin.FileAdmin):
         actions, actions_confirmation = self.get_actions_list()
 
         return self.render(self.icon_modal_template,
-                           dir_path=path,
+                           dir_path=path, parent_path=parent_path,
                            breadcrumbs=breadcrumbs,
                            get_dir_url=self._get_dir_url,
                            get_file_url=self._get_file_url,
@@ -261,12 +260,11 @@ class FileAdmin(LoginMixin, fileadmin.FileAdmin):
                         }
 
         # Parent directory
+        parent_path = None
         if directory != base_path:
             parent_path = op.normpath(op.join(path, '..'))
             if parent_path == '.':
                 parent_path = None
-
-            items.append(('..', parent_path, True, 0))
 
         for f in os.listdir(directory):
             fp = op.join(directory, f)
@@ -299,7 +297,7 @@ class FileAdmin(LoginMixin, fileadmin.FileAdmin):
         actions, actions_confirmation = self.get_actions_list()
 
         return self.render(self.modal_template,
-                           dir_path=path,
+                           dir_path=path, parent_path=parent_path,
                            breadcrumbs=breadcrumbs,
                            get_dir_url=self._get_dir_url,
                            get_file_url=self._get_file_url,
@@ -398,12 +396,11 @@ class FileAdmin(LoginMixin, fileadmin.FileAdmin):
                         }
 
         # Parent directory
+        parent_path = None
         if directory != base_path:
             parent_path = op.normpath(op.join(path, '..'))
             if parent_path == '.':
                 parent_path = None
-
-            items.append(('..', parent_path, True, 0))
 
         for f in os.listdir(directory):
             fp = op.join(directory, f)
@@ -436,7 +433,7 @@ class FileAdmin(LoginMixin, fileadmin.FileAdmin):
         actions, actions_confirmation = self.get_actions_list()
 
         return self.render(self.icon_list_template,
-                           dir_path=path,
+                           dir_path=path, parent_path=parent_path,
                            breadcrumbs=breadcrumbs,
                            get_dir_url=self._get_dir_url,
                            get_file_url=self._get_file_url,
@@ -471,12 +468,11 @@ class FileAdmin(LoginMixin, fileadmin.FileAdmin):
                         }
 
         # Parent directory
+        parent_path = None
         if directory != base_path:
             parent_path = op.normpath(op.join(path, '..'))
             if parent_path == '.':
                 parent_path = None
-
-            items.append(('..', parent_path, True, 0))
 
         for f in os.listdir(directory):
             fp = op.join(directory, f)
@@ -509,7 +505,7 @@ class FileAdmin(LoginMixin, fileadmin.FileAdmin):
         actions, actions_confirmation = self.get_actions_list()
 
         return self.render(self.list_template,
-                           dir_path=path,
+                           dir_path=path, parent_path=parent_path,
                            breadcrumbs=breadcrumbs,
                            get_dir_url=self._get_dir_url,
                            get_file_url=self._get_file_url,

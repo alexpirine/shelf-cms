@@ -661,6 +661,7 @@ td.center, th.center
   .modalBiblio--title{
     /*font-size:4.8rem; /*48px*/
     line-height:3.0rem;
+    text-transform: uppercase;
   }
   .modalBiblio--arborescence{
     margin:0;
