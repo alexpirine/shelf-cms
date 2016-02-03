@@ -543,7 +543,7 @@ h1
 
 .model-list thead tr th:first-child,
 .model-list tbody tr td:first-child {
-    padding-left: 25px !important;
+    padding-left: 25px;
 }
 
 .model-list:not(.modal-img) tbody tr td:first-child {
@@ -575,27 +575,26 @@ h1
 
 .model-list tbody tr.selected
 {
-  background-color: #fde6d5 !important;
+  background-color: #fde6d7;
 }
 
 .model-list tbody tr.selected td
 {
-  color: #ca9670 !important;
+  color: #c99774;
 }
 
-.model-list tbody tr.selected i
-{
-  color: #e5c4ac !important;
+.model-list tbody tr.selected i, .model-list tbody tr.selected a {
+    color: #c99774;
 }
 
 .model-list tbody tr.selected i:hover
 {
-  color: #ca9670 !important;
+  color: #ca9670;
 }
 
 .model-list tbody tr.selected:hover
 {
-  background-color: #fddabe !important;
+  background-color: #fddabe;
 }
 
 .model-list i
@@ -648,6 +647,319 @@ td.center, th.center
     padding-top: 25px;
     padding-bottom: 15px;
 }
+
+/*
+ * Style de la modal spécifique a la bibliotheque
+ * 
+ */
+.modalBiblio{}
+  /*Le contenu header */
+  .modalBiblio .modal-header{ 
+    padding:40px 36px 28px 36px;
+  }
+
+  .modalBiblio--title{
+    /*font-size:4.8rem; /*48px*/
+    line-height:3.0rem;
+  }
+  .modalBiblio--arborescence{
+    margin:0;
+    padding:0;
+    color:#ff4262;
+    line-height:1.4rem;
+    font-weight:300;
+  }
+    .modalBiblio--arborescence > *{
+      display:inline-block;
+      margin:0 2px 0 0;
+      padding:0;
+    }
+    .modalBiblio--arborescence > *:after{
+      display:inline-block;
+      content:'/';
+      margin:0 0 0 2px;
+      padding:0;
+    }
+    .modalBiblio--arborescence > *:last-child:after{
+      display:none;
+      content:'';
+    }
+  .modalBiblio--backParent{
+    display:block;
+    padding:0px 0 0 36px;
+    color:#4C4C4C;
+    font-size:1.5rem;
+    line-height:6.0rem;
+    font-weight:600;
+    border-bottom:2px solid #c3c3c3;
+  }
+    .modalBiblio--backParent i{
+      margin-right:16px;
+    }
+
+  /*Le contenu central (model-list cest le model par defaut)*/
+  .modalBiblio .model-list{
+    border-top:none;
+  }
+    .modalBiblio .model-list thead tr th:first-child, 
+    .modalBiblio .model-list tbody tr td:first-child{
+      padding-left:36px;
+    }
+
+    .modalBiblio .model-list td{
+      padding-top:0;
+      padding-bottom:0;
+    }
+    .modalBiblio .model-list tr:not(.file) a {
+      font-weight:600;
+    }
+    .modalBiblio .model-list a{
+      font-size:1.5rem;
+      line-height: 5.5rem;
+    }
+    .modalBiblio .model-list i{
+      color:#4C4C4C;
+    }
+    .modalBiblio .model-list .detail{
+      display:inline-block;
+      margin:0 0 0 4px;
+      color:#919191;
+      font-size:1.2rem;
+      font-weight:400;
+    }
+
+    .modalBiblio .model-list tr.addFolder i {
+      color:#919191;
+    }
+    .modalBiblio .model-list tr.addFolder a {
+      color:#919191;
+      font-weight:400;
+      font-style:italic;
+    }
+  /*Le contenu central : model-carre c*/
+  .modalBiblio .model-icone{
+    border-top:none;
+  }
+    .modalBiblio .model-icone > div{
+      background-color:#fff;
+      border-right:1px solid #ededed;
+      border-bottom:1px solid #ededed;
+    }
+
+    .modalBiblio .model-icone > div:nth-child(2n+0){
+      border-right:none;
+    }
+
+      .modalBiblio .model-icone > div:hover{
+        background: #f4f4f4 none repeat scroll 0 0;
+      }
+      .modalBiblio .model-icone > div > a,
+      .modalBiblio .model-icone > div > .thumbnail
+      {
+        display:block;
+        height:210px;
+        margin:0;
+        width:100%;
+        text-align:center;
+        border:none;
+        background-color:transparent;
+      }
+
+      .modalBiblio .model-icone > div > .thumbnail:hover{
+        text-decoration:none;
+      }
+
+      .modalBiblio .model-icone .fa{
+        font-size:5.483rem !important;
+        line-height:5.483rem;
+        margin-top:51px;
+      }
+      .modalBiblio .model-icone > div:not(.files) .caption{
+        font-weight:600;
+      }
+      .modalBiblio .model-icone .caption{
+        display:block;
+        line-height:normal;
+      }
+
+      .modalBiblio .model-icone .detail{
+        display:block;
+      }
+
+      
+      .modalBiblio .model-icone .files{
+
+      }
+        .modalBiblio .model-icone .link-file{
+          display:block;
+          line-height:1.5rem;
+        }
+
+        .modalBiblio .model-icone .files img{
+          position:relative;
+          height:72px;
+          max-width:100%;
+          margin:50px auto 0 auto;
+          padding:0;
+        }
+      
+      .modalBiblio .model-icone .files.selected{
+        background-color: #fde6d7;
+        color: #c99774;
+      }
+        .modalBiblio .model-icone .files.selected a,
+        .modalBiblio .model-icone .files.selected span{
+          color: #c99774;
+        }
+
+    /*Le footer */    
+    .modalBiblio .modal-footer{
+      background-color:#ff9d98;
+
+    }
+
+      .modalBiblio .modal-footer .nav{
+
+      }
+        .modalBiblio .modal-footer .nav-pills li{
+          margin:0;
+          padding:0;
+          border-right:1px solid rgba(255,255,255,0.4);
+        }
+          .modalBiblio .modal-footer .nav-pills li:last-child{
+            border-right:0;
+          }
+          .modalBiblio .modal-footer .nav-pills li.validate{
+            background-color:#ff4262;
+          }
+
+        .modalBiblio .modal-footer .nav-pills a{
+          padding-top:0;padding-bottom:0;
+          color:#fff;
+          line-height:5.6rem;
+          font-size:1.4rem;
+        }
+          .modalBiblio .modal-footer .nav-pills a i{
+            font-size:1.6rem;
+          }
+
+    /*Différence pour la modal d'upload*/
+    .modalBiblio--uploader{}
+    .modalBiblio--uploader .modal-body{
+      max-height:500px!important;
+      border-bottom:none;
+    }
+    .modalBiblio--uploader .model-list{
+      border-bottom:none;
+    }
+
+      /*Zone de drop*/
+        .modalBiblio .clear{
+          clear:both;
+          float:none;
+        }
+        .modalBiblio--zonedrop{
+          height:208px;
+          background-image:  url('./images/bg-zone-upload.png'); 
+          background-repeat:repeat-x;
+          background-position: 0 0;
+          text-align:center;
+        }
+        .modalBiblio--zonedrop span{
+          margin-top:85px;
+          display:inline-block;
+          line-height:normal;
+          color:#FFF;
+        }
+          .modalBiblio--zonedrop .btn{
+            height:inherit;
+            border:1px solid #8f8f8f;
+            background-color:#737373;
+            margin:0;
+            padding:0px 12px;
+            font-size:1.2rem;
+            line-height:2.3rem;
+            color:#FFF;
+            
+            -moz-transition: all 0.25s, height 0s; /* Safari */
+            -webkit-transition: all 0.25s, height 0s; /* Safari */
+              transition: all 0.25s, height 0s;
+          }
+          .modalBiblio--zonedrop .btn i{
+            margin-left:50px;
+          }
+          .modalBiblio--zonedrop .btn:hover{
+            color:#737373;
+            background-color:#fff;
+          }
+
+        .modalBiblio--queue{
+          /*padding-left:36px;
+          padding-right:36px;*/
+        }
+          .modalBiblio--queue-fichier{
+            padding:20px 36px 13px 36px;
+            border-bottom:1px solid #eeeeee;
+          }
+            .modalBiblio--queue-fichier .nom{
+              display:block;
+              float:left;
+              font-size:1.4rem;
+              line-height:1.5rem;
+            }
+            .modalBiblio--queue-fichier a.del{
+              display:block;
+              float:right;
+              line-height:1.5rem;
+              color:#e8e8e8;
+              font-size:1.4rem;
+            }
+            .modalBiblio--queue-fichier .del i
+            {
+              color:#e8e8e8;
+              font-size:1.4rem;
+              -ms-transform: rotate(45deg); /* IE 9 */
+              -webkit-transform: rotate(45deg); /* Safari */
+              transform: rotate(45deg);
+            }
+            .modalBiblio--queue-fichier .progress{
+              width:100%;
+              margin:6px 0 0 0;
+              height:5px;
+            }
+              .modalBiblio--queue-fichier .progress-bar-warning{
+                background-color:#f5e2c3;
+              }
+              .modalBiblio--queue-fichier .progress-bar-success{
+                background-color:#b9e4aa;
+              }
+          .modalBiblio--queue-fichier.actif .nom,
+          .modalBiblio--queue-fichier.actif .nom i
+          {
+            color:#a5a5a5;
+          }
+          .modalBiblio--queue-fichier:last-child{
+            border-bottom:none;
+          }
+      /*Footer*/
+      .modalBiblio--uploader .modal-footer{
+        margin-top:0;
+      }
+      .modalBiblio--uploader .modal-footer li{
+        color:#fff;
+      }
+      .modalBiblio--uploader  .modal-footer .retour a{
+        text-align:left;
+        padding-left:36px;
+      }
+      .modalBiblio--uploader  .modal-footer .nav-pills li.feedback{
+        padding-top:0;padding-bottom:0;
+        padding-right:36px;
+        color:#fff;
+        line-height:5.6rem;
+        font-size:1.4rem;
+        text-align:right;
+      }
 
 /* Edition */
 
