@@ -25,5 +25,17 @@ setup(
         'SQLAlchemy',
         'Werkzeug',
         'WTForms',
-    ]
+    ],
+    classifiers=[
+        'License :: OSI Approved :: BSD License',
+        'Intended Audience :: Developers',
+        'Development Status :: 4 - Beta',
+        'Environment :: Web Environment',
+        'Framework :: Flask',
+        'Topic :: Software Development :: Build Tools',
+        'Topic :: Software Development :: User Interfaces',
+        'Topic :: Internet :: WWW/HTTP :: Dynamic Content',
+        'Programming Language :: Python :: 2',
+        'Programming Language :: Python :: 2.7',
+    ],
 )
