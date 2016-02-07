@@ -3,11 +3,10 @@ from actions import ActionsMixin
 from flask.ext.admin.babel import lazy_gettext, ngettext, gettext
 from flask.ext.admin.actions import action
 from flask.ext.admin.base import AdminIndexView
-from flask import flash, redirect, url_for, request
+from flask import flash, url_for, request
 from sqlalchemy.orm import joinedload
 from flask.ext.admin.contrib.sqla import tools
 from sqlalchemy import or_
-from field import ShelfInlineFieldList
 from form import ModelConverter, InlineModelConverter
 from shelf.security.mixin import LoginMixin
 
@@ -53,12 +52,12 @@ class SQLAModelView(LoginMixin, sqla.ModelView, ActionsMixin):
                             columns[k] = v
         return columns
 
-    def _order_by(self, query, joins, sort_field, sort_desc):
+    def _order_by(self, query, joins, sort_joins, sort_field, sort_desc):
         if hasattr(sort_field, "mapper"):
             for mixin in self.sort_overrides:                
                 if issubclass(sort_field.mapper.class_, mixin):
-                    return self.sort_overrides[mixin](query, joins, sort_field, sort_desc)
-        query, joins = sqla.ModelView._order_by(self, query, joins, dict(), sort_field, sort_desc)
+                    return self.sort_overrides[mixin](query, joins, sort_joins, sort_field, sort_desc)
+        query, joins = sqla.ModelView._order_by(self, query, joins, sort_joins, sort_field, sort_desc)
         return query, joins
 
     def extend_view(self, endpoint, block, template):
@@ -177,12 +176,12 @@ class SQLAModelView(LoginMixin, sqla.ModelView, ActionsMixin):
             if sort_column in self._sortable_columns:
                 sort_field = self._sortable_columns[sort_column]
 
-                query, joins = self._order_by(query, joins, sort_field, sort_desc)
+                query, joins = self._order_by(query, joins, dict(), sort_field, sort_desc)
         else:
             order = self._get_default_order()
 
             if order:
-                query, joins = self._order_by(query, joins, order[0], order[1])
+                query, joins = self._order_by(query, joins, dict(), order[0], order[1])
 
         # Pagination
         if page is not None:

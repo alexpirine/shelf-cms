@@ -1,5 +1,5 @@
-class BaseProvider:
-    def compute():
+class BaseProvider(object):
+    def compute(self):
         raise NotImplementedError
 
 

@@ -4,7 +4,7 @@ from flask.ext.security import Security, SQLAlchemyUserDatastore, url_for_securi
 from security.view import UserModelView
 from werkzeug.utils import import_string
 
-class Shelf:
+class Shelf(object):
     """The Shelf object handles the admin, the plugins and the
     link between them"""
 

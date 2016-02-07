@@ -1,9 +1,9 @@
 from flask import Blueprint
 
-class PreviewableViewMixin:
+class PreviewableViewMixin(object):
     pass
 
-class PreviewableModelMixin:
+class PreviewableModelMixin(object):
     def get_url(self):
         raise NotImplementedError
 
@@ -23,7 +23,7 @@ config = {
     }
 }
 
-class Preview:
+class Preview(object):
     def __init__(self):
         self.config = config
 

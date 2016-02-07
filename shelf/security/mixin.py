@@ -1,7 +1,7 @@
 from flask_security import url_for_security, current_user
 from flask import redirect, url_for, abort
 
-class LoginMixin:
+class LoginMixin(object):
     def _handle_view(self, name, **kwargs):
         if not self.is_accessible() and current_user.is_anonymous:
             return redirect(url_for_security('login', next=url_for(".%s" % name)))
@@ -14,6 +14,6 @@ class LoginMixin:
                  current_user.has_role('superadmin'))
        
 
-class UserPanelMixin:
+class UserPanelMixin(object):
     def additionnal_context(self):        
         return dict(current_user=current_user)

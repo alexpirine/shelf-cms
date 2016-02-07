@@ -2,17 +2,16 @@ from flask import Blueprint
 from os.path import basename
 from wtforms.fields import TextField
 from flask.ext.admin.form import RenderTemplateWidget
-from shelf.admin.view import SQLAModelView
 try:
     from wtforms.utils import unset_value
-except:
+except ImportError:
     unset_value = object()
 
 config = {
     "name": "Slider"
 }
 
-class SlideModelMixin:
+class SlideModelMixin(object):
     def get_picture(self):
         return self.picture
 
@@ -22,7 +21,7 @@ class SlideModelMixin:
         except:
             return ""
 
-class SliderModelMixin:
+class SliderModelMixin(object):
     def get_slides(self):
         return self.slides
 
@@ -61,7 +60,7 @@ class SliderField(TextField):
             del kwargs["slider_view_endpoint"]
         TextField.__init__(self, *args, **kwargs)
 
-class Slider:
+class Slider(object):
     def __init__(self):
         self.config = config
 

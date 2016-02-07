@@ -6,7 +6,7 @@ from flask.ext.admin.form.fields import Select2Field
 
 _unset_value = object()
 
-class OrderViewMixin:
+class OrderViewMixin(object):
     pass
 
 config = {
@@ -46,7 +46,7 @@ config = {
 class PositionField(Select2Field):
     pass
 
-class Order:
+class Order(object):
     def __init__(self):
         self.config = config
 
@@ -69,7 +69,7 @@ class OrderingInlineFormWidget(RenderTemplateWidget):
         return super(OrderingInlineFormWidget, self).__call__(field, **kwargs)
 
 
-class OrderingModelMixin:
+class OrderingModelMixin(object):
     def get_position(self, context=None):
         return self.position
 
@@ -83,7 +83,7 @@ class OrderingModelMixin:
 class OrderingInlineModelFormField(InlineModelFormField):
     widget = OrderingInlineFormWidget()
 
-    def is_position_field(self, name):
+    def is_position_field(self, field):
         return field == self.position_field
 
     def process(self, formdata, data=None):
@@ -107,8 +107,8 @@ class OrderingInlineFieldList(InlineModelFormList):
             'You cannot have more than max_entries entries in this FieldList'
         new_index = self.last_index = index or (self.last_index + 1)
         name = '%s-%d' % (self.short_name, new_index)
-        id   = '%s-%d' % (self.id, new_index)
-        field = self.unbound_field.bind(form=None, name=name, prefix=self._prefix, id=id, _meta=self.meta,
+        field_id   = '%s-%d' % (self.id, new_index)
+        field = self.unbound_field.bind(form=None, name=name, prefix=self._prefix, id=field_id, _meta=self.meta,
                                         translations=self._translations)
         field.size_list = self.size_list
         if hasattr(data, "get_inline_title"):
@@ -147,7 +147,7 @@ class OrderingInlineFieldList(InlineModelFormList):
         else:
             self.size_list = len(data)
             for obj_data in data:
-                new = self._add_entry(formdata, obj_data)                
+                self._add_entry(formdata, obj_data)
 
         while len(self.entries) < self.min_entries:
             self._add_entry(formdata)

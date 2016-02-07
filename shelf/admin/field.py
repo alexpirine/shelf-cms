@@ -13,7 +13,7 @@ class ShelfInlineFieldList(InlineModelFormList):
     form_field_type = ShelfInlineModelFormField
 
     def process(self, formdata, data=_unset_value):
-        res = super(ShelfInlineFieldList, self).process(formdata, data)
+        super(ShelfInlineFieldList, self).process(formdata, data)
         titles = [obj.get_title() for obj in data]
         for i in range(len(self.entries)):
             f = self.entries[i]

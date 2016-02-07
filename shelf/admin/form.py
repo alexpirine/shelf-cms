@@ -1,5 +1,4 @@
 from flask.ext.admin.contrib.sqla import form
-from field import ShelfInlineFieldList
 from shelf.plugins.order import OrderingInlineFieldList
 
 class ModelConverter(form.AdminModelConverter):

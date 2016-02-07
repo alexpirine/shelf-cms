@@ -1,13 +1,12 @@
 from oauth2client.client import SignedJwtAssertionCredentials
 from apiclient.discovery import build
-from oauth2client.file import Storage
 from httplib2 import Http
 from urllib import urlencode
 import datetime
 import calendar
 from shelf.plugins.dashboard.provider import TextProvider, DonutProvider, BarProvider
 
-class AddthisAnalytics:
+class AddthisAnalytics(object):
     def init_app(self, app):
         self.email = app.config.get('ADDTHIS_EMAIL')
         self.password = app.config.get('ADDTHIS_PASSWORD')
@@ -25,7 +24,7 @@ class AddthisAnalytics:
         resp, content = h.request("%s?%s" % (url, urlencode(data)), "GET")
         return content
 
-class GoogleAnalytics:
+class GoogleAnalytics(object):
     DEFAULT_START = datetime.date.today() - datetime.timedelta(days=30)
     DEFAULT_END = datetime.date.today() 
 
@@ -76,7 +75,7 @@ class GoogleAnalytics:
             ptr = results
             if dimensions:
                 for i in range(len(dimensions)):
-                    dim = dimensions[i]
+                    # FIXME dim = dimensions[i]
                     if row[i] not in ptr:
                         ptr[row[i]] = {}
                     ptr = ptr[row[i]]

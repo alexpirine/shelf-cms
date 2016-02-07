@@ -1,10 +1,6 @@
-import datetime
-from flask import render_template, url_for
-from operator import itemgetter
-import math
+from flask import render_template
 
-
-class DashboardWidget:
+class DashboardWidget(object):
     shouldUpdate = False
     template = None
     title = None
@@ -26,7 +22,7 @@ class DashboardWidget:
             return render_template(self.template)
 
 
-class BaseWidget:
+class BaseWidget(object):
     template = None
     title = None
     style = None

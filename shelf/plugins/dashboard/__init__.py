@@ -26,7 +26,7 @@ class DashboardView(LoginMixin, AdminIndexView):
     def index(self):
         return self.render(self._template, widgets=[w.render() for w in self.widgets])
 
-class Dashboard:
+class Dashboard(object):
     def __init__(self):
         self.config = config
 

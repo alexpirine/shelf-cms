@@ -1,17 +1,15 @@
-from wtforms.fields import FieldList, TextField
+from wtforms.fields import FieldList
 from flask import current_app, Blueprint, render_template
 from wtforms.utils import unset_value
-from jinja2 import contextfunction
-from shelf.admin.view import SQLAModelView
 from sqlalchemy.sql.expression import desc
 from flask.ext.admin.form import RenderTemplateWidget
 
 
-class LocalizedViewMixin:
+class LocalizedViewMixin(object):
     pass
 
 
-class LocalizedModelMixin:
+class LocalizedModelMixin(object):
     def get_langs(self):
         return self.translations
 
@@ -44,7 +42,7 @@ class LocalizedModelMixin:
         return self.value
 
 
-def localized_order_by(query, joins, sort_field, sort_desc):
+def localized_order_by(query, joins, sort_joins, sort_field, sort_desc):
     table = sort_field.mapper.tables[0]
     query = query.outerjoin(str(sort_field).split('.')[1])
     joins.add(table.name)
@@ -106,10 +104,10 @@ class LocalizedWidget(RenderTemplateWidget):
     def __init__(self):
         RenderTemplateWidget.__init__(self, "localized-widget.html")
 
-    '''def __call__(self, field, **kwargs):
-        kwargs.setdefault('id', field.id)
-        self.langs = field.langs
-        return render_template("localized-widget.html", id=field.id, field=field, data=field.data, langs=field.langs)'''
+    # def __call__(self, field, **kwargs):
+    #     kwargs.setdefault('id', field.id)
+    #     self.langs = field.langs
+    #     return render_template("localized-widget.html", id=field.id, field=field, data=field.data, langs=field.langs)
 
 class LocalizedField(FieldList):
     widget = LocalizedWidget()
@@ -160,8 +158,8 @@ class LocalizedField(FieldList):
             index = self.last_index + 1
         self.last_index = index
         name = '%s-%s' % (self.short_name, self.langs[index])
-        id = '%s-%s' % (self.id, self.langs[index])
-        field = self.unbound_field.bind(form=None, name=name, prefix=self._prefix, id=id, _meta=self.meta,
+        field_id = '%s-%s' % (self.id, self.langs[index])
+        field = self.unbound_field.bind(form=None, name=name, prefix=self._prefix, id=field_id, _meta=self.meta,
                                         translations=self._translations)
         field.process(formdata, data)
         self.entries.append(field)
@@ -192,7 +190,7 @@ class InternationalField(LocalizedField):
                 **kwargs)
 
 
-class Localized:
+class Localized(object):
     def __init__(self):
         self.config = config
 

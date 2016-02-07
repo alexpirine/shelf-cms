@@ -1,8 +1,8 @@
-from flask import flash, Blueprint, render_template, render_template_string
+from flask import flash, Blueprint
 from wtforms.widgets import TextArea
 from wtforms.fields import TextAreaField
 
-class WysiwygViewMixin:
+class WysiwygViewMixin(object):
     pass
 
 config = {
@@ -51,7 +51,7 @@ class FullWysiwygField(TextAreaField):
     widget = FullWysiwygTextArea()
 
 
-class Wysiwyg:
+class Wysiwyg(object):
     def __init__(self):
         self.config = config
 
