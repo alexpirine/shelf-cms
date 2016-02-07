@@ -5,12 +5,12 @@ from shelf.plugins.workflow import WorkflowViewMixin, StateField
 from shelf.plugins.wysiwyg import ClassicWysiwygField, WysiwygViewMixin
 
 class PostModelView(SQLAModelView, LibraryViewMixin, 
-			   WysiwygViewMixin, WorkflowViewMixin):
-	column_list = ('title', 'state')
-	form_columns = (
+                    WysiwygViewMixin, WorkflowViewMixin):
+    column_list = ('title', 'state')
+    form_columns = (
         "title", "content", "picture", "state"
     )
-	form_overrides = {
+    form_overrides = {
         "content": ClassicWysiwygField,
         "picture": PictureField,
         "state": StateField

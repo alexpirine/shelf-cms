@@ -16,9 +16,9 @@ class Admin(flask_admin.Admin):
             print "test"
         
         if "index_view" not in kwargs:
-        	endpoint = kwargs['endpoint'] if 'endpoint' in kwargs else None
-        	url = kwargs['url'] if 'url' in kwargs else None
-        	kwargs["index_view"] = IndexView(endpoint=endpoint, url=url, template='shelf/index.html')
+            endpoint = kwargs['endpoint'] if 'endpoint' in kwargs else None
+            url = kwargs['url'] if 'url' in kwargs else None
+            kwargs["index_view"] = IndexView(endpoint=endpoint, url=url, template='shelf/index.html')
 
         self.css = []
         self.js = []
