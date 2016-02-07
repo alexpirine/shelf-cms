@@ -10,7 +10,7 @@ REVIEW_STATE = "review"
 PUBLIC_STATE = "published"
 WORKFLOW_STATES = (DRAFT_STATE, REVIEW_STATE, PUBLIC_STATE)
 
-class WorkflowViewMixin:
+class WorkflowViewMixin(object):
     pass
 
 class StateField(HiddenField):
@@ -53,7 +53,7 @@ config = {
     }
 }
 
-class WorkflowModelMixin:
+class WorkflowModelMixin(object):
     def can_publish(self):
         return current_user.has_role(PUBLISHER_ROLE)
 
@@ -84,7 +84,7 @@ class WorkflowModelMixin:
     def get_draft(cls):
         return cls.query.filter_by(cls.state == DRAFT_STATE)
 
-class Workflow:
+class Workflow(object):
     def __init__(self):
         self.config = config
 

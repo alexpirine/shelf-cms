@@ -29,7 +29,7 @@ class PageModelView(SQLAModelView):
 
         return self._edit_form_class(get_form_data(), obj=obj)
 
-class PageModelMixin:
+class PageModelMixin(object):
     def get_title(self):
         return self.title
 
@@ -39,7 +39,7 @@ class PageModelMixin:
     def get_name(self):
         return self.name
 
-class Page:
+class Page(object):
     def __init__(self):
         self.config = config
 

@@ -16,7 +16,7 @@ from shelf.security.mixin import LoginMixin
 
 _unset_value = object()
 
-class RemoteFileModelMixin:
+class RemoteFileModelMixin(object):
     def get_path(self):
         return self.path
 
@@ -29,7 +29,7 @@ class RemoteFileModelMixin:
         return self.path
 
 
-class PictureModelMixin:
+class PictureModelMixin(object):
     def get_path(self, format="source"):
         paths = {}
         if hasattr(self, "format"):
@@ -54,7 +54,7 @@ class PictureModelMixin:
             else:
                 for picformat in self.formats:
                     if picformat.format not in paths:
-                        paths[ficformat.format] = picformat
+                        paths[picformat.format] = picformat
                 if format in picformat:
                     picformat[format].path = path
                 else:
@@ -67,7 +67,7 @@ class PictureModelMixin:
         return self.path
 
 
-class LibraryViewMixin:
+class LibraryViewMixin(object):
     pass
 
 
@@ -162,6 +162,7 @@ class FileAdmin(LoginMixin, fileadmin.FileAdmin):
     upload_template = "shelf-library-upload.html"
     modal_template = "shelf-library-modal-list.html"  
     icon_modal_template = "shelf-library-modal-icon-list.html"
+    upload_modal_template = "shelf-library-modal-upload.html"
     
     @expose('/modal-icons/')
     @expose('/modal-icons/b/<path:path>')
@@ -233,7 +234,7 @@ class FileAdmin(LoginMixin, fileadmin.FileAdmin):
                            mimes=mimes,
                            actions=actions,
                            actions_confirmation=actions_confirmation)
-
+    
     @expose('/modal/')
     @expose('/modal/b/<path:path>')
     def modal_index(self, path=None):
@@ -515,7 +516,7 @@ class FileAdmin(LoginMixin, fileadmin.FileAdmin):
                            actions_confirmation=actions_confirmation)
 
 
-class Library:
+class Library(object):
     def __init__(self):
         self.config = config
 
