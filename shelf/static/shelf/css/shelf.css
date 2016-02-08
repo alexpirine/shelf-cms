@@ -1250,7 +1250,7 @@ h4.media-heading {
     position:relative;
   }
     .l-menulateral >ul{
-      min-width:180px;
+      min-width:210px;
       background:#ffffff;
     }
       .l-menulateral ul li a{
@@ -1278,8 +1278,7 @@ h4.media-heading {
 
 
 /*Petites classes pratique est seule*/
-.posRelative{
-}
+.posRelative{}
 
 
 

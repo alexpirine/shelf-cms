@@ -23,7 +23,7 @@
 
 {% block body %}
     <div class="row create">
-        <div class="col-xs-9">
+        <div class="col-sm-9 col-xs-12">
             <div class="title">
                 {% block model_create_title %}
                     <h1>{{ admin_view.name.upper() }}</h1>
@@ -36,7 +36,7 @@
             </div>
         </div>
 
-    <div class="col-xs-3 l-menulateral">
+    <div class="hidden-xs col-xs-3 l-menulateral">
         <ul class="nav nav-pills nav-stacked" data-spy="affix" data-offset-top="60" data-offset-bottom="0">
             <li class="OK "><a href="#name">Nom</a></li>
             <li class="OK "><a href="#reference">Référence</a></li>
