@@ -23,16 +23,30 @@
 
 {% block body %}
     <div class="row create">
-        <div class="col-xs-12 title">
-            {% block model_create_title %}
-                <h1>{{ admin_view.name.upper() }}</h1>
-            {% endblock %}
+        <div class="col-xs-9">
+            <div class="title">
+                {% block model_create_title %}
+                    <h1>{{ admin_view.name.upper() }}</h1>
+                {% endblock %}
+            </div>
+            <div class="content">
+              {% call lib.form_tag(form) %}
+                  {{ lib.render_form_fields(form, form_opts=form_opts, extra=extra_fld()) }}
+              {% endcall %}
+            </div>
         </div>
-        <div class="col-xs-12 content">
-          {% call lib.form_tag(form) %}
-              {{ lib.render_form_fields(form, form_opts=form_opts, extra=extra_fld()) }}
-          {% endcall %}
-        </div>
+
+    <div class="col-xs-3 l-menulateral">
+        <ul class="nav nav-pills nav-stacked" data-spy="affix" data-offset-top="60" data-offset-bottom="0">
+            <li class="OK "><a href="#name">Nom</a></li>
+            <li class="OK "><a href="#reference">Référence</a></li>
+            <li class="empty "><a href="#is_stock">En stock</a></li>
+            <li class="empty "><a href="#etc">Etc ...</a></li>
+        </ul>
+    </div>
+
+
+    </div><!--HB :  Alex j'ai rajouté cette balise pour fermer la div class="row create" je pense qu'elle manque. Supprime la si elle se ferme ailleur -->
 {% endblock %}
 
 {% block page_body %}

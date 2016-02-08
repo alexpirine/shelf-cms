@@ -631,7 +631,7 @@ td.center, th.center
 .create 
 {
     margin-top: 50px;
-    background-color: #ffffff;
+    /*background-color: #ffffff;/**/
 }
 
 .create .title
@@ -640,6 +640,7 @@ td.center, th.center
     padding-top: 5px;
     padding-bottom: 15px;
     padding-left: 25px;
+    background-color: #ffffff;
 }
 
 .create .content
@@ -1245,6 +1246,40 @@ h4.media-heading {
   margin-bottom: 0;
 }
 
+  .l-menulateral{
+    position:relative;
+  }
+    .l-menulateral >ul{
+      min-width:180px;
+      background:#ffffff;
+    }
+      .l-menulateral ul li a{
+        font-size:1.4rem;
+        color:#4c4c4c;
+        border-bottom:1px solid #ededed;
+        padding-left:24px;
+      }
+        .l-menulateral ul li a:before{
+          display:inline-block;
+          content:' ';
+          width:9px;
+          height:9px;
+          margin:0 20px 0 0;
+          -webkit-border-radius: 50%;
+          -moz-border-radius: 50%;
+          border-radius: 50%;
+          background:#a3d9ac;
+        }
+
+      .l-menulateral ul li.ok a{}
+      .l-menulateral ul li.empty a:before{background:#d0d0d0;} 
+
+
+
+
+/*Petites classes pratique est seule*/
+.posRelative{
+}
 
 
 

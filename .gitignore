@@ -41,6 +41,8 @@ nosetests.xml
 .mr.developer.cfg
 .project
 .pydevproject
+*.sublime-project
+*.sublime-workspace
 
 # Virtualenv
 env
