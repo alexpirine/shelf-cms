@@ -417,6 +417,7 @@ ul.nav > li.disabled > a
     right: 0px;
     left: 0px;
     bottom: 30px;
+    z-index:10;
 }
 
 .alert-success
@@ -1246,6 +1247,12 @@ h4.media-heading {
   margin-bottom: 0;
 }
 
+/*                      */
+/*    CLASSES REPEAT    */
+/*   blocs,             */
+/*                      */
+
+  /*-> menu lateral fixed (raccourcies) */
   .l-menulateral{
     position:relative;
   }
@@ -1274,11 +1281,27 @@ h4.media-heading {
       .l-menulateral ul li.ok a{}
       .l-menulateral ul li.empty a:before{background:#d0d0d0;} 
 
-
+  /*-> Style menu de tabulation*/
+    .nav-tabs--grey > li > a{
+      color:#4c4c4c;
+      border:1px solid #ddd;
+    }
+    .nav-tabs--grey > li.active > a,
+    .nav-tabs--grey > li.active > a:focus
+    {
+      background:#ddd;
+    }
 
 
 /*Petites classes pratique est seule*/
 .posRelative{}
+
+/*surdefini la classe .dropdown-toggle de bootstrap */
+.dropdown-toggle--chevron i{
+  display:inline-block;
+  margin-left:6px;
+}
+
 
 
 

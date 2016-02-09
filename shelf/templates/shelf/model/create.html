@@ -22,7 +22,100 @@
 {% endblock %}
 
 {% block body %}
+
+<!-- Exemple des integratoins -->
+<div class="row">
+<div class="col-xs-12">
+<!-- Formulaire Champs statique pour intégration css -->
+<form>
+    <!-- Champ texte ac traduction -->
+    <div class="form-group ">
+        <label for="testTitle">Test title</label>
+        <div class="input-group">
+          <div class="input-group-btn">
+            <button type="button" class="btn btn-default dropdown-toggle dropdown-toggle--chevron" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">FR <i class="fa fa-angle-down"></i></button>
+            <ul class="dropdown-menu">
+              <li><a href="#">Fançais (french)</a></li>
+              <li><a href="#">Anglais (english)</a></li>
+              <li><a href="#">Espagnol (spanish)</a></li>
+            </ul>
+          </div><!-- /btn-group -->
+          <input id ="testTitle"type="text" class="form-control" placeholder="Title exemple" required="required">
+        </div><!-- /input-group -->
+    </div><!-- . -->
+
+    <div class="form-group">
+        <label for="testSubTitle">Champ normal</label>
+        <input id ="testSubTitle" type="text" class="form-control" placeholder="subtitle exemple" required="required" >
+    </div><!--  . -->
+
+
+    <div class="form-group">
+        <label for="testlien">Url/lien</label>
+        <div class="input-group">
+            <input id="testlien" type="text" class="form-control" placeholder="URL" aria-describedby="basic-addon2">
+            <span class="input-group-addon" id="basic-addon2">
+                <span class="glyphicon glyphicon-link" aria-hidden="true"></span>
+            </span>
+        </div>
+    </div>
+
+<!-- Les feedback visuel sur les champ (a appliquer en js)-->
+    <div class="form-group has-success has-feedback">
+        <label for="">Test succes</label>
+        <input id ="" type="text" class="form-control" >
+        <span class="glyphicon glyphicon-ok form-control-feedback" aria-hidden="true"></span>
+    </div>
+
+    <div class="form-group has-error has-feedback ">
+        <label for="">Test error</label>
+        <input id ="" type="text" class="form-control" >
+        <span class="glyphicon glyphicon-remove form-control-feedback" aria-hidden="true"></span>
+    </div>
+<!-- /end feedback visuel sur les champs -->
+
+
+<!-- Tool tips info sur les champs-->
+    <div class="form-group ">
+        <label for="" data-toggle="tooltip" data-placement="top" title="Pas d'accents n'y d'espace !">Infos champs en tooltip ?</label>
+        <input id ="" type="text" class="form-control" >
+    </div>
+<!-- /end tooltip -->
+
+
+<div>
+  <!-- Nav tabs -->
+  <ul class="nav nav-tabs nav-tabs--grey" role="tablist">
+    <li role="presentation" class="active"><a href="#fr-dec" aria-controls="fr-desc" role="tab" data-toggle="tab">FR</a></li>
+    <li role="presentation"><a href="#en-desc" aria-controls="en-desc" role="tab" data-toggle="tab">EN</a></li>
+    <li role="presentation"><a href="#es-desc" aria-controls="es-desc" role="tab" data-toggle="tab">ES</a></li>
+  </ul>
+
+  <!-- Tab panes -->
+  <div class="tab-content">
+    <div role="tabpanel" class="tab-pane active" id="fr-desc">FR...</div>
+    <div role="tabpanel" class="tab-pane" id="en-desc">EN...</div>
+    <div role="tabpanel" class="tab-pane" id="es-desc">ES...</div>
+  </div>
+</div>
+</form>
+<!-- End champ statique formulaire -->
+
+<!-- Les feedback apres validation du form (retour serveur) -->
+    <div class="alert alert-danger alert-dismissible fade in" role="alert"> <button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">×</span></button> <h4>Oh snap! You got an error!</h4> <p>Change this and that and try again. Duis mollis, est non commodo luctus, nisi erat porttitor ligula, eget lacinia odio sem nec elit. Cras mattis consectetur purus sit amet fermentum.</p> </div>
+
+    <div class="alert alert-success alert-dismissible fade in" role="alert"> <button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">×</span></button> <h4>Nice</h4> <p>Tt ce passe bien</p> </div>
+
+    <div class="alert alert-warning alert-dismissible fade in" role="alert"> <button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">×</span></button> <h4>Message</h4> <p>le message</p> </div>
+<!-- end feedback -->
+</div>
+</div><!-- end Exemple des integratoins -->
+
+
+
+
     <div class="row create">
+       
         <div class="col-sm-9 col-xs-12">
             <div class="title">
                 {% block model_create_title %}
@@ -46,7 +139,7 @@
     </div>
 
 
-    </div><!--HB :  Alex j'ai rajouté cette balise pour fermer la div class="row create" je pense qu'elle manque. Supprime la si elle se ferme ailleur -->
+    </div><!--HB :  Alex j'ai rajouté cette balise pour fermer la div class="row create" je pense qu'elle manque. Supprimes la si elle se ferme ailleur -->
 {% endblock %}
 
 {% block page_body %}
@@ -83,6 +176,8 @@
             elems.forEach(function(html) {
               var switchery = new Switchery(html, { color: '#a9a3d9', secondaryColor: '#e0e0e0' });
             });
+
+            $('[data-toggle="tooltip"]').tooltip(); //Pour faire fonctionnerles tooltip de bootstrap
         })(jQuery);
     </script>
 {% endblock %}
