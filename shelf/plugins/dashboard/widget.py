@@ -1,4 +1,12 @@
+from flask import url_for
 from flask import render_template
+
+__all__ = [
+    'url_for',
+    'DashboardWidget', 'TextWidget',
+    'PictureWidget', 'EvolutionWidget',
+    'DonutWidget', 'BarWidget',
+]
 
 class DashboardWidget(object):
     shouldUpdate = False
