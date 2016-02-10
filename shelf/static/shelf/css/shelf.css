@@ -902,6 +902,7 @@ td.center, th.center
         .modalBiblio--queue{
           /*padding-left:36px;
           padding-right:36px;*/
+          min-height: 62px; /* Reserve vertical space for at least one progress bar */
         }
           .modalBiblio--queue-fichier{
             padding:20px 36px 13px 36px;
