@@ -1,5 +1,5 @@
 from wtforms.fields import FieldList
-from flask import current_app, Blueprint, render_template
+from flask import current_app, Blueprint
 from wtforms.utils import unset_value
 from sqlalchemy.sql.expression import desc
 from flask.ext.admin.form import RenderTemplateWidget
