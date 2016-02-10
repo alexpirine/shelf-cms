@@ -3,7 +3,7 @@ import os
 import os.path as op
 
 from flask_admin.contrib import fileadmin
-from flask import Blueprint, flash, url_for, request, json, redirect, render_template
+from flask import Blueprint, flash, url_for, request, json, redirect
 from flask.ext.admin.babel import gettext, lazy_gettext
 from flask_admin.base import expose
 from operator import itemgetter
@@ -234,7 +234,78 @@ class FileAdmin(LoginMixin, fileadmin.FileAdmin):
                            mimes=mimes,
                            actions=actions,
                            actions_confirmation=actions_confirmation)
-    
+
+    @expose('/modal-upload/')
+    @expose('/modal-upload/b/<path:path>')
+    def modal_upload(self, path=None):
+        """
+            Upload view method
+
+            :param path:
+                Optional directory path. If not provided, will use the base directory
+        """
+        # Get path and verify if it is valid
+        base_path, directory, path = self._normalize_path(path)
+
+        if not self.is_accessible_path(path):
+            flash(gettext(gettext('Permission denied.')))
+            return redirect(self._get_dir_url('.index'))
+
+        # Get directory listing
+        items = []
+        mimes = {}
+        mime_by_ext = {'text': ('.pdf', '.txt', '.doc', '.html', '.xml', '.css'),
+                        'archive': ('.zip',),
+                        'image': ('.png', '.jpg', '.jpeg', '.gif'),
+                        'video': ('.mpg', '.mpeg', '.wmv', '.mp4', '.flv', '.mov')
+                        }
+        
+        # Parent directory
+        parent_path = None
+        if directory != base_path:
+            parent_path = op.normpath(op.join(path, '..'))
+            if parent_path == '.':
+                parent_path = None
+        
+        for f in os.listdir(directory):
+            fp = op.join(directory, f)
+            rel_path = op.join(path, f)
+
+            if self.is_accessible_path(rel_path) and not f.startswith('.'):
+                file_size = op.getsize(fp)
+                file_size = humanize.naturalsize(file_size, format = '%0.f')
+                items.append((f, rel_path, op.isdir(fp), file_size))
+                mimes[rel_path] = 'other'
+                for mime in mime_by_ext:
+                    if op.splitext(rel_path)[1] in mime_by_ext[mime]:
+                        mimes[rel_path] = mime
+        
+        # Sort by name
+        items.sort(key=itemgetter(0))
+        
+        # Sort by type
+        items.sort(key=itemgetter(2), reverse=True)
+        
+        # Generate breadcrumbs
+        accumulator = []
+        breadcrumbs = []
+        for n in path.split(os.sep):
+            accumulator.append(n)
+            breadcrumbs.append((n, op.join(*accumulator)))
+        
+        # Actions
+        actions, actions_confirmation = self.get_actions_list()
+        
+        return self.render(self.upload_modal_template,
+                           dir_path=path, parent_path=parent_path,
+                           breadcrumbs=breadcrumbs,
+                           get_dir_url=self._get_dir_url,
+                           get_file_url=self._get_file_url,
+                           items=items,
+                           mimes=mimes,
+                           actions=actions,
+                           actions_confirmation=actions_confirmation)
+
     @expose('/modal/')
     @expose('/modal/b/<path:path>')
     def modal_index(self, path=None):

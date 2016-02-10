@@ -46,7 +46,7 @@
                 {% endfor %}
             </div>
         </div>
-
+        
         <div class="modal-footer">
                 <ul style="float: left; display: inline-block" class="nav nav-pills nav-justified">
                     <li>
@@ -56,14 +56,21 @@
                             <a class="link" href="{{ url_for('.modal_index') }}"><i class="fa fa-th-list"></i></a>
                         {% endif %}
                     </li>
-                    <li>
-                        <a class="link" href="#"><i class="fa fa-plus-circle"></i></a>
+                    <li class="disabled">
+                        <a class="link" href="javascript:void(0)"><i class="fa fa-plus-circle"></i></a>
                     </li>
-                    <li>
-                        <a class="link" href="#"><i class="fa fa-upload"></i></a>
+                    <li class="disabled">
+                        {#
+                        {% if dir_path %}
+                            <a class="link" href="{{ url_for('.modal_upload', path=dir_path) }}"><i class="fa fa-upload"></i></a>
+                        {% else %}
+                            <a class="link" href="{{ url_for('.modal_upload') }}"><i class="fa fa-upload"></i></a>
+                        {% endif %}
+                        #}
+                        <a class="link" href="javascript:void(0)"><i class="fa fa-upload"></i></a>
                     </li>
-                    <li>
-                        <a class="link" href="#"><i class="fa fa-search"></i></a>
+                    <li class="disabled">
+                        <a class="link" href="javascript:void(0)"><i class="fa fa-search"></i></a>
                     </li>
                     <li class="actions validate disabled">
                         <a href="javascript:void(0)">Validate <i class="fa fa-check"></i></a>
