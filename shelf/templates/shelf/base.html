@@ -78,7 +78,7 @@
 {% endblock %}
 
 {% block tail_js %}
-    {{ super() }}
+    {{ super()|safe }}
     {{ lib.get_view_extensions("tail_js") }}
     <script language="javascript" src="{{ url_for('library.static', filename='jquery.file.js') }}"></script>
 {% endblock %}

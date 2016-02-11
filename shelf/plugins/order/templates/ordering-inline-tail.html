@@ -7,7 +7,7 @@
 						var newval = parseInt(event.val);
 						var oldval = parseInt(event.removed.text);
 						var newelem = $(event.target);
-						console.log("YEAAAH")
+						
 						newelem.closest(".inline-field-list").find(".inline-field > div > select").each(function (idx, elem) {
 							console.log($(elem).val(), newval)
 							var curval = parseInt($(elem).val());

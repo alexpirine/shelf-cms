@@ -233,7 +233,7 @@
                 event.preventDefault();
                 event.stopPropagation();
                 $('#ren-modal').modal('show');
-                console.log($(this).closest('.thumbnail').find('span.filename').html());
+                
                 $('#ren-modal input#name').val($(this).closest('.thumbnail').find('span.filename').html());
                 {% if dir_path %}                    
                     $('#ren-modal form').attr('action', "{{ url_for('.rename') }}" + "?url={{ url_for('.icon_index', path=dir_path) }}&path={{ dir_path }}/" + $(this).closest('.thumbnail').find('span.filename').html());
