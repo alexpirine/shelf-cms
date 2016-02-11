@@ -21,12 +21,12 @@
     $('.model-form').on('click', "button.remove", function() {
         if ($(this).closest('.form-group').find('input').hasClass('remote-file'))
         {
-            $(this).closest('.form-group').find('input').val("");
+            $(this).closest('.form-group').find('input').first().val('');
         }
         else if ($(this).closest('.form-group').find('input').hasClass('picture'))
         {
-            $(this).closest('.form-group').find('img').attr('src', "/shelf/static/shelf/img/missing-picture.png");
-            $(this).closest('.form-group').find('input[type=hidden]').val("");
+            $(this).closest('.form-group').find('img').first().attr('src', "/shelf/static/shelf/img/missing-picture.png");
+            $(this).closest('.form-group').find('input[type=hidden]').first().val('');
         }
         return false;
     });
