@@ -20,17 +20,25 @@
             <a href="javascript:void(0)"><i class="fa fa-plus-circle"></i></a>
         </li>
         <li>
-            {% if dir_path %}
-                <a class="xhr_link" href="{{ url_for('.modal_upload', path=dir_path) }}"><i class="fa fa-upload"></i></a>
+            {% if request.url_rule.endpoint == "fileadmin.modal_iconic_index" %}
+                {% if dir_path %}
+                    <a class="xhr_link" href="{{ url_for('.modal_upload', path=dir_path) }}?pvt=icons"><i class="fa fa-upload"></i></a>
+                {% else %}
+                    <a class="xhr_link" href="{{ url_for('.modal_upload') }}?pvt=icons"><i class="fa fa-upload"></i></a>
+                {% endif %}
             {% else %}
-                <a class="xhr_link" href="{{ url_for('.modal_upload') }}"><i class="fa fa-upload"></i></a>
+                {% if dir_path %}
+                    <a class="xhr_link" href="{{ url_for('.modal_upload', path=dir_path) }}?pvt=list"><i class="fa fa-upload"></i></a>
+                {% else %}
+                    <a class="xhr_link" href="{{ url_for('.modal_upload') }}?pvt=list"><i class="fa fa-upload"></i></a>
+                {% endif %}
             {% endif %}
         </li>
         <li class="disabled">
             <a href="javascript:void(0)"><i class="fa fa-search"></i></a>
         </li>
         <li class="actions validate disabled modal_file_validate">
-            <a href="javascript:void(0)">Validate <i class="fa fa-check"></i></a>
+            <a href="javascript:void(0)">{{ _("Validate") }} <i class="fa fa-check"></i></a>
         </li>
     </ul>
 </div>

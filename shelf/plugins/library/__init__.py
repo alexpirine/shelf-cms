@@ -235,8 +235,8 @@ class FileAdmin(LoginMixin, fileadmin.FileAdmin):
                            actions=actions,
                            actions_confirmation=actions_confirmation)
 
-    @expose('/modal-upload/')
-    @expose('/modal-upload/b/<path:path>')
+    @expose('/modal-upload/', methods = ("GET",))
+    @expose('/modal-upload/b/<path:path>', methods = ("GET",))
     def modal_upload(self, path=None):
         """
             Upload view method
@@ -244,6 +244,10 @@ class FileAdmin(LoginMixin, fileadmin.FileAdmin):
             :param path:
                 Optional directory path. If not provided, will use the base directory
         """
+        prev_view_type = request.args.get('pvt', None)
+        if prev_view_type != 'list':
+            prev_view_type = 'icons'
+        
         # Get path and verify if it is valid
         base_path, directory, path = self._normalize_path(path)
 
@@ -304,6 +308,7 @@ class FileAdmin(LoginMixin, fileadmin.FileAdmin):
                            items=items,
                            mimes=mimes,
                            actions=actions,
+                           prev_view_type=prev_view_type,
                            actions_confirmation=actions_confirmation)
 
     @expose('/modal/')

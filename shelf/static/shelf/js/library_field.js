@@ -1,11 +1,15 @@
 $(function() {
-    // transform <a> links to XHR requests in modal dialogs
+    /**
+     * Library browsing & file / picture selection
+     */
+    
+    // transforms <a> links to XHR requests loaded in modal dialogs
     $('.modal').on('click', 'a.xhr_link', function(e) {
         e.preventDefault();
         $(this).closest('.modal').load($(this).attr('href'));
     });
     
-    // selects file in a modal popup
+    // selects a file in modal popup
     $('.modal').on('click', '.modal_file_selector .modal_file_element', function(e) {
         e.preventDefault();
         e.stopPropagation();
@@ -31,7 +35,7 @@ $(function() {
         }
     });
     
-    // validates file selection in a modal popup
+    // validates file selection in modal popup
     $('.modal').on('click', '.modal_file_selector .modal_file_validate', function(e) {
         e.preventDefault();
         e.stopPropagation();
@@ -58,8 +62,10 @@ $(function() {
      * Upload
      */
     
-    var documents = []
+    // list of documents to upload
+    var documents = [];
     
+    // updates upload progress for a specific document
     function updateProgressBar(scope, el, loaded, total)
     {
         var percent = (loaded * 100.0) / total;
@@ -103,12 +109,13 @@ $(function() {
             feedback_message(scope, 'uploading', documents.length - nb_complete);
         }
     }
-
+    
+    // starts uploading a list of files
     function upload(scope, files)
     {
         for (var j = 0; j < files.length; j++)
         {
-            // Only process image files.
+            // Only processes image files
             /*if (!f.type.match('image/jpeg')) {
                alert('The file must be a jpeg image') ;
                return false ;
@@ -183,6 +190,7 @@ $(function() {
         }
     }
     
+    // notifies the user on the upload status
     function feedback_message(scope, message, arg) {
         var el = scope.find('.modal_upload_feedback').first();
         var msg = el.data('msg-' + message);
@@ -194,6 +202,7 @@ $(function() {
         el.text(msg);
     }
     
+    // selects files to upload by pressing a button
     $('.modal').on('click', '.modal_upload_button', function(e) {
         var scope = $(this).closest('.modal');
         
@@ -204,18 +213,22 @@ $(function() {
         });
     });
     
-    $('.modal').on('dragover drop', '.modal_upload_dropzone', function(e){
-        e.preventDefault();
-        e.stopPropagation();
-    });
-    
+    // selects files to upload by drag-and-drop
     $('.modal').on('drop', '.modal_upload_dropzone', function(e) {
         var scope = $(this).closest('.modal');
+        var e = e.originalEvent;
         
-        if (!e.originalEvent.dataTransfer || !e.originalEvent.dataTransfer.files.length) {
+        if (!e.dataTransfer || !e.dataTransfer.files.length) {
             return;
         }
         
-        upload(scope, e.originalEvent.dataTransfer.files);
+        upload(scope, e.dataTransfer.files);
+    });
+    
+    // enables drag-and-drop support by calling event.preventDefault()
+    // for "dragover" and "drop" events
+    $('.modal').on('dragover drop', '.modal_upload_dropzone', function(e){
+        e.preventDefault();
+        e.stopPropagation();
     });
 });

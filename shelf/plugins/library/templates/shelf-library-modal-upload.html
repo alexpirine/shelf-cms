@@ -40,7 +40,7 @@
         <div class="modal-footer">
             <ul style="float: left; display: inline-block" class="nav nav-pills nav-justified">
                 <li class="retour">
-                {% if request.url_rule.endpoint == "fileadmin.modal_iconic_index" %}
+                {% if prev_view_type == 'list' %}
                     {% if dir_path %}
                         <a class="xhr_link" href="{{ url_for('.modal_index', path=dir_path) }}"><i class="fa fa-long-arrow-left"></i> {{ _("Go back") }}</a>
                     {% else %}
