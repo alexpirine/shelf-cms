@@ -12,15 +12,15 @@
 {% endif %}
 </div>
 <div class="col-xs-2">
-  <button class="btn btn-default modal-open side-btn" type="button">EDIT</button>
-  <button class="btn btn-default remove side-btn" type="button">REMOVE</button>
+  <button class="btn btn-default modal-open side-btn" type="button">{{ _("EDIT") }}</button>
+  <button class="btn btn-default remove side-btn" type="button">{{ _("REMOVE") }}</button>
 </div>
 <div class="modal fade modalBiblio" data-src-target="#thumb_{{ field.id }}" data-val-target="#{{ field.id }}">
     <div class="modal-dialog">
         <div style="border-radius: 0px" class="modal-content">
             <div class="modal-header">
                 <button aria-hidden="true" data-dismiss="modal" class="close" type="button"><i class="fa fa-times fa-lg"></i></button>
-                <h3>Please select a picture</h3>
+                <h3>{{ _("Please select a picture") }}</h3>
             </div>
             <div class="modal-body">
             </div>
