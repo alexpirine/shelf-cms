@@ -1,5 +1,6 @@
+{% import "shelf-library-modal-macros.html" as macros with context %}
 <div class="modal-dialog">
-    <div class="modal-content" style='border-radius: 0px'>
+    <div class="modal-content modal_file_selector" style='border-radius: 0px'>
         <div class="modal-header">
             <button aria-hidden="true" data-dismiss="modal" class="close" type="button"><i class="fa fa-times fa-lg"></i></button>
             <h1 class="modalBiblio--title">{{ _gettext("Choose") }}</h1>
@@ -8,114 +9,28 @@
             </div>
         </div>
         {% if dir_path %}
-        <a class="modalBiblio--backParent link" href="{{ get_dir_url('.modal_index', parent_path)|safe }}"><i class="fa fa-arrow-circle-o-left"></i>Dossier parent</a>
+        <a class="modalBiblio--backParent xhr_link" href="{{ get_dir_url('.modal_index', parent_path)|safe }}"><i class="fa fa-arrow-circle-o-left"></i>Dossier parent</a>
         {% endif %}
-        <div class="modal-body"  style="padding: 0px; overflow: hidden">
+        <div class="modal-body" style="padding: 0px; overflow: hidden">
             <table class="table table-hover model-list modal-img">
                 {% for name, path, is_dir, size in items %}
-                <tr {% if not is_dir %}class="file"{% endif %}>
+                <tr {% if not is_dir %}class="modal_file_element" data-url="{{ get_file_url(path)|safe }}"{% endif %}>
                     {% if is_dir %}
                         <td>
                             <i style="width: 20px" class="fa fa-folder"></i> 
-                            <a href="{{ get_dir_url('.modal_index', path)|safe }}" class="link"><span>{{ name }}</span><span class="detail"><!--(nombre de sous-éléments)--></span></a>
+                            <a href="{{ get_dir_url('.modal_index', path)|safe }}" class="xhr_link"><span>{{ name }}</span><span class="detail"><!--(nombre de sous-éléments)--></span></a>
                         </td>
                     {% else %}
                         <td>
                             {% set icons_by_mime = {'image': 'fa-picture-o', 'text': 'fa-file-text', 'video': 'fa-film', 'other': 'fa-file', 'archive': 'fa-save'} %}
                             <i style="width: 20px" class="fa {{ icons_by_mime[mimes[path]] }}"></i> 
-                            <span data-href="{{ get_file_url(path)|safe }}"><span>{{ name }}</span><span class="detail">({{ size }})</span></span>
+                            <span class="link-file"><span>{{ name }}</span><span class="detail">({{ size }})</span></span>
                         </td>
                     {% endif %}
                 </tr>
                 {% endfor %}
             </table>
         </div>
-        
-        <div class="modal-footer">
-            <ul style="float: left; display: inline-block" class="nav nav-pills nav-justified">
-                <li>
-                    {% if dir_path %}
-                        <a class="link" href="{{ url_for('.modal_iconic_index', path=dir_path) }}"><i class="fa fa-th-large"></i></a>
-                    {% else %}
-                        <a class="link" href="{{ url_for('.modal_iconic_index') }}"><i class="fa fa-th-large"></i></a>
-                    {% endif %}
-                </li>
-                <li class="disabled">
-                    <a class="link" href="javascript:void(0)"><i class="fa fa-plus-circle"></i></a>
-                </li>
-                <li class="disabled">
-                    {#
-                    {% if dir_path %}
-                        <a class="link" href="{{ url_for('.modal_upload', path=dir_path) }}"><i class="fa fa-upload"></i></a>
-                    {% else %}
-                        <a class="link" href="{{ url_for('.modal_upload') }}"><i class="fa fa-upload"></i></a>
-                    {% endif %}
-                    #}
-                    <a class="link" href="javascript:void(0)"><i class="fa fa-upload"></i></a>
-                </li>
-                <li class="disabled">
-                    <a class="link" href="javascript:void(0)"><i class="fa fa-search"></i></a>
-                </li>
-                <li class="actions validate disabled">
-                    <a href="javascript:void(0)">Validate <i class="fa fa-check"></i></a>
-                </li>
-            </ul>
-        </div>
-    </div> 
+        {{ macros.library_modal_footer(dir_path) }}
+    </div>
 </div>
-
-<script>
-$('a.link').click(function() {
-    $(this).closest('.modal').load($(this).attr('href'));
-    return false;
-});
-$('tr.file').click(function() {
-
-    if ($(this).hasClass('selected'))
-    {
-        $(this).removeClass('selected');
-    }
-    else
-    {
-        $('tr.selected').removeClass('selected');
-        $(this).addClass('selected');
-    }
-
-    if ($('tr.selected').length > 0)
-    {
-        $('li.actions.validate').removeClass('disabled');
-    }
-    else
-    {
-        $('li.actions.validate').addClass('disabled');
-    }
-
-    return false;
-});
-
-$('li.actions.cancel').click(function() {
-    $(this).closest('.modal').modal('hide');
-});
-
-$('li.actions.validate').click(function() {
-    if ($(this).hasClass('disabled')) {
-        return;
-    }
-    
-    var url = $('tr.selected span[data-href]').data('href');
-    
-    if ($(this).closest('.form-group').find('input').hasClass('remote-file'))
-    {
-        $(this).closest('.form-group').find('input').val(url);
-        $(this).closest('.modal').modal('hide');
-    }
-    else if ($(this).closest('.form-group').find('input').hasClass('picture'))
-    {
-        $(this).closest('.form-group').find('img').attr('src', url);
-        $(this).closest('.form-group').find('input[type=hidden]').val(url);
-        $(this).closest('.modal').modal('hide');
-    }    
-});
-
-</script>
-

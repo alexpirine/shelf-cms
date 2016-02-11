@@ -1,0 +1,63 @@
+{% import "shelf-library-modal-macros.html" as macros with context %}
+<div class="modal-dialog modalBiblio--uploader">
+    <div class="modal-content" style='border-radius: 0px'>
+        <div class="modal-header">
+            <button aria-hidden="true" data-dismiss="modal" class="close" type="button"><i class="fa fa-times fa-lg"></i></button>
+            <h1 class="modalBiblio--title">{{ _gettext("File upload") }}</h1>
+            <div class="modalBiblio--arborescence">
+                <span>{{ _gettext("Root") }}</span><span>{{ dir_path }}</span>
+            </div>
+        </div>
+        {% if dir_path %}
+        <a class="modalBiblio--backParent xhr_link" href="{{ get_dir_url('.modal_index', parent_path)|safe }}"><i class="fa fa-arrow-circle-o-left"></i>Dossier parent</a>
+        {% endif %}
+        <div class="modal-body"  style="padding: 0px; overflow: hidden">
+            <div class="model-list">
+                <div role="form" class="modalBiblio--zonedrop modal_upload_dropzone" data-upload-dir="{{ dir_path }}" data-async-upload-url="{{ url_for(".async_upload") }}">
+                    <span style="width:50%">
+                    <button type="button" class="btn btn-default modal_upload_button">{{ _("Select...") }} <i class="fa fa-upload"></i></button>
+                    <br>{{ _("Drop your files in the grayed area or select them from your computer") }}</span>
+                    <input type="hidden" name="async" id="async" value="">
+                </div>
+                
+                <div class="modalBiblio--queue">
+                    <div class="example-file hide">
+                        <div class="modalBiblio--queue-fichier actif">
+                            <span class="nom"><i class="fa fa-picture-o"></i> <span class="upload_file_name">-</span><span class="detail"><!--(taille)--></span></span>
+                            <a class="del"><i class="fa fa-plus-circle"></i></a>
+                            <div class="clear"></div>
+                            <div class="progress">
+                                <div style="width: 0%" aria-valuemin="0" aria-valuemax="100" aria-valuenow="0" role="progressbar" class="progress-bar progress-bar-warning">
+                                    <span class="sr-only">0% complete</span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <div class="modal-footer">
+            <ul style="float: left; display: inline-block" class="nav nav-pills nav-justified">
+                <li class="retour">
+                {% if request.url_rule.endpoint == "fileadmin.modal_iconic_index" %}
+                    {% if dir_path %}
+                        <a class="xhr_link" href="{{ url_for('.modal_index', path=dir_path) }}"><i class="fa fa-long-arrow-left"></i> {{ _("Go back") }}</a>
+                    {% else %}
+                        <a class="xhr_link" href="{{ url_for('.modal_index') }}"><i class="fa fa-long-arrow-left"></i> {{ _("Go back") }}</a>
+                    {% endif %}
+                {% else %}
+                    {% if dir_path %}
+                        <a class="xhr_link" href="{{ url_for('.modal_iconic_index', path=dir_path) }}"><i class="fa fa-long-arrow-left"></i> {{ _("Go back") }}</a>
+                    {% else %}
+                        <a class="xhr_link" href="{{ url_for('.modal_iconic_index') }}"><i class="fa fa-long-arrow-left"></i> {{ _("Go back") }}</a>
+                    {% endif %}
+                {% endif %}
+                </li>
+                <li  class="feedback modal_upload_feedback" data-msg-done="{{ _("File upload complete.") }}" data-msg-uploading="{{ _("Uploading %%d files...") }}">
+                    {{ _("Ready to upload") }}
+                </li>
+            </ul>
+        </div>
+    </div> 
+</div>

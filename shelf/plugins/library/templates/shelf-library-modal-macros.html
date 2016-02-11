@@ -1,0 +1,37 @@
+{% macro library_modal_footer(dir_path) %}
+<div class="modal-footer">
+    <ul style="float: left; display: inline-block" class="nav nav-pills nav-justified">
+        <li>
+            {% if request.url_rule.endpoint == "fileadmin.modal_iconic_index" %}
+                {% if dir_path %}
+                    <a class="xhr_link" href="{{ url_for('.modal_index', path=dir_path) }}"><i class="fa fa-th-list"></i></a>
+                {% else %}
+                    <a class="xhr_link" href="{{ url_for('.modal_index') }}"><i class="fa fa-th-list"></i></a>
+                {% endif %}
+            {% else %}
+                {% if dir_path %}
+                    <a class="xhr_link" href="{{ url_for('.modal_iconic_index', path=dir_path) }}"><i class="fa fa-th-large"></i></a>
+                {% else %}
+                    <a class="xhr_link" href="{{ url_for('.modal_iconic_index') }}"><i class="fa fa-th-large"></i></a>
+                {% endif %}
+            {% endif %}
+        </li>
+        <li class="disabled">
+            <a href="javascript:void(0)"><i class="fa fa-plus-circle"></i></a>
+        </li>
+        <li>
+            {% if dir_path %}
+                <a class="xhr_link" href="{{ url_for('.modal_upload', path=dir_path) }}"><i class="fa fa-upload"></i></a>
+            {% else %}
+                <a class="xhr_link" href="{{ url_for('.modal_upload') }}"><i class="fa fa-upload"></i></a>
+            {% endif %}
+        </li>
+        <li class="disabled">
+            <a href="javascript:void(0)"><i class="fa fa-search"></i></a>
+        </li>
+        <li class="actions validate disabled modal_file_validate">
+            <a href="javascript:void(0)">Validate <i class="fa fa-check"></i></a>
+        </li>
+    </ul>
+</div>
+{% endmacro %}

@@ -716,12 +716,9 @@ td.center, th.center
     .modalBiblio .model-list tr:not(.file) a {
       font-weight:600;
     }
-    .modalBiblio .model-list a, .modalBiblio .model-list span[data-href]{
+    .modalBiblio .model-list a, .modalBiblio .model-list .link-file{
       font-size:1.5rem;
       line-height: 5.5rem;
-    }
-    .modalBiblio .model-list span[data-href] {
-      cursor: pointer;
     }
     .modalBiblio .model-list i{
       color:#4C4C4C;
