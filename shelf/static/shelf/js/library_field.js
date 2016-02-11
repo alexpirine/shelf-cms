@@ -4,18 +4,20 @@ $(function() {
      */
     
     // transforms <a> links to XHR requests loaded in modal dialogs
-    $('.modal').on('click', 'a.xhr_link', function(e) {
+    $(document).on('click', '.modal a.xhr_link', function(e) {
         e.preventDefault();
         $(this).closest('.modal').load($(this).attr('href'));
     });
     
     // selects a file in modal popup
-    $('.modal').on('click', '.modal_file_selector .modal_file_element', function(e) {
+    $(document).on('click', '.modal .modal_file_selector .modal_file_element', function(e) {
         e.preventDefault();
         e.stopPropagation();
         
         var selector = $(this).closest('.modal_file_selector');
         var validator = selector.find('.modal_file_validate').first();
+        
+        console.log("Selecting: selector = ", selector, " validator = ", validator);
         
         if ($(this).hasClass('selected')) {
             $(this).removeClass('selected');
@@ -36,7 +38,7 @@ $(function() {
     });
     
     // validates file selection in modal popup
-    $('.modal').on('click', '.modal_file_selector .modal_file_validate', function(e) {
+    $(document).on('click', '.modal .modal_file_selector .modal_file_validate', function(e) {
         e.preventDefault();
         e.stopPropagation();
         
@@ -203,7 +205,7 @@ $(function() {
     }
     
     // selects files to upload by pressing a button
-    $('.modal').on('click', '.modal_upload_button', function(e) {
+    $(document).on('click', '.modal .modal_upload_button', function(e) {
         var scope = $(this).closest('.modal');
         
         $('#jquery_file_fake_selector').click();
@@ -214,7 +216,7 @@ $(function() {
     });
     
     // selects files to upload by drag-and-drop
-    $('.modal').on('drop', '.modal_upload_dropzone', function(e) {
+    $(document).on('drop', '.modal .modal_upload_dropzone', function(e) {
         var scope = $(this).closest('.modal');
         var e = e.originalEvent;
         
@@ -227,7 +229,7 @@ $(function() {
     
     // enables drag-and-drop support by calling event.preventDefault()
     // for "dragover" and "drop" events
-    $('.modal').on('dragover drop', '.modal_upload_dropzone', function(e){
+    $(document).on('dragover drop', '.modal .modal_upload_dropzone', function(e){
         e.preventDefault();
         e.stopPropagation();
     });
