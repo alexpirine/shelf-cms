@@ -133,12 +133,13 @@
             <div class="modal-content">
                 <div class="modal-header">
                     <button type="button" class="close" data-dismiss="modal" aria-hidden="true"><i class="fa fa-times fa-lg"></i></button>
-                    <h1>RENAME</h1>
+                    <h1>{{ _('RENAME') }}</h1>
                 </div>
                 <div class="modal-body" style="padding: 0px; overflow: hidden">
                     <form method="post" class="form-inline" style="margin: 15px" action="{{ url_for('.rename') }}">
                         <label for="name" class="control-label">Name</label>
-                            <input class="form-control" type="text" id="name" name="name" />
+                        <input class="form-control" type="text" id="name" name="name" />
+                        <input type="hidden" name="path" value="" />
                     </form>
                     <div style="height: 37px; width: 100%; padding: 0px; background-color: #ff9d98">                    
                     <ul class="nav nav-pills pull-right" style="display: inline-block; background-color: #ef8580">
@@ -277,9 +278,11 @@
                 event.stopPropagation();
                 $('#ren-modal').modal('show');
                 $('#ren-modal input#name').val($(this).closest('tr').find('span.filename').html());
-                {% if dir_path %}                    
+                {% if dir_path %}
+                    $('#ren-modal form input[type=hidden][name=path]').val("{{ dir_path }}/" + $(this).closest('tr').find('span.filename').html());
                     $('#ren-modal form').attr('action', "{{ url_for('.rename') }}" + "?path={{ dir_path }}/" + $(this).closest('tr').find('span.filename').html());
                 {% else %}
+                    $('#ren-modal form input[type=hidden][name=path]').val($(this).closest('tr').find('span.filename').html());
                     $('#ren-modal form').attr('action', "{{ url_for('.rename') }}" + "?path=" + $(this).closest('tr').find('span.filename').html());
                 {% endif %}
                 
