@@ -14,6 +14,6 @@ MarkupSafe==0.23
 passlib==1.6.5
 py-bcrypt==0.4
 SQLAlchemy==1.0.11
-Werkzeug==0.11.3
+Werkzeug==0.11.4
 wheel==0.29.0
 WTForms==2.1
