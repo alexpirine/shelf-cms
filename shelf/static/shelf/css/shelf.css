@@ -895,6 +895,44 @@ td.center, th.center
             color:#737373;
             background-color:#fff;
           }
+            .modalBiblio--zonedrop:before{
+              content:'\f0ab';
+              display:inline-block;
+              position:absolute;
+              top:40px;
+              left:0;
+              right:0;
+              text-align:center;
+
+              font: normal normal normal 14px/1 FontAwesome;
+              font-size: 2.85rem;
+              text-rendering: auto;
+              font-smoothing: antialiased;
+              -webkit-font-smoothing: antialiased;
+              -moz-osx-font-smoothing: grayscale;
+              color:#fff;
+            }
+            /*--> Zone de drop OK/KO */
+              .modalBiblio--zonedrop--ok{
+                background-image:  url('./images/bg-zone-upload-ok.jpg'); 
+              }
+              .modalBiblio--zonedrop--ko{
+                background-image:  url('./images/bg-zone-upload-ko.jpg'); 
+              }
+                .modalBiblio--zonedrop--ok:before{
+                  content:'\f087';
+                }
+                .modalBiblio--zonedrop--ko:before{
+                  content:'\f088';
+                }
+                /*le btn ds zone upload*/
+                .modalBiblio--zonedrop--ok .btn,
+                .modalBiblio--zonedrop--ko .btn{
+                  background:transparent;/**/
+                  border-color:#9D9D9D;
+                  opacity:0.6;
+                }
+            /*END status zone de drop ok/ko*/
 
         .modalBiblio--queue{
           /*padding-left:36px;
