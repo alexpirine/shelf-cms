@@ -863,8 +863,8 @@ td.center, th.center
         }
         .modalBiblio--zonedrop{
           height:208px;
-          background-image:  url('../img/bg-zone-upload.png'); 
-          background-repeat:repeat-x;
+          background-image:  url('./images/bg-zone-upload.jpg'); 
+          background-repeat:repeat;
           background-position: 0 0;
           text-align:center;
         }
