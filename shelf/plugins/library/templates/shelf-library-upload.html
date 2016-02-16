@@ -11,6 +11,80 @@
             <h1>{{ admin_view.name.upper() }}</h1>
             {% endif %}
         </div>
+
+        <div class="col-xs-12 modalBiblio">
+            <div class="modalBiblio--zonedrop">
+                <span>
+                <button type="button" class="btn btn-default">PARCOURIR <i class="fa fa-upload"></i></button>
+                <br>Déposer votre fichier dans la zone grisée<br>ou charger depuis votre ordinateur</span>
+            </div>
+        </div>
+        <div class="col-xs-12">
+            <div class="modalBiblio bibliotheque">
+                <h2 class="h1--like">UPLOADING...</h2>
+                <hr />
+                    <div class="modalBiblio--queue-fichier modalBiblio--queue-all">
+                        <span class="nom"><i class="fa fa-list"></i>&nbsp;&nbsp;Tous<span class="detail">(4)</span></span>
+                        <a class="del"><i class="fa fa-plus-circle"></i></a>
+                        <div class="clear"></div>
+                        <div class="progress ">
+                            <div style="width: 20%" aria-valuemax="100" aria-valuemin="0" aria-valuenow="90" role="progressbar" class="progress-bar progress-bar-danger">
+                                <span class="sr-only">90% Complete (success)</span>
+                            </div>
+                        </div>
+                        <div class="totaldataup">
+                            <span class="up">168</span>&nbsp;/&nbsp;<span class="total">259</span> mo
+                        </div>
+                    </div>
+
+                <div class="modalBiblio--queue">
+
+                        <div class="modalBiblio--queue-fichier actif">
+                            <span class="nom"><i class="fa fa-picture-o"></i> azerty.png<span class="detail">(126Ko)</span></span>
+                            <a class="del"><i class="fa fa-plus-circle"></i></a>
+                            <div class="clear"></div>
+                            <div class="progress ">
+                                <div style="width: 20%" aria-valuemax="100" aria-valuemin="0" aria-valuenow="90" role="progressbar" class="progress-bar progress-bar-warning">
+                                    <span class="sr-only">90% Complete (success)</span>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="modalBiblio--queue-fichier actif">
+                            <span class="nom"><i class="fa fa-picture-o"></i> Vaches.jpg<span class="detail">(126Ko)</span></span>
+                            <a class="del"><i class="fa fa-plus-circle"></i></a>
+                            <div class="clear"> </div>
+                            <div class="progress">
+                                <div style="width: 70%" aria-valuemax="100" aria-valuemin="0" aria-valuenow="90" role="progressbar" class="progress-bar progress-bar-success">
+                                    <span class="sr-only">90% Complete (success)</span>
+                                </div>
+                            </div>
+                        </div>
+
+
+                        <div class="modalBiblio--queue-fichier">
+                            <span class="nom"><i class="fa fa-picture-o"></i> Kiwi.jpg<span class="detail">(126Ko)</span></span>
+                            <a class="del"><i class="fa fa-plus-circle"></i></a>
+                            <div class="clear"> </div>
+                        </div>
+
+
+                        <div class="modalBiblio--queue-fichier">
+                            <span class="nom"><i class="fa fa-picture-o"></i> Banane.jpg<span class="detail">(126Ko)</span></span>
+                            <a class="del"><i class="fa fa-plus-circle"></i></a>
+                            <div class="clear"> </div>
+                        </div>
+
+                </div><!-- END .modalBiblio--queue -->
+        </div>
+        </div>
+
+<hr />
+<hr />
+
+
+
+
         <div class="col-xs-12" style="padding: 0px; padding-bottom: 15px; overflow: hidden">
                 <form role="form" method="post" enctype="multipart/form-data" id="dropfile"  style="background-color: black;">
                     <input type="hidden" name="async" id="async" value="">

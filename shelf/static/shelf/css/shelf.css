@@ -492,7 +492,8 @@ form.icon button {
     background-color: white !important;
 }
 
-h1
+h1,
+.h1--like
 {
   color: #4c4c4c;
   font-family: 'Open Sans', sans-serif;
@@ -723,7 +724,7 @@ td.center, th.center
     .modalBiblio .model-list i{
       color:#4C4C4C;
     }
-    .modalBiblio .model-list .detail{
+    .modalBiblio .detail{
       display:inline-block;
       margin:0 0 0 4px;
       color:#919191;
@@ -857,13 +858,15 @@ td.center, th.center
     }
 
       /*Zone de drop*/
-        .modalBiblio .clear{
+        .modalBiblio .clear,
+        .bibliotheque .clear
+        {
           clear:both;
           float:none;
         }
         .modalBiblio--zonedrop{
           height:208px;
-          background-image:  url('./images/bg-zone-upload.jpg'); 
+          background-image:  url('../img/bg-zone-upload.jpg'); 
           background-repeat:repeat;
           background-position: 0 0;
           text-align:center;
@@ -914,10 +917,10 @@ td.center, th.center
             }
             /*--> Zone de drop OK/KO */
               .modalBiblio--zonedrop--ok{
-                background-image:  url('./images/bg-zone-upload-ok.jpg'); 
+                background-image:  url('../img/bg-zone-upload-ok.jpg'); 
               }
               .modalBiblio--zonedrop--ko{
-                background-image:  url('./images/bg-zone-upload-ko.jpg'); 
+                background-image:  url('../img/bg-zone-upload-ko.jpg'); 
               }
                 .modalBiblio--zonedrop--ok:before{
                   content:'\f087';
@@ -955,6 +958,7 @@ td.center, th.center
               line-height:1.5rem;
               color:#e8e8e8;
               font-size:1.4rem;
+              cursor:pointer;
             }
             .modalBiblio--queue-fichier .del i
             {
@@ -969,6 +973,9 @@ td.center, th.center
               margin:6px 0 0 0;
               height:5px;
             }
+              .modalBiblio--queue-fichier .progress-bar-danger{
+                background-color:#ff4262;
+              }
               .modalBiblio--queue-fichier .progress-bar-warning{
                 background-color:#f5e2c3;
               }
@@ -1062,6 +1069,38 @@ a:hover {
 }
 
 /* Bibliotheque */
+  .bibliotheque{} /*Attention cest un bloc qui peut etre repete a plusieurs endroit du site */
+    .bibliotheque--inactif{
+      background-color:#ddd;
+      opacity:0.40;
+    }
+
+    .modalBiblio--queue-fichier{
+      padding-right:0;
+      margin-right:30px;
+    }
+
+    .modalBiblio--queue-all{
+      border-bottom:none;
+      padding-left:10px;
+    }
+      .modalBiblio--queue-all .progress{
+        width:40px;
+        min-width:310px;
+      }
+        .modalBiblio--queue-all .totaldataup{
+          color:#ff4262;
+          font-size:2.567rem;
+          font-family: 'Open Sans', sans-serif;
+          font-weight: 300;
+        }
+
+    .modalBiblio--queue{
+      margin-left:30px;
+      border-left: 1px solid #eeeeee;
+    }
+
+
 
 .files a
 {
