@@ -818,6 +818,7 @@ td.center, th.center
 
     /*Le footer */    
     .modalBiblio .modal-footer{
+      margin-top:0;
       background-color:#ff9d98;
 
     }
