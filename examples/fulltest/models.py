@@ -122,7 +122,6 @@ class Post(db.Model, WorkflowModelMixin, PreviewableModelMixin):
 class Page(db.Model, PreviewableModelMixin, PageModelMixin):
     id = db.Column(db.Integer, primary_key=True)
     name = db.Column(db.String(50))
-    slug = db.Column(db.String(50))
     l_title_id = db.Column(db.Integer, db.ForeignKey('localized_string.id'))
     l_title = db.relationship('LocalizedString', foreign_keys=(l_title_id,))
 
@@ -130,7 +129,7 @@ class Page(db.Model, PreviewableModelMixin, PageModelMixin):
     l_description = db.relationship('LocalizedString', foreign_keys=(l_description_id,))
 
     __mapper_args__ = {
-        'polymorphic_on': slug,
+        'polymorphic_on': name,
         'polymorphic_identity': 'page'
     }
 
