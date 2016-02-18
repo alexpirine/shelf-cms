@@ -229,8 +229,46 @@ $(function() {
     
     // enables drag-and-drop support by calling event.preventDefault()
     // for "dragover" and "drop" events
-    $(document).on('dragover drop', '.modal .modal_upload_dropzone', function(e){
-        e.preventDefault();
-        e.stopPropagation();
+    $(document).on('dragover drop', '.modal .modal_upload_dropzone', function(e) {
+        return false;
+    });
+
+    $(document).on('dragleave drop', '.modal .modal_upload_dropzone', function(e) {
+        this.dragenter_level -= 1;
+        
+        if (e.target != this) {
+            return;
+        }
+        
+        if (!this.dragenter_level) {
+            $(this).removeClass('modalBiblio--zonedrop--ko').removeClass('modalBiblio--zonedrop--ok');
+        }
+    });
+    
+    $(document).on('dragenter', '.modal .modal_upload_dropzone', function(e) {
+        var e = e.originalEvent;
+        var data = e.dataTransfer;
+        var data_ok = false;
+        
+        if (typeof this.dragenter_level === "undefined") {
+            this.dragenter_level = 0;
+        }
+        
+        this.dragenter_level += 1;
+        
+        for (var i = 0; i < data.items.length; i += 1) {
+            var item = data.items[i];
+            
+            if (item.kind === "file") {
+                data_ok = true;
+            }
+        }
+        
+        if (data_ok) {
+            $(this).addClass('modalBiblio--zonedrop--ok').removeClass('modalBiblio--zonedrop--ko');
+        }
+        else {
+            $(this).addClass('modalBiblio--zonedrop--ko').removeClass('modalBiblio--zonedrop--ok');
+        }
     });
 });
