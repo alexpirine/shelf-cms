@@ -1,0 +1,12 @@
+{% extends "master-page.html" %}
+
+{% block content %}
+  <div id="main" class="container">
+    <h1>Page Contact</h1>
+    <div class="row">
+      <div class="col-md-6 col-md-offset-3">
+        {{page.text | safe}}
+      </div>
+    </div>
+  </div><!-- /.container -->
+{% endblock %}

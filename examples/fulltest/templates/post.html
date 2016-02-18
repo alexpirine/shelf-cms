@@ -1,0 +1,21 @@
+{% extends "master-page.html" %}
+
+{% block content %}
+  <div id="main" class="container">
+    <div class="row">
+      <h1>{{post.title}} - {{post.publication_date | date}}</h1>
+    </div>
+    <div class="row">
+      <div class="col-md-6 col-md-offset-3">
+      {{post.text | safe}}
+      </div>
+    </div>
+    {% if post.picture %}
+    <div class="row">
+      <div class="col-md-6 col-md-offset-3">
+        <img src="{{post.picture}}" alt="{{post.title}}" class="img-responsive">
+      </div>
+    </div>
+    {% endif %}
+  </div><!-- /.container -->
+{% endblock %}
