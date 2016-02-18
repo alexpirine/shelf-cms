@@ -3,6 +3,8 @@ from wtforms.fields import HiddenField
 from flask_security import current_user
 from flask_principal import PermissionDenied
 
+from ...security.decorators import allow_superadmin
+
 REVIEWER_ROLE = "reviewer"
 PUBLISHER_ROLE = "publisher"
 DRAFT_STATE = "draft"
@@ -54,32 +56,35 @@ config = {
 }
 
 class WorkflowModelMixin(object):
+    @allow_superadmin
     def can_publish(self):
         return current_user.has_role(PUBLISHER_ROLE)
-
+    
+    @allow_superadmin
     def can_review(self):
         return current_user.has_role(REVIEWER_ROLE)
-
+    
+    @allow_superadmin
     def can_unpublish(self):
         return current_user.has_role(PUBLISHER_ROLE)
-
+    
     def is_public(self):
         return self.state == PUBLIC_STATE
-
+    
     def is_private(self):
         return self.state == REVIEW_STATE
-
+    
     def is_draft(self):
         return self.state == DRAFT_STATE or self.state is None
-
+    
     @classmethod
     def get_public(cls):
         return cls.query.filter_by(cls.state == PUBLIC_STATE)
-
+    
     @classmethod
     def get_private(cls):
         return cls.query.filter_by(cls.state == REVIEW_STATE)
-
+    
     @classmethod
     def get_draft(cls):
         return cls.query.filter_by(cls.state == DRAFT_STATE)
