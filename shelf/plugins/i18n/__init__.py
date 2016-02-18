@@ -54,14 +54,24 @@ def localized_order_by(query, joins, sort_joins, sort_field, sort_desc):
 
     return query, joins
 
-
 config = {
     "name": "Localized",
     "description": "Models, fields, buttons and utility functions to add several languages to a website",
     "model": {
         "model_subclass": LocalizedModelMixin,
         "view_subclass": LocalizedViewMixin,
-        "sort": localized_order_by
+        "sort": localized_order_by,
+    },
+    "admin": {
+        "view_subclass": LocalizedViewMixin,
+        "template": {
+            "modelview.edit_view": {
+                "tail_js":"shelf-i18n-field-tail.html"
+            },
+            "modelview.create_view": {
+                "tail_js": "shelf-i18n-field-tail.html"
+            }
+        }
     }
 }
 

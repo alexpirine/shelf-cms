@@ -1,0 +1,10 @@
+<script language="javascript">
+$(function() {
+  $(document).on('click', '.i18n-lang-selector [role=tab]', function(e) {
+    e.preventDefault();
+    var li = $(this).closest('li');
+    li.addClass('active').siblings().removeClass('active');
+    $(this).closest('.i18n-lang-selector').find('.i18n-lang-display').text($(this).text());
+  });
+});
+</script>

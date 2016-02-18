@@ -1,19 +1,19 @@
 {% import 'shelf/lib.html' as lib with context %}
 
-{% macro render_field(form, field, kwargs={}) %}
-    {% if "class_" in kwargs %}
-        {% set classes = "%s %s" % ("form-control", kwargs['class_']) %}         
-        {{ field(class_=classes)|safe }}
-    {% else %}
-       {% if field.type == "QuerySelectField" or field.type == "Select2Field" %}
-        {{ field(style="width: 100%", **kwargs)|safe }}
-       {% elif field.type == "BooleanField" %}
-        {{ field(class_="js-switch", **kwargs)|safe }}
-       {% else %}
-         {{ field(class_="form-control", **kwargs)|safe }}
-       {% endif %}
-    {% endif %}
-{% endmacro %}
+{%- macro render_field(form, field, kwargs={}) -%}
+    {%- if "class_" in kwargs -%}
+        {%- set classes = "%s %s" % ("form-control", kwargs['class_']) -%}
+        {{ field(class_=classes)|safe -}}
+    {%- else -%}
+       {%- if field.type == "QuerySelectField" or field.type == "Select2Field" -%}
+        {{- field(style="width: 100%", **kwargs)|safe -}}
+       {%- elif field.type == "BooleanField" -%}
+        {{- field(class_="js-switch", **kwargs)|safe -}}
+       {%- else -%}
+         {{- field(class_="form-control", **kwargs)|safe -}}
+       {%- endif -%}
+    {%- endif -%}
+{%- endmacro -%}
 
 {% macro render_form_fields(form, form_opts=None, extra=None) %}
     {% if form.hidden_tag is defined %}
@@ -54,15 +54,59 @@
 {% endmacro %}
 
 {% if field[0].form %}
-{{ render_form_fields(field[0].form) }}
+  {{ render_form_fields(field[0].form) }}
 {% else %}
-{{ render_field(form, field[0]) }}
+  {% if field[0].type == 'TextField' %}
+    {% set lang = field.langs[0] %}
+    <div class="input-group">
+      <div class="input-group-btn i18n-lang-selector">
+        <button type="button" class="btn btn-default dropdown-toggle dropdown-toggle--chevron" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"><span class="i18n-lang-display">{{ lang|upper }}</span> <i class="fa fa-angle-down"></i></button>
+        <ul class="dropdown-menu" role="tablist">
+          {%- for subfield in field %}
+            {%- set lang = field.langs[loop.index0] %}
+            <li{% if not loop.index0 %} class="active"{% endif %}><a href="#panel-{{ subfield.id }}" aria-controls="panel-{{ subfield.id }}" role="tab" data-toggle="tab">{{ lang|upper }}</a></li>
+          {%- endfor %}
+        </ul>
+      </div>
+      <div class="tab-content">
+        {%- for subfield in field %}
+          {%- set lang = field.langs[loop.index0] %}
+          <div role="tabpanel" class="tab-pane{% if not loop.index0 %} active{% endif %}" id="panel-{{ subfield.id }}">
+            {{ render_field(form, subfield) }}
+          </div>
+        {%- endfor %}
+      </div>
+    </div>
+  {% elif field[0].type in ['ClassicWysiwygField', 'FullWysiwygField'] %}
+    <div>
+      <ul class="nav nav-tabs nav-tabs--grey i18n-lang-selector" role="tablist">
+        {%- for subfield in field %}
+          {%- set lang = field.langs[loop.index0] %}
+          <li role="presentation"{% if not loop.index0 %} class="active"{% endif %}><a href="#panel-{{ subfield.id }}" aria-controls="panel-{{ subfield.id }}" role="tab" data-toggle="tab">{{ lang|upper }}</a></li>
+        {%- endfor %}
+      </ul>
+      <div class="tab-content">
+        {%- for subfield in field %}
+          {%- set lang = field.langs[loop.index0] %}
+          <div role="tabpanel" class="tab-pane{% if not loop.index0 %} active{% endif %}" id="panel-{{ subfield.id }}">
+            {{ render_field(form, subfield) }}
+          </div>
+        {%- endfor %}
+      </div>
+    </div>
+  {% else %}
+    {{ render_field(form, field[0]) }}
+  {% endif %}
 {% endif %}
+
+{% if field[0].form or field[0].type not in ['TextField', 'ClassicWysiwygField', 'FullWysiwygField'] %}
+
 </div>
+
 <div class="col-xs-2">
-	<button type="button" class="btn btn-default accordion-toggle side-btn" 
-    data-toggle="collapse"  href="#{{ field.id }}-panel">TRANSLATE</button>
+	<button type="button" class="btn btn-default accordion-toggle side-btn" data-toggle="collapse" href="#{{ field.id }}-panel">TRANSLATE</button>
 </div>
+
 <div class="accordion col-xs-12" id="{{ field.id }}-accordion" style="border: 0px; margin-top: 10px; padding: 0">
 	<div class="accordion-group">
 		<div id="{{ field.id }}-panel" class="accordion-body collapse" style="border: 0px">
@@ -90,3 +134,5 @@
 	      	</div>
     	</div>    	
 	</div>
+
+{% endif %}
