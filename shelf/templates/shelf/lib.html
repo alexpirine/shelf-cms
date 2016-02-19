@@ -122,29 +122,39 @@
 {% macro render_field(form, field, kwargs={}) %}
   {% set direct_error = h.is_field_error(field.errors) %}
   <div class="form-group{{ ' error' if direct_error else '' }} col-xs-12">
-      {% if "ignore_label" not in kwargs %}
-      <label class="col-xs-2" for="{{ field.id }}">{{ field.label.text.upper() }}
-          {% if h.is_required_form_field(field) %}
-            <strong style="color: red">&#42;</strong>
-          {%- else -%}
-            &nbsp;
-          {%- endif %}
-      </label>
+    {% if "ignore_label" not in kwargs %}
+      {% if field.description %}
+        <label class="col-xs-2" data-toggle="tooltip" data-placement="top" title="{{ field.description }}" for="{{ field.id }}">{{ field.label.text.upper() }}<sup> <i class="fa fa-info-circle"></i></sup>
+            {% if h.is_required_form_field(field) %}
+              <strong style="color: red">&#42;</strong>
+            {%- else -%}
+              &nbsp;
+            {%- endif %}
+        </label>
+      {% else %}
+        <label class="col-xs-2" for="{{ field.id }}">{{ field.label.text.upper() }}
+            {% if h.is_required_form_field(field) %}
+              <strong style="color: red">&#42;</strong>
+            {%- else -%}
+              &nbsp;
+            {%- endif %}
+        </label>
       {% endif %}
-      <div class="col-xs-8">
-        {% if "class_" in kwargs %}
-            {% set classes = "%s %s" % ("form-control", kwargs['class_']) %}         
-            {{ field(class_=classes)|safe }}
-        {% else %}
-           {% if field.type == "QuerySelectField" or field.type == "Select2Field" %}
-            {{ field(style="width: 100%", **kwargs)|safe }}
-           {% elif field.type == "BooleanField" %}
-            {{ field(class_="js-switch", **kwargs)|safe }}
-           {% else %}
-             {{ field(class_="form-control", **kwargs)|safe }}
-           {% endif %}
-        {% endif %}
-      </div>
+    {% endif %}
+    <div class="col-xs-8">
+      {% if "class_" in kwargs %}
+          {% set classes = "%s %s" % ("form-control", kwargs['class_']) %}         
+          {{ field(class_=classes)|safe }}
+      {% else %}
+         {% if field.type == "QuerySelectField" or field.type == "Select2Field" %}
+          {{ field(style="width: 100%", **kwargs)|safe }}
+         {% elif field.type == "BooleanField" %}
+          {{ field(class_="js-switch", **kwargs)|safe }}
+         {% else %}
+           {{ field(class_="form-control", **kwargs)|safe }}
+         {% endif %}
+      {% endif %}
+    </div>
   </div>
 {% endmacro %}
 
