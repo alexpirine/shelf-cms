@@ -124,7 +124,7 @@
   <div class="form-group{{ ' error' if direct_error else '' }} col-xs-12">
     {% if "ignore_label" not in kwargs %}
       {% if field.description %}
-        <label class="col-xs-2" data-toggle="tooltip" data-placement="top" title="{{ field.description }}" for="{{ field.id }}">{{ field.label.text.upper() }}<sup> <i class="fa fa-info-circle"></i></sup>
+        <label class="col-xs-2" data-toggle="tooltip" data-placement="top" title="{{ field.description }}" id="label-{{ field.id }}" for="{{ field.id }}">{{ field.label.text.upper() }}<sup> <i class="fa fa-info-circle"></i></sup>
             {% if h.is_required_form_field(field) %}
               <strong style="color: red">&#42;</strong>
             {%- else -%}
@@ -132,7 +132,7 @@
             {%- endif %}
         </label>
       {% else %}
-        <label class="col-xs-2" for="{{ field.id }}">{{ field.label.text.upper() }}
+        <label class="col-xs-2" id="label-{{ field.id }}" for="{{ field.id }}">{{ field.label.text.upper() }}
             {% if h.is_required_form_field(field) %}
               <strong style="color: red">&#42;</strong>
             {%- else -%}
@@ -203,17 +203,13 @@
 {% endmacro %}
 
 {% macro render_form_shortcuts(form=None) %}
-  {% for f in form if 'hidden' not in f.flags and 'shortcut' in f.flags %}
-  {% if loop.first %}
-    <div class="hidden-xs col-xs-3 l-menulateral">
-        <ul class="nav nav-pills nav-stacked" data-spy="affix" data-offset-top="60" data-offset-bottom="0">
-  {% endif %}
-  <li class="empty"><a href="#{{ f.id }}">{{ f.label.text }}</a></li>
-  {% if loop.last %}
-        </ul>
-    </div>
-  {% endif %}
-  {% endfor %}
+  <div class="hidden-xs col-xs-3 l-menulateral">
+      <ul class="nav nav-pills nav-stacked" data-spy="affix" data-offset-top="60" data-offset-bottom="0">
+        {% for f in form if 'hidden' not in f.flags and 'shortcut' in f.flags %}
+          <li class="empty"><a href="#label-{{ f.id }}">{{ f.label.text }}</a></li>
+        {% endfor %}
+      </ul>
+  </div>
 {% endmacro %}
 
 {% macro render_form_buttons(cancel_url, extra=None) %}

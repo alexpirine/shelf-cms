@@ -24,7 +24,7 @@
 {% block body %}
     <div class="row create">
 
-        <div class="col-sm-9 col-xs-12">
+        <div class="{% if admin_view.form_shortcuts %}col-sm-9 {% endif %}col-xs-12">
             <div class="title">
                 {% block model_create_title %}
                     <h1>{{ admin_view.name.upper() }}</h1>
@@ -36,7 +36,9 @@
               {% endcall %}
             </div>
         </div>
-        {{ lib.render_form_shortcuts(form) }}
+        {% if admin_view.form_shortcuts %}
+            {{ lib.render_form_shortcuts(form) }}
+        {% endif %}
     </div>
 {% endblock %}
 
