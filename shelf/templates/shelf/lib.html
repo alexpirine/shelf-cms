@@ -124,7 +124,7 @@
   <div class="form-group{{ ' error' if direct_error else '' }} col-xs-12">
     {% if "ignore_label" not in kwargs %}
       {% if field.description %}
-        <label class="col-xs-2" data-toggle="tooltip" data-placement="top" title="{{ field.description }}" id="label-{{ field.id }}" for="{{ field.id }}">{{ field.label.text.upper() }}<sup> <i class="fa fa-info-circle"></i></sup>
+        <label class="col-xs-2 shelf-form-label" data-toggle="tooltip" data-placement="top" title="{{ field.description }}" id="label-{{ field.id }}" for="{{ field.id }}">{{ field.label.text.upper() }}<sup> <i class="fa fa-info-circle"></i></sup>
             {% if h.is_required_form_field(field) %}
               <strong style="color: red">&#42;</strong>
             {%- else -%}
@@ -132,7 +132,7 @@
             {%- endif %}
         </label>
       {% else %}
-        <label class="col-xs-2" id="label-{{ field.id }}" for="{{ field.id }}">{{ field.label.text.upper() }}
+        <label class="col-xs-2 shelf-form-label" id="label-{{ field.id }}" for="{{ field.id }}">{{ field.label.text.upper() }}
             {% if h.is_required_form_field(field) %}
               <strong style="color: red">&#42;</strong>
             {%- else -%}

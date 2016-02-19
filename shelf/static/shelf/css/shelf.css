@@ -1034,6 +1034,11 @@ label
   color: #323232;
 }
 
+label.shelf-form-label {
+  padding-top: 80px;
+  margin-top: -80px;
+}
+
 input
 {
   font-family: 'Open Sans', sans-serif;
