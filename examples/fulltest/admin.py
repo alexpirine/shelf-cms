@@ -32,7 +32,7 @@ def init_admin(admin, session):
     admin.add_view(FileAdmin("static/media/", "/static/media/", name=u"Bibliothèque"))
 
 
-class TagModelView(SQLAModelView):
+class TagModelView(SQLAModelView, LocalizedViewMixin):
     form_excluded_columns = ("posts")
 
     form_overrides = {
@@ -78,7 +78,7 @@ class BlogModelView(SQLAModelView, LibraryViewMixin, WysiwygViewMixin,
     }
 
 
-class BasePageModelView(WysiwygViewMixin, PageModelView):
+class BasePageModelView(WysiwygViewMixin, PageModelView, LocalizedViewMixin):
     form_columns = ("l_title", "l_description",)
     can_create = False
     can_delete = False
