@@ -1,0 +1,25 @@
+{% extends "master-page.html" %}
+
+{% block content %}
+<div id="main" class="container">
+  <div class="row">
+    <h1>Shelf-Demo</h1>
+    <p class="lead">{{page.intro}}</p>
+  </div>
+  <div class="row">
+    {% for post in posts %}
+    <div class="col-md-6 col-md-offset-3">
+      <div class="panel panel-default">
+        <div class="panel-heading">
+        <h3 class="panel-title">{{post.title}}</h3>
+        </div>
+        <div class="panel-body">
+          {{post.abstract | safe}}
+        </div>
+        <div class="panel-footer"><a href="{{url_for('post_view', post_id=post.id)}}">Voir la suite</a></div>
+      </div>
+    </div>
+    {% endfor %}
+  </div>
+</div><!-- /.container -->
+{% endblock %}
