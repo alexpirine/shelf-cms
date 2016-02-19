@@ -1,6 +1,8 @@
+Babel==2.2.0
 blinker==1.4
 Flask==0.10.1
 Flask-Admin==1.4.0
+Flask-Babel==0.9
 Flask-Login==0.3.2
 Flask-Mail==0.9.1
 Flask-Principal==0.4.0
@@ -13,6 +15,8 @@ Jinja2==2.8
 MarkupSafe==0.23
 passlib==1.6.5
 py-bcrypt==0.4
+pytz==2015.7
+speaklater==1.3
 SQLAlchemy==1.0.12
 Werkzeug==0.11.4
 wheel==0.29.0
