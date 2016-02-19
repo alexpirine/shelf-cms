@@ -131,13 +131,15 @@ $(function() {
             scope.find('.modalBiblio--queue').prepend(item);
             var el = scope.find('.modalBiblio--queue .modalBiblio--queue-fichier').first();
             el.find('.upload_file_name').html(f.name);
+            el.find('.file-size-text').first().text(humanize.filesize({number: f.size}))
             
             documents.push({
                 'file': f.name,
                 'size': f.size,
                 'uploaded': 0,
                 'type': f.type,
-                'el': el
+                'el': el,
+                'f': f
             });
             
             reader.onload = (function(f) {
@@ -163,7 +165,7 @@ $(function() {
                                 
                                 for (var i in documents)
                                 {
-                                    if (documents[i]['file'] == f.name) {
+                                    if (documents[i]['f'] == f) {
                                         documents[i]['uploaded'] = e.loaded;
                                         documents[i]['size'] = e.total;
                                         updateProgressBar(scope, documents[i]['el'], documents[i]['uploaded'], documents[i]['size']);
