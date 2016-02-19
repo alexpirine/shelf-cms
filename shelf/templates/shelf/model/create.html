@@ -23,6 +23,7 @@
 
 {% block body %}
     <div class="row create">
+
         <div class="col-sm-9 col-xs-12">
             <div class="title">
                 {% block model_create_title %}
@@ -35,6 +36,7 @@
               {% endcall %}
             </div>
         </div>
+        {{ lib.render_form_shortcuts(form) }}
     </div>
 {% endblock %}
 

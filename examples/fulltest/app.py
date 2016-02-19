@@ -43,7 +43,7 @@ with app.app_context():
 
     user_datastore = SQLAlchemyUserDatastore(db, User, Role)
     shlf.init_security(User, Role)
-
+    
     shlf.load_plugins((
         "shelf.plugins.wysiwyg",
         "shelf.plugins.workflow",

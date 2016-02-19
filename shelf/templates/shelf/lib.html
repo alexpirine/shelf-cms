@@ -202,6 +202,20 @@
     </form>
 {% endmacro %}
 
+{% macro render_form_shortcuts(form=None) %}
+  {% for f in form if 'hidden' not in f.flags and 'shortcut' in f.flags %}
+  {% if loop.first %}
+    <div class="hidden-xs col-xs-3 l-menulateral">
+        <ul class="nav nav-pills nav-stacked" data-spy="affix" data-offset-top="60" data-offset-bottom="0">
+  {% endif %}
+  <li class="empty"><a href="#{{ f.id }}">{{ f.label.text }}</a></li>
+  {% if loop.last %}
+        </ul>
+    </div>
+  {% endif %}
+  {% endfor %}
+{% endmacro %}
+
 {% macro render_form_buttons(cancel_url, extra=None) %}
     <ul class="nav navbar-nav navbar-right">
         {% if cancel_url %}

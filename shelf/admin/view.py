@@ -40,6 +40,9 @@ class SQLAModelView(LoginMixin, sqla.ModelView, ActionsMixin):
             self.form_args = {}
         if self.sort_overrides is None:
             self.sort_overrides = {}
+        
+        self.form_shortcuts = getattr(self, 'form_shortcuts', tuple())
+        print "init", self.form_shortcuts
 
     def scaffold_sortable_columns(self):
         columns = sqla.ModelView.scaffold_sortable_columns(self)

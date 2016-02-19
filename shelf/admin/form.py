@@ -1,15 +1,26 @@
 from flask.ext.admin.contrib.sqla import form
 from shelf.plugins.order import OrderingInlineFieldList
 
+class ShortcutValidator(object):
+    field_flags = ('shortcut',)
+
 class ModelConverter(form.AdminModelConverter):
-    pass
-    '''def convert(self, model, mapper, prop, field_args, hidden_pk):
-        res = super(ModelConverter, self).convert(model, mapper, prop, field_args, hidden_pk)
-        if field_args and "is_order" in field_args:
-            del field_args["is_order"]
-            res.short_name = "_is_order"
-            print res
-        return res'''
+    def convert(self, model, mapper, prop, field_args, hidden_pk):
+        kwargs = {
+            'validators': [],
+        }
+        
+        if field_args:
+            kwargs.update(field_args)
+        
+        form_shortcuts = getattr(self.view, 'form_shortcuts', None)
+        
+        if form_shortcuts and prop.key in form_shortcuts:
+            kwargs['validators'].append(ShortcutValidator())
+        
+        res = super(ModelConverter, self).convert(model, mapper, prop, kwargs, hidden_pk)
+        
+        return res
 
 class InlineModelConverter(form.InlineModelConverter):
     inline_field_list_type = OrderingInlineFieldList
