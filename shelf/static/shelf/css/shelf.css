@@ -918,10 +918,10 @@ td.center, th.center
             }
             /*--> Zone de drop OK/KO */
               .modalBiblio--zonedrop--ok{
-                background-image:  url('../img/bg-zone-upload-ok.jpg'); 
+                background-image:  url('../img/bg-zone-upload-ok.jpg');
               }
               .modalBiblio--zonedrop--ko{
-                background-image:  url('../img/bg-zone-upload-ko.jpg'); 
+                background-image:  url('../img/bg-zone-upload-ko.jpg');
               }
                 .modalBiblio--zonedrop--ok:before{
                   content:'\f087';

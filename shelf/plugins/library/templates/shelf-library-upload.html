@@ -13,144 +13,59 @@
         </div>
 
         <div class="col-xs-12 modalBiblio">
-            <div class="modalBiblio--zonedrop">
+            <form role="form" method="post" enctype="multipart/form-data" id="dropfile"  class="modalBiblio--zonedrop">
+                <input type="hidden" name="async" id="async" value="">
                 <span>
-                <button type="button" class="btn btn-default">PARCOURIR <i class="fa fa-upload"></i></button>
-                <br>Déposer votre fichier dans la zone grisée<br>ou charger depuis votre ordinateur</span>
-            </div>
+                    <button type="button" class="btn btn-default" id="upload">
+                        {{ _("Browse files…") }} <i class="fa fa-upload"></i>
+                    </button>
+                    <br>
+                    {{ _("Select files from your computer or drag and drop them into this area.") }}
+                </span>
+                <input type="file" name="upload" id="upload" size="chars" style="visibility:hidden;">
+            </form>
         </div>
         <div class="col-xs-12">
-            <div class="modalBiblio bibliotheque">
-                <h2 class="h1--like">UPLOADING...</h2>
+            <div class="modalBiblio bibliotheque" id="files-uploading" style="display:none;">
+                <h2 class="h1--like">{{ _("UPLOADING...") }}</h2>
                 <hr />
-                    <div class="modalBiblio--queue-fichier modalBiblio--queue-all">
-                        <span class="nom"><i class="fa fa-list"></i>&nbsp;&nbsp;Tous<span class="detail">(4)</span></span>
-                        <a class="del"><i class="fa fa-plus-circle"></i></a>
-                        <div class="clear"></div>
-                        <div class="progress ">
-                            <div style="width: 20%" aria-valuemax="100" aria-valuemin="0" aria-valuenow="90" role="progressbar" class="progress-bar progress-bar-danger">
-                                <span class="sr-only">90% Complete (success)</span>
-                            </div>
-                        </div>
-                        <div class="totaldataup">
-                            <span class="up">168</span>&nbsp;/&nbsp;<span class="total">259</span> mo
+                
+                <div class="modalBiblio--queue-fichier modalBiblio--queue-all" id="main-progress">
+                    <span class="nom"><i class="fa fa-list"></i>&nbsp;{{ _("All files") }}&nbsp;<span class="detail">(<span id="total-files-number">0</span>)</span></span>
+                    <a class="del"><i class="fa fa-plus-circle"></i></a>
+                    <div class="clear"></div>
+                    <div class="progress">
+                        <div aria-valuemin="0" aria-valuemax="0" aria-valuenow="0" role="progressbar" class="progress-bar progress-bar-danger" style="width: 0%">
+                            <span class="sr-only progress-per100-text">0%</span>
                         </div>
                     </div>
-
-                <div class="modalBiblio--queue">
-
+                    <div class="totaldataup">
+                        <span class="up">0</span>&nbsp;/&nbsp;<span class="total">0</span>
+                    </div>
+                </div>
+                
+                <div class="modalBiblio--queue" id="files-list">
+                    <div id="example-file" class="hide">
                         <div class="modalBiblio--queue-fichier actif">
-                            <span class="nom"><i class="fa fa-picture-o"></i> azerty.png<span class="detail">(126Ko)</span></span>
+                            <span class="nom"><i class="fa fa-picture-o"></i> <span class="title">file.ext</span><span class="detail">(<span class="file-size-text">0</span>)</span></span>
                             <a class="del"><i class="fa fa-plus-circle"></i></a>
                             <div class="clear"></div>
                             <div class="progress ">
-                                <div style="width: 20%" aria-valuemax="100" aria-valuemin="0" aria-valuenow="90" role="progressbar" class="progress-bar progress-bar-warning">
-                                    <span class="sr-only">90% Complete (success)</span>
+                                <div style="width: 0%" aria-valuemax="0" aria-valuemin="0" aria-valuenow="0" role="progressbar" class="progress-bar progress-bar-success">
+                                    <span class="sr-only progress-per100-text">0%</span>
                                 </div>
                             </div>
                         </div>
-
-                        <div class="modalBiblio--queue-fichier actif">
-                            <span class="nom"><i class="fa fa-picture-o"></i> Vaches.jpg<span class="detail">(126Ko)</span></span>
-                            <a class="del"><i class="fa fa-plus-circle"></i></a>
-                            <div class="clear"> </div>
-                            <div class="progress">
-                                <div style="width: 70%" aria-valuemax="100" aria-valuemin="0" aria-valuenow="90" role="progressbar" class="progress-bar progress-bar-success">
-                                    <span class="sr-only">90% Complete (success)</span>
-                                </div>
-                            </div>
-                        </div>
-
-
-                        <div class="modalBiblio--queue-fichier">
-                            <span class="nom"><i class="fa fa-picture-o"></i> Kiwi.jpg<span class="detail">(126Ko)</span></span>
-                            <a class="del"><i class="fa fa-plus-circle"></i></a>
-                            <div class="clear"> </div>
-                        </div>
-
-
-                        <div class="modalBiblio--queue-fichier">
-                            <span class="nom"><i class="fa fa-picture-o"></i> Banane.jpg<span class="detail">(126Ko)</span></span>
-                            <a class="del"><i class="fa fa-plus-circle"></i></a>
-                            <div class="clear"> </div>
-                        </div>
-
-                </div><!-- END .modalBiblio--queue -->
-        </div>
-        </div>
-
-<hr />
-<hr />
-
-
-
-
-        <div class="col-xs-12" style="padding: 0px; padding-bottom: 15px; overflow: hidden">
-                <form role="form" method="post" enctype="multipart/form-data" id="dropfile"  style="background-color: black;">
-                    <input type="hidden" name="async" id="async" value="">
-                    <div class="form-group" style="text-align: center; margin-bottom: 0px; padding: 10px; background: url({{ url_for('shelf.static', filename='shelf-admin/img/motif_up.png') }}); color: #fff">
-                        <i class="fa fa-arrow-circle-down fa-2x"></i><br><br>
-                        <button type="button" class="btn btn-primary" id="upload">Drag file or upload from your harddrive</button>
                     </div>
-                    <input type="file" name="upload" id="upload" size="chars" style="visibility:hidden;">
-                </form>
-        </div>
-    </div>
-    <div class="row" style="margin-top: 50px; background-color: #ffffff; display: none" id="files-uploading">
-        <div class="col-xs-12" style="border-bottom: 1px solid black;">
-            <h1>UPLOADING...</h1>
-         </div>
-         <div class="col-xs-12"  style="padding-top: 25px">  
-                <div id="example-file" style="display: none">
-                    <li class="media" style="border-top: 1px solid #ddd; padding-top: 10px">
-                        <p class="pull-left" style="padding-top: 5px">
-                          <i class="media-object fa fa-picture-o fa-2x" style="width: 50px"></i>
-                        </p>
-                        <div class="media-body">
-                            <h4 class="media-heading"><span class="title">machin.png</span>
-                            <p class="pull-right">
-                                <i class="fa fa-times fa-lg"></i>
-                            </p>
-                        </h4>
-                            <div class="progress progress-striped active" style="height: 6px; width: 100%">
-                                <div class="progress-bar progress-success" role="progressbar" aria-valuenow="0" aria-valuemin="0" aria-valuemax="100" style="width: 0%;">
-                                    <span class="sr-only">0% Complete</span>
-                                </div>                                    
-                            </div>
-                            
-                            <div class="clearfix"></div>
-                        </div>
-                    </li>
                 </div>
-                
-                <ul class="media-list">
-                  <li class="media" id="main-progress">
-                    <div class="media-body">
-                      <h4 class="media-heading"><span class="title">Tous</span>
-                            <p class="pull-right">
-                                <i class="fa fa-times fa-lg"></i>
-                            </p>
-                        </h4>
-                        <div class="progress progress-striped active" style="height: 6px; width: 100%">
-                            <div class="progress-bar progress-success" role="progressbar" aria-valuenow="0" aria-valuemin="0" aria-valuemax="100" style="width: 0%;">
-                            <span class="sr-only">0% Complete</span>
-                            </div>
-                        </div>
-                        <div class="clearfix"></div>
-                        <ul class="media-list" id="files-list">
-                        
-                        </ul>
-                    </div>
-                  </li>
-                </ul>
+            </div>
         </div>
     </div>
-
 {% endblock %}
 
 {% block page_body %}
     {{ super() }}
-    {% call lib.navbar("TITRE", pos="bottom") %}
+    {% call lib.navbar(_("UPLOAD"), pos="bottom") %}
         {% block model_menu_bar %}
         <ul class="nav navbar-nav navbar-right">
             {% if dir_path %}
@@ -168,203 +83,229 @@
 {% endblock %}
 
 {% block tail %}
-    {{ super() }}
-    {{ admin_lib.form_js() }}
+{{ super() }}
+{{ admin_lib.form_js() }}
+
+<script src="{{ url_for('admin.static', filename='admin/js/filters.js') }}"></script>
+<script language="javascript">
+
+(function($) {
+    var documents = [] // format: {'file', 'path', 'size', 'uploaded', 'extension', 'el', 'f'}
     
-    <script src="{{ url_for('admin.static', filename='admin/js/filters.js') }}"></script>
-    <script language="javascript">
-    (function($) {
-        var documents = [] // 1 elem au format {'file', 'path', 'size', 'uploaded', 'extension', 'el'}
+    function updateProgressBar(el, loaded, total, is_total_bar)
+    {
+        var percent = (loaded * 100.0) / total;
         
-        function updateProgressBar(el, loaded, total, is_total_bar)
-        {
-            var percent = (loaded * 100.0) / total;
-            
-            progress_container = el.find('.progress').first();
-            progress_bar = el.find('.progress-bar').first();
-            check_icon = el.find('.media-heading i').first();
-            
-            progress_bar.width(percent+'%');
-            progress_bar.attr({'aria-valuenow': loaded, 'aria-valuemax': total});
-            progress_bar.addClass('progress-bar-success');
-            
-            if (loaded == total) {
-                check_icon.removeClass('fa-times');
-                check_icon.addClass('fa-check');
-                progress_container.removeClass('active');
-                progress_container.removeClass('progress-striped');
+        progress_container = el.find('.progress').first();
+        progress_bar = el.find('.progress-bar').first();
+        check_button = el.find('a.del').first();
+        
+        progress_bar.width(percent+'%');
+        progress_bar.find('.progress-per100-text').first().text(percent+'%');
+        progress_bar.attr({'aria-valuenow': loaded, 'aria-valuemax': total});
+        
+        if (loaded == total) {
+            if (is_total_bar) {
+                check_button.hide();
             }
             else {
-                check_icon.addClass('fa-times');
-                check_icon.removeClass('fa-check');
-                progress_container.addClass('active');
-                progress_container.addClass('progress-striped');
+                check_button.remove();
+                progress_container.remove();
+                el.removeClass('actif');
+            }
+        }
+        else if (is_total_bar) {
+            check_button.show();
+        }
+        
+        if (!is_total_bar) {
+            var total = 0; 
+            var loaded = 0;
+            
+            for (var i in documents)
+            {
+                total += documents[i]['size'];
+                loaded += documents[i]['uploaded'];
             }
             
-            if (!is_total_bar) {
-                var total = 0; 
-                var loaded = 0;
-                
-                for (var i in documents)
-                {
-                    total += documents[i]['size'];
-                    loaded += documents[i]['uploaded'];
-                }
-                
-                updateProgressBar($('#main-progress'), loaded, total, true);
-            }
-            else if (total > 0 && loaded == total) {
+            updateProgressBar($('#main-progress'), loaded, total, true);
+        }
+        else {
+            el.find('.totaldataup .total').text(humanize.filesize({
+                number: total
+            }));
+            
+            el.find('.totaldataup .up').text(humanize.filesize({
+                number: loaded,
+                ref: total
+            }));
+            
+            if (total > 0 && loaded == total) {
                 validate()
             }
         }
+    }
 
-        function upload(files) {
-            $('#files-uploading').show();
+    function upload(files) {
+        $('#files-uploading').show();
+        
+        for (var j=0; j < files.length; j++)
+        {
+            // Only process image files.
+            /*if (!f.type.match('image/jpeg')) {
+               alert('The file must be a jpeg image') ;
+               return false ;
+            }*/
             
-            $('li.actions.validate').addClass('disabled').unbind('click').on('click', function(e) {
-                e.preventDefault();
-                return false;
+            var reader = new FileReader();
+            var f = files[j];
+            var item = $('#example-file').html();
+            $('#files-list').prepend(item);
+            var el = $('#files-list div').first();
+            el.find('.nom .title').first().text(f.name);
+            el.find('.file-size-text').first().text(humanize.filesize({number: f.size}))
+            
+            documents.push({
+                'file': f.name,
+                'size': f.size,
+                'uploaded': 0,
+                'type': f.type,
+                'el': el,
+                'f': f
             });
             
-            for (var j=0; j < files.length; j++)
-            {
-                // Only process image files.
-                /*if (!f.type.match('image/jpeg')) {
-                   alert('The file must be a jpeg image') ;
-                   return false ;
-                }*/
-                
-                var reader = new FileReader();
-                var f = files[j];
-                
-                var item = $('#example-file').html();
-                $('#files-list').prepend(item);
-                var el = $('#files-list li').first();
-                el.find('.media-heading .title').html(f.name);
-                
-                documents.push({
-                    'file': f.name,
-                    'size': f.size,
-                    'uploaded': 0,
-                    'type': f.type,
-                    'el': el
-                });
-                
-                reader.onload = (function(f) {
-                    return function (evt) {
-                        var pic = {};
-                        pic.file = evt.target.result.split(',')[1];
-                        pic.path = "{{ dir_path }}";
-                        pic.name = f.name;
-                        //pic.filename = evt.target.result.split(',')[0];
-                        
-                        var str = jQuery.param(pic);
-                        var total_upload_size = 0;
-                        
-                        $.ajax({
-                            type: 'POST',
-                            url: '{{ url_for(".async_upload") }}',
-                            data: str,
-                            xhr: function() {
-                                var xhr = new window.XMLHttpRequest();
-                                xhr.upload.addEventListener("progress", function(e) {
-                                    if (!e.lengthComputable) {
-                                        return;
-                                    }
-                                    
-                                    for (var i in documents)
-                                    {
-                                        if (documents[i]['file'] == f.name)
-                                        {                       
-                                            documents[i]['uploaded'] = e.loaded;
-                                            documents[i]['size'] = e.total;
-                                            updateProgressBar(documents[i]['el'], documents[i]['uploaded'], documents[i]['size']);
-                                            break;
-                                        }
-                                    }
-                                }, false);
+            reader.onload = (function(f) {
+                return function (evt) {
+                    var pic = {};
+                    pic.file = evt.target.result.split(',')[1];
+                    pic.path = "{{ dir_path }}";
+                    pic.name = f.name;
+                    
+                    var str = jQuery.param(pic);
+                    
+                    $.ajax({
+                        type: 'POST',
+                        url: '{{ url_for(".async_upload") }}',
+                        data: str,
+                        xhr: function() {
+                            var xhr = new window.XMLHttpRequest();
+                            xhr.upload.addEventListener("progress", function(e) {
+                                if (!e.lengthComputable) {
+                                    return;
+                                }
                                 
-                                return xhr;
-                            },
-                            success: function(data) {
                                 for (var i in documents)
                                 {
-                                    if (documents[i]['file'] == f.name)
+                                    if (documents[i]['f'] == f)
                                     {
-                                        documents[i]['uploaded'] = documents[i]['size'];
+                                        documents[i]['uploaded'] = e.loaded;
+                                        documents[i]['size'] = e.total;
                                         updateProgressBar(documents[i]['el'], documents[i]['uploaded'], documents[i]['size']);
                                         break;
                                     }
                                 }
+                            }, false);
+                            
+                            return xhr;
+                        },
+                        success: function(data) {
+                            for (var i in documents)
+                            {
+                                if (documents[i]['file'] == f.name)
+                                {
+                                    documents[i]['uploaded'] = documents[i]['size'];
+                                    updateProgressBar(documents[i]['el'], documents[i]['uploaded'], documents[i]['size']);
+                                    break;
+                                }
                             }
-                        });
-                    };
-                })(files[j]);
-              
-                reader.readAsDataURL(f);
+                        }
+                    });
+                };
+            })(files[j]);
+            
+            reader.readAsDataURL(f);
+        }
+        
+        $('#total-files-number').text(documents.length);
+    }
+    
+    function validate() {
+        var finished = [];
+        for (var i=0; i < documents.length; i++)
+        {
+            if (documents[i]['size'] == documents[i]['uploaded'])
+            {
+                finished.push(documents[i].file);
+            }
+        }
+        $("input#async").val(JSON.stringify(finished));
+        $('#dropfile').submit();
+    }
+    
+    function is_acceptable_drag(e) {
+        var e = e.originalEvent;
+        var data = e.dataTransfer;
+        var data_ok = false;
+        
+        for (var i = 0; i < data.items.length; i += 1) {
+            var item = data.items[i];
+            
+            if (item.kind === "file") {
+                data_ok = true;
             }
         }
         
-        function validate() {
-            var finished = [];
-            for (var i=0; i < documents.length; i++)
-            {
-                if (documents[i]['size'] == documents[i]['uploaded'])
-                {
-                    finished.push(documents[i].file);
-                }
-            }
-            $("input#async").val(JSON.stringify(finished));
-            $('#dropfile').submit();
+        return data_ok;
+    }
+    
+    $('#upload').click(function(e) {
+        $('#jquery_file_fake_selector').click();
+        $('#jquery_file_fake_selector').one('change', function() {
+            upload(this.files);
+            $(this).val('');
+        });
+    });
+    
+    $(document).on('drop', '#dropfile', function(e) {
+        if (is_acceptable_drag(e)) {
+            upload(e.originalEvent.dataTransfer.files);
+        }
+    });
+    
+    // enables drag-and-drop support by calling event.preventDefault()
+    // for "dragover" and "drop" events;
+    // the call is implicitely done with "return false" (thanks to jQuery)
+    $(document).on('dragover drop', '#dropfile', function(e) {
+        return false;
+    });
+    
+    // displayes different styles for the dropzone for rejected and accepted elements
+    $(document).on('dragleave drop', '#dropfile', function(e) {
+        this.dragenter_level -= 1;
+        
+        if (e.target != this) {
+            return;
         }
         
-        $(document).on('dragenter', '#dropfile', function() {
-            $(this).css('background-color', 'green');
-            return false;
-        });
+        if (!this.dragenter_level) {
+            $(this).removeClass('modalBiblio--zonedrop--ko').removeClass('modalBiblio--zonedrop--ok');
+        }
+    });
+    
+    $(document).on('dragenter', '#dropfile', function(e) {
+        if (typeof this.dragenter_level === "undefined") {
+            this.dragenter_level = 0;
+        }
         
-        $(document).on('dragover', '#dropfile', function(e){
-            e.preventDefault();
-            e.stopPropagation();
-            $(this).css('background-color', 'green');
-            return false;
-        });
+        this.dragenter_level += 1;
         
-        $(document).on('dragleave', '#dropfile', function(e) {
-            e.preventDefault();
-            e.stopPropagation();
-            $(this).css('background-color', 'black');
-            return false;
-        });
-        
-        $('#upload').click(function(e) {
-            $('#jquery_file_fake_selector').click();
-            $('#jquery_file_fake_selector').one('change', function() {
-                upload(this.files);
-                $(this).val('');
-            });
-        });
-        
-        $('li.actions.validate').on('click', validate);
-        
-        $(document).on('drop', '#dropfile', function(e) {
-            if(e.originalEvent.dataTransfer){
-                if(e.originalEvent.dataTransfer.files.length) {
-                    // Stop the propagation of the event
-                    e.preventDefault();
-                    e.stopPropagation();
-                    $(this).css('background-color', 'black');
-                    
-                    // Main function to upload
-                    upload(e.originalEvent.dataTransfer.files);
-                }
-            }
-            else
-            {
-                $(this).css('background-color', 'black');
-            }
-            return false;
-        });
-    })(jQuery);
-    </script>
+        if (is_acceptable_drag(e)) {
+            $(this).addClass('modalBiblio--zonedrop--ok').removeClass('modalBiblio--zonedrop--ko');
+        }
+        else {
+            $(this).addClass('modalBiblio--zonedrop--ko').removeClass('modalBiblio--zonedrop--ok');
+        }
+    });
+})(jQuery);
+</script>
 {% endblock %}

@@ -228,11 +228,13 @@ $(function() {
     });
     
     // enables drag-and-drop support by calling event.preventDefault()
-    // for "dragover" and "drop" events
+    // for "dragover" and "drop" events;
+    // the call is implicitely done with "return false" (thanks to jQuery)
     $(document).on('dragover drop', '.modal .modal_upload_dropzone', function(e) {
         return false;
     });
-
+    
+    // displayes different styles for the dropzone for rejected and accepted elements
     $(document).on('dragleave drop', '.modal .modal_upload_dropzone', function(e) {
         this.dragenter_level -= 1;
         

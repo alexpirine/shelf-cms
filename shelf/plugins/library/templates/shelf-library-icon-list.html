@@ -156,7 +156,7 @@
 
 {% block page_body %}
     {{ super() }}
-    {% call lib.navbar("TITRE", pos="bottom") %}
+    {% call lib.navbar(_("FILES"), pos="bottom") %}
         {% block model_menu_bar %}
         <ul class="nav navbar-nav">
             <li class="dropdown">
