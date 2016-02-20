@@ -1,0 +1,6 @@
+python-targets:
+  - 2
+uses:
+  - flask
+requirements:
+  - requirements.txt
