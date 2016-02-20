@@ -13,7 +13,6 @@ class Admin(flask_admin.Admin):
         
         if "template_mode" not in kwargs:
             kwargs["template_mode"] = "bootstrap3"
-            print "test"
         
         if "index_view" not in kwargs:
             endpoint = kwargs['endpoint'] if 'endpoint' in kwargs else None

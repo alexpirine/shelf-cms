@@ -418,7 +418,6 @@ class FileAdmin(LoginMixin, fileadmin.FileAdmin):
 
         form = self.upload_form()
 
-        #print form, helpers.validate_form_on_submit(form), form.data
         if helpers.validate_form_on_submit(form):
             filename = op.join(directory,
                                secure_filename(form.upload.data.filename))
