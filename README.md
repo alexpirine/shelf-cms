@@ -1,7 +1,6 @@
-[![PyPI](https://img.shields.io/pypi/v/shelfcms.svg)](https://pypi.python.org/pypi/ShelfCMS/)
-[![PyPI](https://img.shields.io/pypi/dm/ShelfCMS.svg)](https://pypi.python.org/pypi/ShelfCMS/)
 [![Requirements Status](https://img.shields.io/requires/github/alexpirine/shelf-cms.svg)](https://requires.io/github/alexpirine/shelf-cms/requirements/)
 [![Build Status](https://img.shields.io/travis/alexpirine/shelf-cms.svg)](https://travis-ci.org/alexpirine/shelf-cms/)
+[![Downloads](https://img.shields.io/pypi/dm/ShelfCMS.svg)](https://pypi.python.org/pypi/ShelfCMS/)
 
 #Shelf CMS
 Enhancing Flask microframework with a beautiful admin and cms-like features 
