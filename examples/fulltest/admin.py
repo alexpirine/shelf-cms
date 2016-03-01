@@ -1,5 +1,4 @@
-#! /usr/bin/python
-# -*- coding:utf-8 -*-
+# coding: utf-8
 
 from wtforms.fields import TextField
 
@@ -87,7 +86,8 @@ class BlogModelView(SQLAModelView, LibraryViewMixin, WysiwygViewMixin,
     form_args = {
         "title": {"default": "", "unbound_field": TextField()},
         "abstract": {"default": "", "unbound_field": ClassicWysiwygField()},
-        "text": {"default": "", "unbound_field": FullWysiwygField()}
+        "text": {"default": "", "unbound_field": FullWysiwygField()},
+        "picture": {"crop_width": 300, "crop_height": 150},
     }
 
 
