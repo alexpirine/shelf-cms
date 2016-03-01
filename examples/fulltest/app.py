@@ -1,21 +1,19 @@
 #!/usr/bin/env python
 # coding: utf-8
 
-import os
-
 from flask import Flask
 from flask.ext.babel import Babel
-from flask.ext.security import Security, SQLAlchemyUserDatastore
+from flask.ext.security import SQLAlchemyUserDatastore
 from flask_security.utils import encrypt_password
 
 from shelf import Shelf
 from shelf.plugins.dashboard import DashboardView
 from shelf.plugins.page import Page as PagePlugin
 
-from models import db, User, Role
-from models import IndexPage, ContactPage
-from view import init_views
 from admin import init_admin, IndexPageModelView, ContactPageModelView
+from models import IndexPage, ContactPage
+from models import db, User, Role
+from view import init_views
 
 app = Flask(__name__)
 

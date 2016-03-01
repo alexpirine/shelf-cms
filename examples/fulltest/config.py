@@ -8,7 +8,6 @@ MEDIA_FOLDER = os.path.join(APP_STATIC, 'media')
 
 try:
     os.makedirs(MEDIA_FOLDER)
-    pass
 except OSError:
     pass
 

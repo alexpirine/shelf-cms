@@ -6,13 +6,13 @@ input, a, label, h1, button {
 }
 
 input {
-	border: 0px none !important;
+	border: 0 none !important;
 }
 
 span.input-group-addon {
 	border-radius: 0 !important;
 	background-color: white;
-	border: 0px none !important;
+	border: 0 none !important;
 	-webkit-box-shadow: inset 0 1px 1px rgba(0,0,0,0.075);
 	box-shadow: inset 0 1px 1px rgba(0,0,0,0.075);
 }
@@ -23,10 +23,10 @@ input[type=password] {
 
 input#remember {
 	margin-top: 12px !important;
-	
+
 }
 
-textarea:focus, input[type="text"]:focus, input[type="password"]:focus, input[type="datetime"]:focus, input[type="datetime-local"]:focus, input[type="date"]:focus, input[type="month"]:focus, input[type="time"]:focus, input[type="week"]:focus, input[type="number"]:focus, input[type="email"]:focus, input[type="url"]:focus, input[type="search"]:focus, input[type="tel"]:focus, input[type="color"]:focus, .uneditable-input:focus {   
+textarea:focus, input[type="text"]:focus, input[type="password"]:focus, input[type="datetime"]:focus, input[type="datetime-local"]:focus, input[type="date"]:focus, input[type="month"]:focus, input[type="time"]:focus, input[type="week"]:focus, input[type="number"]:focus, input[type="email"]:focus, input[type="url"]:focus, input[type="search"]:focus, input[type="tel"]:focus, input[type="color"]:focus, .uneditable-input:focus {
   border-color: #ccc;
   box-shadow: 0 1px 1px rgba(0, 0, 0, 0.075) inset, 0 0 8px rgba(0, 0, 0, 0.4);
   outline: 0 none;
@@ -47,9 +47,9 @@ h1 {
 .alert
 {
     position: fixed;
-    right: 0px;
-    left: 0px;
-    bottom: 0px;
+    right: 0;
+    left: 0;
+    bottom: 0;
 }
 
 input#submit {
@@ -57,7 +57,7 @@ input#submit {
 	margin-top: 10px !important;
 	background-color: #ff4262 !important;
 	color: #fff !important;
-	border: 0px none !important;
+	border: 0 none !important;
 }
 
 .has-error input {

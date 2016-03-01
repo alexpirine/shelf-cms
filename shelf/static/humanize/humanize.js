@@ -14,7 +14,7 @@
 
   if (typeof exports !== 'undefined') {
     if (typeof module !== 'undefined' && module.exports) {
-      exports = module.exports = humanize;
+      var exports = module.exports = humanize;
     }
     exports.humanize = humanize;
   } else {
@@ -385,24 +385,24 @@
    * For example:
    * If value is 123456789, the output would be 117.7 MB.
    */
-  
+
   humanize.filesize = function(options) {
     options.number = options.number || 0;
     options.kilo = options.kilo || 1024;
     options.units = options.units || ['bytes', 'KB', 'MB', 'GB', 'TB', 'PB'];
     options.suffixSep = options.suffixSep || '';
-    
+
     if (options.number < options.kilo && typeof options.decimals === "undefined") {
       options.decimals = 0;
     }
-    
+
     if (options.number <= 0) {
       return '0' + options.suffixSep + options.units[0];
     }
-    
+
     return humanize.intword(options);
   };
-  
+
   /**
    * Formats the value like a 'human-readable' number (i.e. '13 K', '4.1 M', '102', etc).
    *
@@ -419,7 +419,7 @@
     var thousandsSep = options.thousandsSep || ',';
     var suffixSep = options.suffixSep || '';
     var ref = options.ref || number;
-    
+
     for (var i = 0; i < units.length; i++)
     {
       if (ref < Math.pow(kilo, i + 1)) {
@@ -427,10 +427,10 @@
         break;
       }
     }
-    
+
     var humanized = number / Math.pow(kilo, unit);
     var suffix = units[unit] ? suffixSep + units[unit] : '?';
-    
+
     return humanize.numberFormat(humanized, decimals, decPoint, thousandsSep) + suffix;
   };
 

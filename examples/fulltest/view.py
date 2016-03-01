@@ -6,7 +6,6 @@ from models import Post, IndexPage, ContactPage
 
 
 def init_views(app):
-
     @app.route('/')
     def index_view():
         page = IndexPage.query.first()
