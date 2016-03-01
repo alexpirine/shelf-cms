@@ -56,6 +56,6 @@ class Wysiwyg(object):
         self.config = config
 
     def init_app(self, app):
-        self.bp = Blueprint("wysiwyg", __name__, url_prefix="/wysiwyg", 
+        self.bp = Blueprint("wysiwyg", __name__, url_prefix="/wysiwyg",
                 static_folder="static", template_folder="templates")
         app.register_blueprint(self.bp)

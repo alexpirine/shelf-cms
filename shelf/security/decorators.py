@@ -6,5 +6,5 @@ def allow_superadmin(func):
             return True
         else:
             return func(*args, **kwargs)
-    
+
     return wrapper

@@ -144,7 +144,7 @@ class LocalizedField(FieldList):
             )
             for i in range(len(self.langs)):
                 model.set_lang(self.langs[i], self.data[i])
-            setattr(obj, name, model) 
+            setattr(obj, name, model)
 
     def _extract_indices(self, prefix, formdata):
         """
@@ -180,10 +180,10 @@ class LocalizedField(FieldList):
         self.langs = current_app.config.get("SHELF_I18N_LANGS", ("en", "fr"))
         if "allow_blank" in kwargs:
             del kwargs["allow_blank"]
-        FieldList.__init__(self, unbound_field, label, validators, 
-                len(self.langs), 
-                len(self.langs), 
-                default, 
+        FieldList.__init__(self, unbound_field, label, validators,
+                len(self.langs),
+                len(self.langs),
+                default,
                 **kwargs)
 
 
@@ -193,10 +193,10 @@ class InternationalField(LocalizedField):
         self.langs = current_app.config.get("SHELF_I18N_COUNTRIES", ("en", "fr"))
         if "allow_blank" in kwargs:
             del kwargs["allow_blank"]
-        FieldList.__init__(self, unbound_field, label, validators, 
-                len(self.langs), 
-                len(self.langs), 
-                default, 
+        FieldList.__init__(self, unbound_field, label, validators,
+                len(self.langs),
+                len(self.langs),
+                default,
                 **kwargs)
 
 
@@ -205,6 +205,6 @@ class Localized(object):
         self.config = config
 
     def init_app(self, app):
-        self.bp = Blueprint("i18n", __name__, url_prefix="/i18n", 
+        self.bp = Blueprint("i18n", __name__, url_prefix="/i18n",
                 static_folder="static", template_folder="templates")
         app.register_blueprint(self.bp)

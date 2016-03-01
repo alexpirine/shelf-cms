@@ -2,17 +2,18 @@ import humanize
 import os
 import os.path as op
 
-from flask_admin.contrib import fileadmin
-from flask import Blueprint, flash, url_for, request, json, redirect
-from flask.ext.admin.babel import gettext, lazy_gettext
-from flask_admin.base import expose
-from operator import itemgetter
-from flask.ext.admin import helpers
-from werkzeug import secure_filename
 from base64 import b64decode
-from wtforms.fields import TextField
+from flask import Blueprint, flash, url_for, request, json, redirect
+from flask.ext.admin import helpers
+from flask.ext.admin.babel import gettext, lazy_gettext
 from flask.ext.admin.form import RenderTemplateWidget
+from flask.ext.sqlalchemy import SQLAlchemy
+from flask_admin.base import expose
+from flask_admin.contrib import fileadmin
+from operator import itemgetter
 from shelf.security.mixin import LoginMixin
+from werkzeug import secure_filename
+from wtforms.fields import TextField
 
 _unset_value = object()
 
@@ -160,10 +161,10 @@ class FileAdmin(LoginMixin, fileadmin.FileAdmin):
     list_template = "shelf-library-list.html"
     icon_list_template = "shelf-library-icon-list.html"
     upload_template = "shelf-library-upload.html"
-    modal_template = "shelf-library-modal-list.html"  
+    modal_template = "shelf-library-modal-list.html"
     icon_modal_template = "shelf-library-modal-icon-list.html"
     upload_modal_template = "shelf-library-modal-upload.html"
-    
+
     @expose('/modal-icons/')
     @expose('/modal-icons/b/<path:path>')
     def modal_iconic_index(self, path=None):
@@ -188,14 +189,14 @@ class FileAdmin(LoginMixin, fileadmin.FileAdmin):
                         'image': ('.png', '.jpg', '.jpeg', '.gif'),
                         'video': ('.mpg', '.mpeg', '.wmv', '.mp4', '.flv', '.mov')
                         }
-        
+
         # Parent directory
         parent_path = None
         if directory != base_path:
             parent_path = op.normpath(op.join(path, '..'))
             if parent_path == '.':
                 parent_path = None
-        
+
         for f in os.listdir(directory):
             fp = op.join(directory, f)
             rel_path = op.join(path, f)
@@ -247,7 +248,7 @@ class FileAdmin(LoginMixin, fileadmin.FileAdmin):
         prev_view_type = request.args.get('pvt', None)
         if prev_view_type != 'list':
             prev_view_type = 'icons'
-        
+
         # Get path and verify if it is valid
         base_path, directory, path = self._normalize_path(path)
 
@@ -263,14 +264,14 @@ class FileAdmin(LoginMixin, fileadmin.FileAdmin):
                         'image': ('.png', '.jpg', '.jpeg', '.gif'),
                         'video': ('.mpg', '.mpeg', '.wmv', '.mp4', '.flv', '.mov')
                         }
-        
+
         # Parent directory
         parent_path = None
         if directory != base_path:
             parent_path = op.normpath(op.join(path, '..'))
             if parent_path == '.':
                 parent_path = None
-        
+
         for f in os.listdir(directory):
             fp = op.join(directory, f)
             rel_path = op.join(path, f)
@@ -283,23 +284,23 @@ class FileAdmin(LoginMixin, fileadmin.FileAdmin):
                 for mime in mime_by_ext:
                     if op.splitext(rel_path)[1] in mime_by_ext[mime]:
                         mimes[rel_path] = mime
-        
+
         # Sort by name
         items.sort(key=itemgetter(0))
-        
+
         # Sort by type
         items.sort(key=itemgetter(2), reverse=True)
-        
+
         # Generate breadcrumbs
         accumulator = []
         breadcrumbs = []
         for n in path.split(os.sep):
             accumulator.append(n)
             breadcrumbs.append((n, op.join(*accumulator)))
-        
+
         # Actions
         actions, actions_confirmation = self.get_actions_list()
-        
+
         return self.render(self.upload_modal_template,
                            dir_path=path, parent_path=parent_path,
                            breadcrumbs=breadcrumbs,
@@ -517,7 +518,7 @@ class FileAdmin(LoginMixin, fileadmin.FileAdmin):
                            mimes=mimes,
                            actions=actions,
                            actions_confirmation=actions_confirmation)
-    
+
     @expose('/list/')
     @expose('/list/b/<path:path>')
     def index(self, path=None):

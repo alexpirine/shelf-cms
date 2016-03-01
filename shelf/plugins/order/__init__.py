@@ -22,7 +22,7 @@ config = {
                 "tail_js": "ordering-inline-tail.html"
             }
         }
-    } 
+    }
 }
 '''"extend": {
     "admin": {
@@ -113,7 +113,7 @@ class OrderingInlineFieldList(InlineModelFormList):
         field.size_list = self.size_list
         if hasattr(data, "get_inline_title"):
             field.inline_title = data.get_inline_title()
-        if hasattr(data, "get_inline_thumbnail"):    
+        if hasattr(data, "get_inline_thumbnail"):
             field.inline_thumbnail = data.get_inline_thumbnail()
         field.process(formdata, data)
         self.entries.append(field)
@@ -129,7 +129,7 @@ class OrderingInlineFieldList(InlineModelFormList):
 
         self.object_data = data
 
-        if formdata:  
+        if formdata:
             indices = sorted(set(self._extract_indices(self.name, formdata)))
             if self.max_entries:
                 indices = indices[:self.max_entries]
@@ -152,4 +152,4 @@ class OrderingInlineFieldList(InlineModelFormList):
         while len(self.entries) < self.min_entries:
             self._add_entry(formdata)
 
-            
+

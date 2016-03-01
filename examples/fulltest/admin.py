@@ -46,21 +46,21 @@ class TagModelView(SQLAModelView, LocalizedViewMixin):
 class BlogModelView(SQLAModelView, LibraryViewMixin, WysiwygViewMixin,
                     RemoteFileModelMixin, LocalizedViewMixin, WorkflowViewMixin):
     column_list = ('title', 'publication_date', "tags", "state")
-    
+
     form_columns = (
         "state",
-        'publication_date', 'title', 
+        'publication_date', 'title',
         'abstract', 'text',
         "picture", "attachment",
     )
-    
+
     form_shortcuts = (
         'title',
         'publication_date',
         'abstract', 'text',
         "attachment",
     )
-    
+
     column_labels = {
         "title": "Titre",
         "publication_date": u"Date de publication",
@@ -69,11 +69,11 @@ class BlogModelView(SQLAModelView, LibraryViewMixin, WysiwygViewMixin,
         "attachment": "Fichier",
         "state": "Etat"
     }
-    
+
     column_descriptions = {
         "publication_date": u"Si la date de publication est dans le futur, l'article n'apparaîtra qu'à la date indiquée",
     }
-    
+
     form_overrides = {
         "state": StateField,
         "title": LocalizedField,
@@ -83,7 +83,7 @@ class BlogModelView(SQLAModelView, LibraryViewMixin, WysiwygViewMixin,
         "picture": PictureField,
         "attachment": RemoteFileField
     }
-    
+
     form_args = {
         "title": {"default": "", "unbound_field": TextField()},
         "abstract": {"default": "", "unbound_field": ClassicWysiwygField()},

@@ -40,7 +40,7 @@ class SQLAModelView(LoginMixin, sqla.ModelView, ActionsMixin):
             self.form_args = {}
         if self.sort_overrides is None:
             self.sort_overrides = {}
-        
+
         self.form_shortcuts = getattr(self, 'form_shortcuts', tuple())
 
     def scaffold_sortable_columns(self):
@@ -56,7 +56,7 @@ class SQLAModelView(LoginMixin, sqla.ModelView, ActionsMixin):
 
     def _order_by(self, query, joins, sort_joins, sort_field, sort_desc):
         if hasattr(sort_field, "mapper"):
-            for mixin in self.sort_overrides:                
+            for mixin in self.sort_overrides:
                 if issubclass(sort_field.mapper.class_, mixin):
                     return self.sort_overrides[mixin](query, joins, sort_joins, sort_field, sort_desc)
         query, joins = sqla.ModelView._order_by(self, query, joins, sort_joins, sort_field, sort_desc)
@@ -79,7 +79,7 @@ class SQLAModelView(LoginMixin, sqla.ModelView, ActionsMixin):
     def additionnal_context(self):
         view, method = request.endpoint.split('.')
         extensions = {}
-        for view_name in (request.endpoint, 
+        for view_name in (request.endpoint,
                 "modelview.{}".format(method)):
             if view_name in self.extensions:
                 view_extensions = self.extensions[view_name]
@@ -88,7 +88,7 @@ class SQLAModelView(LoginMixin, sqla.ModelView, ActionsMixin):
                         extensions[block] = []
                     for template in view_extensions[block]:
                         extensions[block].append(template)
-        
+
         return {
             "views_extensions": extensions
         }

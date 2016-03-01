@@ -37,7 +37,7 @@ config = {
     "description": "Workflow fonctionnality",
     "security": {
         "roles": (
-            (REVIEWER_ROLE, "Allow user to put articles for review"), 
+            (REVIEWER_ROLE, "Allow user to put articles for review"),
             (PUBLISHER_ROLE, "Allow user to publish or unpublish stuff")
         )
     },
@@ -59,32 +59,32 @@ class WorkflowModelMixin(object):
     @allow_superadmin
     def can_publish(self):
         return current_user.has_role(PUBLISHER_ROLE)
-    
+
     @allow_superadmin
     def can_review(self):
         return current_user.has_role(REVIEWER_ROLE)
-    
+
     @allow_superadmin
     def can_unpublish(self):
         return current_user.has_role(PUBLISHER_ROLE)
-    
+
     def is_public(self):
         return self.state == PUBLIC_STATE
-    
+
     def is_private(self):
         return self.state == REVIEW_STATE
-    
+
     def is_draft(self):
         return self.state == DRAFT_STATE or self.state is None
-    
+
     @classmethod
     def get_public(cls):
         return cls.query.filter_by(cls.state == PUBLIC_STATE)
-    
+
     @classmethod
     def get_private(cls):
         return cls.query.filter_by(cls.state == REVIEW_STATE)
-    
+
     @classmethod
     def get_draft(cls):
         return cls.query.filter_by(cls.state == DRAFT_STATE)
@@ -94,6 +94,6 @@ class Workflow(object):
         self.config = config
 
     def init_app(self, app):
-        self.bp = Blueprint("workflow", __name__, url_prefix="/workflow", 
+        self.bp = Blueprint("workflow", __name__, url_prefix="/workflow",
                 static_folder="static", template_folder="templates")
         app.register_blueprint(self.bp)

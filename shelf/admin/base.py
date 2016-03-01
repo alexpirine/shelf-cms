@@ -10,10 +10,10 @@ class Admin(flask_admin.Admin):
 
         if "base_template" not in kwargs:
             kwargs["base_template"] = "shelf/base.html"
-        
+
         if "template_mode" not in kwargs:
             kwargs["template_mode"] = "bootstrap3"
-        
+
         if "index_view" not in kwargs:
             endpoint = kwargs['endpoint'] if 'endpoint' in kwargs else None
             url = kwargs['url'] if 'url' in kwargs else None

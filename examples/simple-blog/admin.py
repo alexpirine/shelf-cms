@@ -4,7 +4,7 @@ from shelf.plugins.library import PictureField, LibraryViewMixin
 from shelf.plugins.workflow import WorkflowViewMixin, StateField
 from shelf.plugins.wysiwyg import ClassicWysiwygField, WysiwygViewMixin
 
-class PostModelView(SQLAModelView, LibraryViewMixin, 
+class PostModelView(SQLAModelView, LibraryViewMixin,
                     WysiwygViewMixin, WorkflowViewMixin):
     column_list = ('title', 'state')
     form_columns = (

@@ -26,7 +26,7 @@ class AddthisAnalytics(object):
 
 class GoogleAnalytics(object):
     DEFAULT_START = datetime.date.today() - datetime.timedelta(days=30)
-    DEFAULT_END = datetime.date.today() 
+    DEFAULT_END = datetime.date.today()
 
     def __init__(self):
         self.profile = None
@@ -79,7 +79,7 @@ class GoogleAnalytics(object):
                     if row[i] not in ptr:
                         ptr[row[i]] = {}
                     ptr = ptr[row[i]]
-            
+
             for i in range(len(metrics)):
                 met = metrics[i]
                 ptr[met] = row[i+len(dimensions) if dimensions else i]

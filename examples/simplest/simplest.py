@@ -22,7 +22,7 @@ class Role(db.Model, RoleMixin):
 
     name = db.Column(db.String(80), unique=True)
     description = db.Column(db.String(255))
-    
+
     def __unicode__(self):
         return self.name
 

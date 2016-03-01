@@ -6,14 +6,14 @@ class LoginMixin(object):
         if not self.is_accessible() and current_user.is_anonymous:
             return redirect(url_for_security('login', next=url_for(".%s" % name)))
         if not self.is_accessible and current_user.is_authenticated:
-            abort(403) 
+            abort(403)
 
     def is_accessible(self):
         return current_user.is_authenticated and \
                 (current_user.has_role('admin') or \
                  current_user.has_role('superadmin'))
-       
+
 
 class UserPanelMixin(object):
-    def additionnal_context(self):        
+    def additionnal_context(self):
         return dict(current_user=current_user)

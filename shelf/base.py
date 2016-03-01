@@ -12,7 +12,7 @@ class Shelf(object):
         self.app = app
         if app is not None:
             self.init_app(app)
-    
+
     def init_app(self, app):
         """Init shelf with the app object"""
         self.app = app
@@ -22,18 +22,18 @@ class Shelf(object):
                             static_folder="static")
         app.register_blueprint(self.bp)
         app.shelf = self
-    
+
     def init_admin(self, *args, **kwargs):
         adm = admin.Admin(self.app, *args, **kwargs)
         self.admin = adm
-    
+
     def init_db(self, db):
         """Init shelf with the db object"""
         if self.app is None:
             raise ValueError
         self.db = db
         db.create_all()
-    
+
     def init_security(self, user_cls, role_cls, datastore_cls=SQLAlchemyUserDatastore):
         self.user_datastore = datastore_cls(self.db, user_cls, role_cls)
         self.admin.add_view(UserModelView(user_cls, self.db.session))
@@ -66,7 +66,7 @@ class Shelf(object):
             self.app.config["SECURITY_POST_LOGOUT_VIEW"] = "/login"
 
         self.security = Security(self.app, self.user_datastore)
-    
+
     def load_plugins(self, plugins):
         self.plugins = []
         for plugin in plugins:
@@ -82,7 +82,7 @@ class Shelf(object):
                 raise ImportError(
                     "Could not import {0} plugin".format((plugin,))
                 )
-    
+
     def setup_plugins(self):
         for plugin in self.plugins:
             model_config = plugin.config.get("model")
@@ -92,7 +92,7 @@ class Shelf(object):
                 sort_fct = model_config.get("sort")
 
                 if sort_fct:
-                    for view in self.admin._views: 
+                    for view in self.admin._views:
                         if isinstance(view, view_subclass):
                             view.extend_sort(subclass, sort_fct)
 

@@ -16,15 +16,15 @@ class BlueprintModelMixin(object):
     """
     date_created = db.Column(db.DateTime, default=db.func.now())
     date_updated = db.Column(db.DateTime, default=db.func.now(), onupdate=db.func.now())
-    
+
     @declared_attr
     def modified_by_id(cls):
         return db.Column(db.Integer, db.ForeignKey('user.id'))
-    
+
     @declared_attr
     def modified_by(cls):
         db.relationship('User', backref='blueprints')
-    
+
     def set_current_user(self):
         self.modified_by_id = current_user.id
 
@@ -43,7 +43,7 @@ config = {
 class Blueprint(object):
     def __init__(self):
         self.config = config
-    
+
     def init_app(self, app):
         self.bp = FlaskBlueprint('blueprint', __name__)
         app.register_blueprint(self.bp)

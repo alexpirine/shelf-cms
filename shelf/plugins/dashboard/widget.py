@@ -35,7 +35,7 @@ class BaseWidget(object):
     provider = None
 
     def __init__(self, title, provider=None, classes=[],
-                icon=None, icon_color=None, 
+                icon=None, icon_color=None,
                 background_color="#ffffff",
                 title_color=None, title_size=None,
                 columns=2, rows=1, **kwargs):
@@ -64,8 +64,8 @@ class BaseWidget(object):
         if not self.provider:
             raise ValueError
         if not self.template:
-            raise NotImplementedError      
-        return render_template(self.template, 
+            raise NotImplementedError
+        return render_template(self.template,
                                 title=self.title,
                                 style=self.style,
                                 **self.provider.compute())
@@ -101,9 +101,9 @@ class DonutWidget(TextWidget):
         TextWidget.__init__(self, *args, **kwargs)
         self.style["rows"] = kwargs["rows"] if "rows" in kwargs else 2
         grays = [
-            '#696969', '#707070', '#787878', '#808080', '#828282', '#8A8A8A', 
+            '#696969', '#707070', '#787878', '#808080', '#828282', '#8A8A8A',
             '#919191', '#999999', '#A1A1A1', '#A9A9A9', '#ABABAB', '#B0B0B0',
-            '#B8B8B8', '#C0C0C0', '#C2C2C2', '#C9C9C9', '#CFCFCF', '#D3D3D3', 
+            '#B8B8B8', '#C0C0C0', '#C2C2C2', '#C9C9C9', '#CFCFCF', '#D3D3D3',
             '#D9D9D9', '#DEDEDE', '#E5E5E5', '#DEDEDE', '#F5F5F5', '#FCFCFC'
         ]
         self.style["donut_colors"] = kwargs["donut_colors"] if "donut_colors" in kwargs else ['#ff9d98',] + grays
