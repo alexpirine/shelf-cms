@@ -3,7 +3,7 @@ from actions import ActionsMixin
 from flask.ext.admin.babel import lazy_gettext, ngettext, gettext
 from flask.ext.admin.actions import action
 from flask.ext.admin.base import AdminIndexView
-from flask import flash, url_for, request
+from flask import flash, request
 from sqlalchemy.orm import joinedload
 from flask.ext.admin.contrib.sqla import tools
 from sqlalchemy import or_

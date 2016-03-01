@@ -1,6 +1,4 @@
-
 (function() {
-
   // Baseline setup
   // --------------
 
@@ -12,19 +10,7 @@
 
   var humanize = {};
 
-  if (typeof exports !== 'undefined') {
-    if (typeof module !== 'undefined' && module.exports) {
-      var exports = module.exports = humanize;
-    }
-    exports.humanize = humanize;
-  } else {
-    if (typeof define === 'function' && define.amd) {
-      define('humanize', function() {
-        return humanize;
-      });
-    }
-    root.humanize = humanize;
-  }
+  root.humanize = humanize;
 
   humanize.noConflict = function() {
     root.humanize = previousHumanize;

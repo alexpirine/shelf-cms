@@ -18,7 +18,7 @@ class SlideModelMixin(object):
     def get_title(self):
         try:
             return basename(self.get_picture().get_path())
-        except:
+        except Exception:
             return ""
 
 class SliderModelMixin(object):
