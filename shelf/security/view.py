@@ -1,6 +1,6 @@
+from flask import request
 from flask_security import current_user
 from shelf.admin.view import SQLAModelView
-from flask import render_template, request
 
 class UserModelView(SQLAModelView):
     default_forbidden_columns = ("password", "confirmed_at")

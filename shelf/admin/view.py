@@ -26,20 +26,23 @@ class SQLAModelView(LoginMixin, sqla.ModelView, ActionsMixin):
     create_template = "shelf/model/create.html"
     edit_template = "shelf/model/edit.html"
 
-    sort_overrides = {}
+    form_overrides = None
+    form_args = None
+    sort_overrides = None
 
     model_form_converter = ModelConverter
     inline_model_form_converter = InlineModelConverter
 
     def __init__(self, *args, **kwargs):
+        if self.form_overrides is None:
+            self.form_overrides = dict()
+        if self.form_args is None:
+            self.form_args = dict()
+        if self.sort_overrides is None:
+            self.sort_overrides = dict()
+
         super(SQLAModelView, self).__init__(*args, **kwargs)
         self.extensions = {}
-        if self.form_overrides is None:
-            self.form_overrides = {}
-        if self.form_args is None:
-            self.form_args = {}
-        if self.sort_overrides is None:
-            self.sort_overrides = {}
 
         self.form_shortcuts = getattr(self, 'form_shortcuts', tuple())
 

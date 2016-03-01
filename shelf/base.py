@@ -1,6 +1,8 @@
-from flask import Blueprint
 import admin
-from flask.ext.security import Security, SQLAlchemyUserDatastore, url_for_security
+
+from flask import Blueprint
+from flask.ext.security import SQLAlchemyUserDatastore
+from flask.ext.security import Security
 from security.view import UserModelView
 from werkzeug.utils import import_string
 

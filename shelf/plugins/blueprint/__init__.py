@@ -23,7 +23,7 @@ class BlueprintModelMixin(object):
 
     @declared_attr
     def modified_by(cls):
-        db.relationship('User', backref='blueprints')
+        return db.relationship('User', backref='blueprints')
 
     def set_current_user(self):
         self.modified_by_id = current_user.id

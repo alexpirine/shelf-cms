@@ -13,7 +13,7 @@ class DashboardView(LoginMixin, AdminIndexView):
     def __init__(self, *args, **kwargs):
         if "template" not in kwargs:
             kwargs["template"] = "dashboard.html"
-        return super(DashboardView, self).__init__(*args, **kwargs)
+        super(DashboardView, self).__init__(*args, **kwargs)
 
     def add_widget(self, view, provider=None):
         if not self.widgets:

@@ -251,7 +251,7 @@ $(function() {
     });
 
     $(document).on('dragenter', '.modal .modal_upload_dropzone', function(e) {
-        var e = e.originalEvent;
+        e = e.originalEvent;
         var data = e.dataTransfer;
         var data_ok = false;
 

@@ -38,7 +38,7 @@
     } else if (padChar.length > 1) {
       padChar = padChar.charAt(0);
     }
-    type = (type === undefined) ? 'left' : 'right';
+    type = (typeof type === 'undefined') ? 'left' : 'right';
 
     if (type === 'right') {
       while (str.length < count) {
@@ -87,37 +87,37 @@
     var f = {
       /* Day */
       // Day of month w/leading 0; 01..31
-      d: function () { return humanize.pad(f.j(), 2, '0'); },
+      d() { return humanize.pad(f.j(), 2, '0'); },
 
       // Shorthand day name; Mon..Sun
-      D: function () { return f.l().slice(0, 3); },
+      D() { return f.l().slice(0, 3); },
 
       // Day of month; 1..31
-      j: function () { return jsdate.getDate(); },
+      j() { return jsdate.getDate(); },
 
       // Full day name; Monday..Sunday
-      l: function () { return shortDayTxt[f.w()]; },
+      l() { return shortDayTxt[f.w()]; },
 
       // ISO-8601 day of week; 1[Mon]..7[Sun]
-      N: function () { return f.w() || 7; },
+      N() { return f.w() || 7; },
 
       // Ordinal suffix for day of month; st, nd, rd, th
-      S: function () {
+      S() {
         var j = f.j();
         return j > 4 && j < 21 ? 'th' : {1: 'st', 2: 'nd', 3: 'rd'}[j % 10] || 'th';
       },
 
       // Day of week; 0[Sun]..6[Sat]
-      w: function () { return jsdate.getDay(); },
+      w() { return jsdate.getDay(); },
 
       // Day of year; 0..365
-      z: function () {
+      z() {
         return (f.L() ? dayTableLeap[f.n()] : dayTableCommon[f.n()]) + f.j() - 1;
       },
 
       /* Week */
       // ISO-8601 week number
-      W: function () {
+      W() {
         // days between midweek of this week and jan 4
         // (f.z() - f.N() + 1 + 3.5) - 3
         var midWeekDaysFromJan4 = f.z() - f.N() + 1.5;
@@ -127,46 +127,46 @@
 
       /* Month */
       // Full month name; January..December
-      F: function () { return monthTxt[jsdate.getMonth()]; },
+      F() { return monthTxt[jsdate.getMonth()]; },
 
       // Month w/leading 0; 01..12
-      m: function () { return humanize.pad(f.n(), 2, '0'); },
+      m() { return humanize.pad(f.n(), 2, '0'); },
 
       // Shorthand month name; Jan..Dec
-      M: function () { return f.F().slice(0, 3); },
+      M() { return f.F().slice(0, 3); },
 
       // Month; 1..12
-      n: function () { return jsdate.getMonth() + 1; },
+      n() { return jsdate.getMonth() + 1; },
 
       // Days in month; 28..31
-      t: function () { return (new Date(f.Y(), f.n(), 0)).getDate(); },
+      t() { return (new Date(f.Y(), f.n(), 0)).getDate(); },
 
       /* Year */
       // Is leap year?; 0 or 1
-      L: function () { return new Date(f.Y(), 1, 29).getMonth() === 1 ? 1 : 0; },
+      L() { return new Date(f.Y(), 1, 29).getMonth() === 1 ? 1 : 0; },
 
       // ISO-8601 year
-      o: function () {
+      o() {
         var n = f.n();
         var W = f.W();
         return f.Y() + (n === 12 && W < 9 ? -1 : n === 1 && W > 9);
       },
 
       // Full year; e.g. 1980..2010
-      Y: function () { return jsdate.getFullYear(); },
+      Y() { return jsdate.getFullYear(); },
 
       // Last two digits of year; 00..99
-      y: function () { return (String(f.Y())).slice(-2); },
+      y() { return (String(f.Y())).slice(-2); },
 
       /* Time */
       // am or pm
-      a: function () { return jsdate.getHours() > 11 ? 'pm' : 'am'; },
+      a() { return jsdate.getHours() > 11 ? 'pm' : 'am'; },
 
       // AM or PM
-      A: function () { return f.a().toUpperCase(); },
+      A() { return f.a().toUpperCase(); },
 
       // Swatch Internet time; 000..999
-      B: function () {
+      B() {
         var unixTime = jsdate.getTime() / 1000;
         var secondsPassedToday = unixTime % 86400 + 3600; // since it's based off of UTC+1
         if (secondsPassedToday < 0) { secondsPassedToday += 86400; }
@@ -178,29 +178,29 @@
       },
 
       // 12-Hours; 1..12
-      g: function () { return f.G() % 12 || 12; },
+      g() { return f.G() % 12 || 12; },
 
       // 24-Hours; 0..23
-      G: function () { return jsdate.getHours(); },
+      G() { return jsdate.getHours(); },
 
       // 12-Hours w/leading 0; 01..12
-      h: function () { return humanize.pad(f.g(), 2, '0'); },
+      h() { return humanize.pad(f.g(), 2, '0'); },
 
       // 24-Hours w/leading 0; 00..23
-      H: function () { return humanize.pad(f.G(), 2, '0'); },
+      H() { return humanize.pad(f.G(), 2, '0'); },
 
       // Minutes w/leading 0; 00..59
-      i: function () { return humanize.pad(jsdate.getMinutes(), 2, '0'); },
+      i() { return humanize.pad(jsdate.getMinutes(), 2, '0'); },
 
       // Seconds w/leading 0; 00..59
-      s: function () { return humanize.pad(jsdate.getSeconds(), 2, '0'); },
+      s() { return humanize.pad(jsdate.getSeconds(), 2, '0'); },
 
       // Microseconds; 000000-999000
-      u: function () { return humanize.pad(jsdate.getMilliseconds() * 1000, 6, '0'); },
+      u() { return humanize.pad(jsdate.getMilliseconds() * 1000, 6, '0'); },
 
       // Whether or not the date is in daylight savings time
       /*
-      I: function () {
+      I() {
         // Compares Jan 1 minus Jan 1 UTC to Jul 1 minus Jul 1 UTC.
         // If they are not equal, then DST is observed.
         var Y = f.Y();
@@ -209,29 +209,29 @@
       */
 
       // Difference to GMT in hour format; e.g. +0200
-      O: function () {
+      O() {
         var tzo = jsdate.getTimezoneOffset();
         var tzoNum = Math.abs(tzo);
         return (tzo > 0 ? '-' : '+') + humanize.pad(Math.floor(tzoNum / 60) * 100 + tzoNum % 60, 4, '0');
       },
 
       // Difference to GMT w/colon; e.g. +02:00
-      P: function () {
+      P() {
         var O = f.O();
         return (O.substr(0, 3) + ':' + O.substr(3, 2));
       },
 
       // Timezone offset in seconds (-43200..50400)
-      Z: function () { return -jsdate.getTimezoneOffset() * 60; },
+      Z() { return -jsdate.getTimezoneOffset() * 60; },
 
       // Full Date/Time, ISO-8601 date
-      c: function () { return 'Y-m-d\\TH:i:sP'.replace(formatChr, formatChrCb); },
+      c() { return 'Y-m-d\\TH:i:sP'.replace(formatChr, formatChrCb); },
 
       // RFC 2822
-      r: function () { return 'D, d M Y H:i:s O'.replace(formatChr, formatChrCb); },
+      r() { return 'D, d M Y H:i:s O'.replace(formatChr, formatChrCb); },
 
       // Seconds since UNIX epoch
-      U: function () { return jsdate.getTime() / 1000 || 0; }
+      U() { return jsdate.getTime() / 1000 || 0; }
     };
 
     return format.replace(formatChr, formatChrCb);
