@@ -34,14 +34,18 @@ class BaseWidget(object):
     style = None
     provider = None
 
-    def __init__(self, title, provider=None, classes=[],
+    def __init__(self, title, provider=None, classes=None,
                 icon=None, icon_color=None,
                 background_color="#ffffff",
                 title_color=None, title_size=None,
                 columns=2, rows=1, **kwargs):
         self.title = title
 
-        self.style = { "classes": classes }
+        if classes is None:
+            classes = list()
+
+        self.style = {"classes": classes}
+
         if icon:
             self.style["icon"] = icon
         if icon_color:
