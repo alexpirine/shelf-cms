@@ -5,8 +5,8 @@ from flask import render_template, request
 class UserModelView(SQLAModelView):
     default_forbidden_columns = ("password", "confirmed_at")
     can_edit = True
-    can_create = False
-    can_delete = False
+    can_create = True
+    can_delete = True
 
     def __init__(self, *args, **kwargs):
         self.forbidden_columns = self.default_forbidden_columns
