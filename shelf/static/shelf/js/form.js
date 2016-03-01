@@ -148,7 +148,7 @@
         var prefix = id + '-0';
         if ($lastField.length > 0) {
             var parts = $lastField.attr('id').split('-');
-            idx = parseInt(parts[parts.length - 1], 10) + 1;
+            var idx = parseInt(parts[parts.length - 1], 10) + 1;
             prefix = id + '-' + idx;
         }
 
