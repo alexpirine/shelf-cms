@@ -43,7 +43,7 @@ with app.app_context():
 
     user_datastore = SQLAlchemyUserDatastore(db, User, Role)
     shlf.init_security(User, Role)
-    
+
     shlf.load_plugins((
         "shelf.plugins.wysiwyg",
         "shelf.plugins.workflow",
@@ -63,11 +63,11 @@ with app.app_context():
 
     @app.before_first_request
     def create_admin():
-        admin = User.query.join(User.roles).filter(Role.name == "admin").first()
+        admin = User.query.join(User.roles).filter(Role.name == "superadmin").first()
         if not admin:
             admin = User(
                 firstname="Admin", lastname="Shelf",
-                email="admin@demo.fr")
+                email="admin@localhost")
             for role_name in ["superadmin", "reviewer", "publisher"]:
                 role = user_datastore.find_role(role_name)
                 user_datastore.add_role_to_user(admin, role)
