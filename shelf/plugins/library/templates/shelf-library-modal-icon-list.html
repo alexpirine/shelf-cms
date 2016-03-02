@@ -26,8 +26,8 @@
                             </a>
                         </div>
                     {% elif mimes[path] == "image" %}
-                        <div class="files files--image col-xs-6 modal_file_element" data-url="{{ get_file_url(path)|safe }}"> 
-                            <div style="vertical-align: bottom;" class="thumbnail">               
+                        <div class="files files--image col-xs-6 modal_file_element" data-url="{{ get_file_url(path)|safe }}" data-path="{{ path }}">
+                            <div style="vertical-align: bottom;" class="thumbnail">
                                 <img src="{{ get_file_url(path)|safe }}">
                                 <div class="caption">
                                     <span class="link-file"><span>{{ name }}</span><span class="detail">({{ size }})</span></span>
@@ -35,7 +35,7 @@
                             </div>
                         </div>
                     {% else %}
-                        <div class="files col-xs-6 modal_file_element" data-url="{{ get_file_url(path)|safe }}"> 
+                        <div class="files col-xs-6 modal_file_element" data-url="{{ get_file_url(path)|safe }}" data-path="{{ path }}">
                             <div class="thumbnail">
                                     <i class="fa fa-file"></i>
                                     <div class="caption">
@@ -48,5 +48,5 @@
             </div>
         </div>
         {{ macros.library_modal_footer(dir_path) }}
-    </div> 
+    </div>
 </div>

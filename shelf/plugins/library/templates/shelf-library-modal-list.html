@@ -14,16 +14,16 @@
         <div class="modal-body" style="padding: 0px; overflow: hidden">
             <table class="table table-hover model-list modal-img">
                 {% for name, path, is_dir, size in items %}
-                <tr {% if not is_dir %}class="modal_file_element" data-url="{{ get_file_url(path)|safe }}"{% endif %}>
+                <tr {% if not is_dir %}class="modal_file_element" data-url="{{ get_file_url(path)|safe }}" data-path="{{ path }}"{% endif %}>
                     {% if is_dir %}
                         <td>
-                            <i style="width: 20px" class="fa fa-folder"></i> 
+                            <i style="width: 20px" class="fa fa-folder"></i>
                             <a href="{{ get_dir_url('.modal_index', path)|safe }}" class="xhr_link"><span>{{ name }}</span><span class="detail"><!--(nombre de sous-éléments)--></span></a>
                         </td>
                     {% else %}
                         <td>
                             {% set icons_by_mime = {'image': 'fa-picture-o', 'text': 'fa-file-text', 'video': 'fa-film', 'other': 'fa-file', 'archive': 'fa-save'} %}
-                            <i style="width: 20px" class="fa {{ icons_by_mime[mimes[path]] }}"></i> 
+                            <i style="width: 20px" class="fa {{ icons_by_mime[mimes[path]] }}"></i>
                             <span class="link-file"><span>{{ name }}</span><span class="detail">({{ size }})</span></span>
                         </td>
                     {% endif %}

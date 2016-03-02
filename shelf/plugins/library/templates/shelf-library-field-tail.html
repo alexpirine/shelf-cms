@@ -1,15 +1,15 @@
 <script language="javascript" src="{{ url_for('shelf.static', filename='shelf/js/library_field.js') }}"></script>
+<script language="javascript" src="{{ url_for('shelf.static', filename='jquery/jquery.cropit.js') }}"></script>
 <script language="javascript">
 (function($) {
     $('.model-form').on('click', "button.modal-open", function() {
         var input_el = $(this).closest('.form-group').find('input');
         var modal = $(this).closest('.form-group').find('.modal');
-        
-        
+
         if (input_el.hasClass('remote-file'))
         {
             modal.data('val-target', '#' + input_el.attr('id'));
-            
+
             modal.modal({
                 remote: "/admin/fileadmin/modal/",
                 toggle: "modal"
@@ -21,7 +21,7 @@
             $(this).closest('.form-group').find('.thumbnail>img').first().attr('id', thumb_id);
             modal.data('val-target', '#' + input_el.attr('id'));
             modal.data('src-target', '#' + thumb_id);
-            
+
             modal.modal({
                 remote: "/admin/fileadmin/modal-icons/",
                 toggle: "modal"
@@ -29,7 +29,7 @@
         }
         return false;
     });
-    
+
     $('.model-form').on('click', "button.remove", function() {
         if ($(this).closest('.form-group').find('input').hasClass('remote-file'))
         {

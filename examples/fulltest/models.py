@@ -38,7 +38,6 @@ class LocalizedText(db.Model, LocalizedModelMixin):
 
 class Picture(db.Model, PictureModelMixin):
     id = db.Column(db.Integer, primary_key=True)
-    path = db.Column(db.String(255))
 
 
 class RemoteFile(db.Model, RemoteFileModelMixin):

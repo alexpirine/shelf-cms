@@ -5,10 +5,11 @@ import os
 import os.path as op
 
 from base64 import b64decode
-from flask import Blueprint, flash, url_for, request, json, redirect
+from flask import Blueprint, flash, request, json, redirect
 from flask.ext.admin import helpers
 from flask.ext.admin.babel import gettext
 from flask.ext.admin.form import RenderTemplateWidget
+from flask.ext.sqlalchemy import SQLAlchemy
 from flask_admin.base import expose
 from flask_admin.contrib import fileadmin
 from operator import itemgetter
@@ -17,6 +18,8 @@ from werkzeug import secure_filename
 from wtforms.fields import TextField
 
 _unset_value = object()
+
+db = SQLAlchemy()
 
 class RemoteFileModelMixin(object):
     def get_path(self):
@@ -32,6 +35,11 @@ class RemoteFileModelMixin(object):
 
 
 class PictureModelMixin(object):
+    syspath = db.Column(db.String(255))
+    path = db.Column(db.String(255))
+    width = db.Column(db.Integer, default=0)
+    height = db.Column(db.Integer, default=0)
+
     def get_path(self, format="source"):
         paths = {}
         if hasattr(self, "format"):
@@ -139,14 +147,14 @@ class PictureWidget(RenderTemplateWidget):
 class PictureField(TextField):
     widget = PictureWidget()
 
-    def __init__(self, label='', validators=None, crop_width=0, crop_height=0, **kwargs):
+    def __init__(self, label='', validators=None, width=0, height=0, **kwargs):
         if "allow_blank" in kwargs:
             del kwargs["allow_blank"]
 
         super(PictureField, self).__init__(label, validators, **kwargs)
 
-        self.crop_width = crop_width
-        self.crop_height = crop_height
+        self.width = width
+        self.height = height
 
     def populate_obj(self, obj, name):
         if getattr(obj, name) is None:
@@ -262,11 +270,12 @@ class FileAdmin(LoginMixin, fileadmin.FileAdmin):
         # Get directory listing
         items = []
         mimes = {}
-        mime_by_ext = {'text': ('.pdf', '.txt', '.doc', '.html', '.xml', '.css'),
-                        'archive': ('.zip',),
-                        'image': ('.png', '.jpg', '.jpeg', '.gif'),
-                        'video': ('.mpg', '.mpeg', '.wmv', '.mp4', '.flv', '.mov')
-                        }
+        mime_by_ext = {
+            'text': ('.pdf', '.txt', '.doc', '.html', '.xml', '.css'),
+            'archive': ('.zip',),
+            'image': ('.png', '.jpg', '.jpeg', '.gif'),
+            'video': ('.mpg', '.mpeg', '.wmv', '.mp4', '.flv', '.mov'),
+        }
 
         # Parent directory
         parent_path = None
