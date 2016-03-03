@@ -32,6 +32,12 @@
                 modal.observe('added', '.modal_file_element', function(record) {
                     if (!$(this).data('width') || !$(this).data('height')) {
                         $(this).removeClass('modal_file_element');
+                        return;
+                    }
+
+                    if ($(this).data('width') < thumb_el.attr('width') || $(this).data('height') < thumb_el.attr('height')) {
+                        $(this).removeClass('modal_file_element');
+                        $(this).find('span.link-file').append('<span class="picture_too_small">🚫 picture too small</span>');
                     }
                 });
             }

@@ -656,6 +656,7 @@ td.center, th.center
  *
  */
 .modalBiblio{}
+
   /*Le contenu header */
   .modalBiblio .modal-header{
     padding:40px 36px 28px 36px;
@@ -701,6 +702,11 @@ td.center, th.center
       margin-right:16px;
     }
 
+  .modalBiblio .picture_too_small {
+    color: #FF4262;
+    font-size: 1.2rem;
+  }
+
   /*Le contenu central (model-list cest le model par defaut)*/
   .modalBiblio .model-list{
     border-top:none;
@@ -726,7 +732,6 @@ td.center, th.center
     }
     .modalBiblio .detail{
       display:inline-block;
-      margin:0 0 0 4px;
       color:#919191;
       font-size:1.2rem;
       font-weight:400;
@@ -788,6 +793,7 @@ td.center, th.center
 
       .modalBiblio .model-icone .detail{
         display:block;
+        margin-top: 4px;
       }
 
 
@@ -815,6 +821,7 @@ td.center, th.center
         .modalBiblio .model-icone .files.selected span{
           color: #c99774;
         }
+
 
     /*Le footer */
     .modalBiblio .modal-footer{

@@ -18,13 +18,19 @@
                     {% if is_dir %}
                         <td>
                             <i style="width: 20px" class="fa fa-folder"></i>
-                            <a href="{{ get_dir_url('.modal_index', path)|safe }}" class="xhr_link"><span>{{ name }}</span><span class="detail"><!--(nombre de sous-éléments)--></span></a>
+                            <a href="{{ get_dir_url('.modal_index', path)|safe }}" class="xhr_link">
+                                <span>{{ name }}</span>
+                                <span class="detail"><!--(nombre de sous-éléments)--></span>
+                            </a>
                         </td>
                     {% else %}
                         <td>
                             {% set icons_by_mime = {'image': 'fa-picture-o', 'text': 'fa-file-text', 'video': 'fa-film', 'other': 'fa-file', 'archive': 'fa-save'} %}
                             <i style="width: 20px" class="fa {{ icons_by_mime[mimes[path]] }}"></i>
-                            <span class="link-file"><span>{{ name }}</span><span class="detail">({{ size }}{% if dimensions[0] %}, {{ dimensions[0] }}&times;{{ dimensions[1] }}&nbsp;px{% endif %})</span></span>
+                            <span class="link-file">
+                                <span>{{ name }}</span>
+                                <span class="detail">({{ size }}{% if dimensions[0] %}, {{ dimensions[0] }}&times;{{ dimensions[1] }}&nbsp;px{% endif %})</span>
+                            </span>
                         </td>
                     {% endif %}
                 </tr>
