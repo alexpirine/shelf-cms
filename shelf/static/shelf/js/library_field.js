@@ -33,6 +33,7 @@ $(function() {
             if (validator.hasClass('disabled')) {
                 validator.removeClass('disabled');
             }
+            validator.data('path', $(this).data('path'));
             validator.data('url', $(this).data('url'));
         }
     });
@@ -43,6 +44,7 @@ $(function() {
         e.stopPropagation();
 
         var url = $(this).data('url');
+        var path = $(this).data('path');
         var modal = $(this).closest('.modal_file_selector').closest('.modal');
 
         if ($(this).hasClass('disabled') || !url) {
@@ -50,7 +52,7 @@ $(function() {
         }
 
         if (modal.data('val-target')) {
-            $(modal.data('val-target')).val(url);
+            $(modal.data('val-target')).val(path);
         }
 
         if (modal.data('src-target')) {

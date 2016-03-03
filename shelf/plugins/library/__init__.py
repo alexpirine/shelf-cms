@@ -35,43 +35,9 @@ class RemoteFileModelMixin(object):
 
 
 class PictureModelMixin(object):
-    syspath = db.Column(db.String(255))
     path = db.Column(db.String(255))
     width = db.Column(db.Integer, default=0)
     height = db.Column(db.Integer, default=0)
-
-    def get_path(self, format="source"):
-        paths = {}
-        if hasattr(self, "format"):
-            if self.format == format:
-                return self.path
-            else:
-                for picformat in self.formats:
-                    if picformat.format not in paths:
-                        paths[picformat.format] = picformat.path
-                if format in paths:
-                    return paths[format]
-        else:
-            return self.path
-
-    def set_path(self, path, format="source"):
-        paths = {}
-        if path and len(path) == 0:
-            path = None
-        if hasattr(self, "format"):
-            if self.format == format:
-                self.path = path
-            else:
-                for picformat in self.formats:
-                    if picformat.format not in paths:
-                        paths[picformat.format] = picformat
-                if format in picformat:
-                    picformat[format].path = path
-                else:
-                    cls = self.__class__(path=path, format=format)
-                    self.formats.append(cls)
-        else:
-            self.path = path
 
     def __unicode__(self):
         return self.path
@@ -79,7 +45,6 @@ class PictureModelMixin(object):
 
 class LibraryViewMixin(object):
     pass
-
 
 config = {
     "name": "Library",
@@ -158,15 +123,12 @@ class PictureField(TextField):
 
     def populate_obj(self, obj, name):
         if getattr(obj, name) is None:
-            newfile = getattr(obj.__class__, name).mapper.class_()
-            setattr(obj, name, newfile)
-            if self.raw_data and len(self.raw_data):
-                getattr(obj, name).set_path(self.raw_data[0])
+            picture = getattr(obj.__class__, name).mapper.class_()
+            setattr(obj, name, picture)
+        else:
+            picture = getattr(obj, name)
 
-    def process_formdata(self, valuelist):
-        if self.data:
-            self.data.set_path(valuelist[0])
-
+        picture.path = self.raw_data[0]
 
 class FileAdmin(LoginMixin, fileadmin.FileAdmin):
     list_template = "shelf-library-list.html"

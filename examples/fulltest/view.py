@@ -1,5 +1,4 @@
-#! /usr/bin/python
-# -*- coding:utf-8 -*-
+# coding: utf-8
 
 from flask import render_template
 from models import Post, IndexPage, ContactPage
