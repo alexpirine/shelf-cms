@@ -138,6 +138,13 @@ class FileAdmin(LoginMixin, fileadmin.FileAdmin):
     icon_modal_template = "shelf-library-modal-icon-list.html"
     upload_modal_template = "shelf-library-modal-upload.html"
 
+    mime_by_ext = {
+        'text': ('.pdf', '.txt', '.doc', '.html', '.xml', '.css'),
+        'archive': ('.zip',),
+        'image': ('.png', '.jpg', '.jpeg', '.gif'),
+        'video': ('.mpg', '.mpeg', '.wmv', '.mp4', '.flv', '.mov'),
+    }
+
     @expose('/modal-icons/')
     @expose('/modal-icons/b/<path:path>')
     def modal_iconic_index(self, path=None):
@@ -157,11 +164,6 @@ class FileAdmin(LoginMixin, fileadmin.FileAdmin):
         # Get directory listing
         items = []
         mimes = {}
-        mime_by_ext = {'text': ('.pdf', '.txt', '.doc', '.html', '.xml', '.css'),
-                        'archive': ('.zip',),
-                        'image': ('.png', '.jpg', '.jpeg', '.gif'),
-                        'video': ('.mpg', '.mpeg', '.wmv', '.mp4', '.flv', '.mov')
-                        }
 
         # Parent directory
         parent_path = None
@@ -179,8 +181,8 @@ class FileAdmin(LoginMixin, fileadmin.FileAdmin):
                 file_size = humanize.naturalsize(file_size, format = '%0.f')
                 items.append((f, rel_path, op.isdir(fp), file_size))
                 mimes[rel_path] = 'other'
-                for mime in mime_by_ext:
-                    if op.splitext(rel_path)[1] in mime_by_ext[mime]:
+                for mime in self.mime_by_ext:
+                    if op.splitext(rel_path)[1] in self.mime_by_ext[mime]:
                         mimes[rel_path] = mime
 
         # Sort by name
@@ -232,12 +234,6 @@ class FileAdmin(LoginMixin, fileadmin.FileAdmin):
         # Get directory listing
         items = []
         mimes = {}
-        mime_by_ext = {
-            'text': ('.pdf', '.txt', '.doc', '.html', '.xml', '.css'),
-            'archive': ('.zip',),
-            'image': ('.png', '.jpg', '.jpeg', '.gif'),
-            'video': ('.mpg', '.mpeg', '.wmv', '.mp4', '.flv', '.mov'),
-        }
 
         # Parent directory
         parent_path = None
@@ -255,8 +251,8 @@ class FileAdmin(LoginMixin, fileadmin.FileAdmin):
                 file_size = humanize.naturalsize(file_size, format = '%0.f')
                 items.append((f, rel_path, op.isdir(fp), file_size))
                 mimes[rel_path] = 'other'
-                for mime in mime_by_ext:
-                    if op.splitext(rel_path)[1] in mime_by_ext[mime]:
+                for mime in self.mime_by_ext:
+                    if op.splitext(rel_path)[1] in self.mime_by_ext[mime]:
                         mimes[rel_path] = mime
 
         # Sort by name
@@ -305,11 +301,6 @@ class FileAdmin(LoginMixin, fileadmin.FileAdmin):
         # Get directory listing
         items = []
         mimes = {}
-        mime_by_ext = {'text': ('.pdf', '.txt', '.doc', '.html', '.xml', '.css'),
-                        'archive': ('.zip',),
-                        'image': ('.png', '.jpg', '.jpeg', '.gif'),
-                        'video': ('.mpg', '.mpeg', '.wmv', '.mp4', '.flv', '.mov')
-                        }
 
         # Parent directory
         parent_path = None
@@ -327,8 +318,8 @@ class FileAdmin(LoginMixin, fileadmin.FileAdmin):
                 file_size = humanize.naturalsize(file_size, format = '%0.f')
                 items.append((f, rel_path, op.isdir(fp), file_size))
                 mimes[rel_path] = 'other'
-                for mime in mime_by_ext:
-                    if op.splitext(rel_path)[1] in mime_by_ext[mime]:
+                for mime in self.mime_by_ext:
+                    if op.splitext(rel_path)[1] in self.mime_by_ext[mime]:
                         mimes[rel_path] = mime
 
 
@@ -440,11 +431,6 @@ class FileAdmin(LoginMixin, fileadmin.FileAdmin):
         # Get directory listing
         items = []
         mimes = {}
-        mime_by_ext = {'text': ('.pdf', '.txt', '.doc', '.html', '.xml', '.css'),
-                        'archive': ('.zip',),
-                        'image': ('.png', '.jpg', '.jpeg', '.gif'),
-                        'video': ('.mpg', '.mpeg', '.wmv', '.mp4', '.flv', '.mov')
-                        }
 
         # Parent directory
         parent_path = None
@@ -462,8 +448,8 @@ class FileAdmin(LoginMixin, fileadmin.FileAdmin):
                 file_size = humanize.naturalsize(file_size, format = '%0.f')
                 items.append((f, rel_path, op.isdir(fp), file_size))
                 mimes[rel_path] = 'other'
-                for mime in mime_by_ext:
-                    if op.splitext(rel_path)[1] in mime_by_ext[mime]:
+                for mime in self.mime_by_ext:
+                    if op.splitext(rel_path)[1] in self.mime_by_ext[mime]:
                         mimes[rel_path] = mime
 
 
@@ -512,11 +498,6 @@ class FileAdmin(LoginMixin, fileadmin.FileAdmin):
         # Get directory listing
         items = []
         mimes = {}
-        mime_by_ext = {'text': ('.pdf', '.txt', '.doc', '.html', '.xml', '.css'),
-                        'archive': ('.zip',),
-                        'image': ('.png', '.jpg', '.jpeg', '.gif'),
-                        'video': ('.mpg', '.mpeg', '.wmv', '.mp4', '.flv', '.mov')
-                        }
 
         # Parent directory
         parent_path = None
@@ -534,8 +515,8 @@ class FileAdmin(LoginMixin, fileadmin.FileAdmin):
                 file_size = humanize.naturalsize(file_size, format = '%0.f')
                 items.append((f, rel_path, op.isdir(fp), file_size))
                 mimes[rel_path] = 'other'
-                for mime in mime_by_ext:
-                    if op.splitext(rel_path)[1] in mime_by_ext[mime]:
+                for mime in self.mime_by_ext:
+                    if op.splitext(rel_path)[1] in self.mime_by_ext[mime]:
                         mimes[rel_path] = mime
 
 
