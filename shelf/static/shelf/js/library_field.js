@@ -16,12 +16,14 @@ $(function() {
 
         var selector = $(this).closest('.modal_file_selector');
         var validator = selector.find('.modal_file_validate').first();
+        var validator_msg = validator.find('.modal_validation_message').first();
 
         if ($(this).hasClass('selected')) {
             $(this).removeClass('selected');
 
             if (!validator.hasClass('disabled')) {
                 validator.addClass('disabled');
+                validator_msg.text('Validate');
             }
         }
         else {
@@ -31,6 +33,14 @@ $(function() {
             if (validator.hasClass('disabled')) {
                 validator.removeClass('disabled');
             }
+
+            if ($(this).hasClass('modal_crop_required')) {
+                validator_msg.text('Crop');
+            }
+            else {
+                validator_msg.text('Validate');
+            }
+
             validator.data('path', $(this).data('path'));
             validator.data('url', $(this).data('url'));
         }
