@@ -13,8 +13,8 @@
         {% endif %}
         <div class="modal-body" style="padding: 0px; overflow: hidden">
             <table class="table table-hover model-list modal-img">
-                {% for name, path, is_dir, size in items %}
-                <tr {% if not is_dir %}class="modal_file_element" data-url="{{ get_file_url(path)|safe }}" data-path="{{ path }}"{% endif %}>
+                {% for name, path, is_dir, size, dimensions in items %}
+                <tr {% if not is_dir %}class="modal_file_element" data-url="{{ get_file_url(path)|safe }}" data-path="{{ path }}"{% endif %}{% if dimensions[0] %} data-width="{{ dimensions[0] }}" data-height="{{ dimensions[1] }}"{% endif %}>
                     {% if is_dir %}
                         <td>
                             <i style="width: 20px" class="fa fa-folder"></i>
@@ -24,7 +24,7 @@
                         <td>
                             {% set icons_by_mime = {'image': 'fa-picture-o', 'text': 'fa-file-text', 'video': 'fa-film', 'other': 'fa-file', 'archive': 'fa-save'} %}
                             <i style="width: 20px" class="fa {{ icons_by_mime[mimes[path]] }}"></i>
-                            <span class="link-file"><span>{{ name }}</span><span class="detail">({{ size }})</span></span>
+                            <span class="link-file"><span>{{ name }}</span><span class="detail">({{ size }}{% if dimensions[0] %}, {{ dimensions[0] }}&times;{{ dimensions[1] }}&nbsp;px{% endif %})</span></span>
                         </td>
                     {% endif %}
                 </tr>

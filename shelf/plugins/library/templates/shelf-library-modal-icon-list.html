@@ -14,7 +14,7 @@
         <div class="modal-body" style="padding: 0px; overflow: hidden">
             <div style="background-color: #ffffff" class="row model-list model-icone">
                 {% set icons_by_mime = {'image': 'fa-picture-o', 'text': 'fa-file-text', 'video': 'fa-film', 'other': 'fa-file', 'archive': 'fa-save'} %}
-                {% for name, path, is_dir, size in items %}
+                {% for name, path, is_dir, size, dimensions in items %}
                     {% if is_dir %}
                         <div class="col-xs-6">
                             <a href="{{ get_dir_url('.modal_iconic_index', path)|safe }}" class="thumbnail xhr_link">
@@ -26,11 +26,14 @@
                             </a>
                         </div>
                     {% elif mimes[path] == "image" %}
-                        <div class="files files--image col-xs-6 modal_file_element" data-url="{{ get_file_url(path)|safe }}" data-path="{{ path }}">
+                        <div class="files files--image col-xs-6 modal_file_element" data-url="{{ get_file_url(path)|safe }}" data-path="{{ path }}"{% if dimensions[0] %} data-width="{{ dimensions[0] }}" data-height="{{ dimensions[1] }}"{% endif %}>
                             <div style="vertical-align: bottom;" class="thumbnail">
                                 <img src="{{ get_file_url(path)|safe }}">
                                 <div class="caption">
-                                    <span class="link-file"><span>{{ name }}</span><span class="detail">({{ size }})</span></span>
+                                    <span class="link-file">
+                                        <span>{{ name }}</span>
+                                        <span class="detail">{{ size }}{% if dimensions[0] %}, {{ dimensions[0] }}&times;{{ dimensions[1] }}&nbsp;px{% endif %}</span>
+                                    </span>
                                 </div>
                             </div>
                         </div>
@@ -39,7 +42,7 @@
                             <div class="thumbnail">
                                     <i class="fa fa-file"></i>
                                     <div class="caption">
-                                        <span class="link-file"><span>{{ name }}</span><span class="detail">({{ size }})</span></span>
+                                        <span class="link-file"><span>{{ name }}</span><span class="detail">{{ size }}</span></span>
                                     </div>
                             </div>
                         </div>

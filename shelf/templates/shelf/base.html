@@ -82,6 +82,7 @@
     {{ lib.get_view_extensions("tail_js") }}
     <script language="javascript" src="{{ url_for('library.static', filename='jquery.file.js') }}"></script>
     <script language="javascript" src="{{ url_for('shelf.static', filename='humanize/humanize.js') }}"></script>
+    <script language="javascript" src="{{ url_for('shelf.static', filename='jquery/jquery.observe.js') }}"></script>
 {% endblock %}
 
 {% block tail %}

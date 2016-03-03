@@ -18,13 +18,29 @@
         else if (input_el.hasClass('picture'))
         {
             var thumb_id = 'thumb_' + input_el.attr('id');
-            $(this).closest('.form-group').find('.thumbnail>img').first().attr('id', thumb_id);
+            var thumb_el = $(this).closest('.form-group').find('.thumbnail>img').first();
+
+            thumb_el.attr('id', thumb_id);
+
             modal.data('val-target', '#' + input_el.attr('id'));
             modal.data('src-target', '#' + thumb_id);
+
+            if (thumb_el.attr('width') && thumb_el.attr('height')) {
+                modal.data('crop-width', thumb_el.attr('width'));
+                modal.data('crop-height', thumb_el.attr('height'));
+
+                modal.observe('added', '.modal_file_element', function(record) {
+                    if (!$(this).data('width') || !$(this).data('height')) {
+                        $(this).removeClass('modal_file_element');
+                    }
+                });
+            }
 
             modal.modal({
                 remote: "/admin/fileadmin/modal-icons/",
                 toggle: "modal"
+            }).on('hidden.bs.modal', function(e) {
+                modal.disconnect();
             });
         }
         return false;

@@ -17,8 +17,6 @@ $(function() {
         var selector = $(this).closest('.modal_file_selector');
         var validator = selector.find('.modal_file_validate').first();
 
-        console.log("Selecting: selector = ", selector, " validator = ", validator);
-
         if ($(this).hasClass('selected')) {
             $(this).removeClass('selected');
 
