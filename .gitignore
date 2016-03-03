@@ -26,6 +26,9 @@ lib64
 # Installer logs
 pip-log.txt
 
+# Media files
+**/static/media
+
 # Databases
 *.db
 *.sqlite
