@@ -29,7 +29,7 @@ def init_admin(admin, session):
     admin.add_view(BlogModelView(Post, session, name="Articles", category="Blog"))
     admin.add_view(TagModelView(Tag, session, name="Tags", category="Blog"))
     admin.add_view(BasePageModelView(Page, session, name="Pages"))
-    admin.add_view(FileAdmin(config.MEDIA_FOLDER, base_url=config.MEDIA_URL, name=u"Bibliothèque"))
+    admin.add_view(FileAdmin(name=u"Bibliothèque"))
 
 
 class TagModelView(SQLAModelView, LocalizedViewMixin):

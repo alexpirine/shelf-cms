@@ -4,8 +4,14 @@ import humanize
 import os
 import os.path as op
 
+from PIL import ImageFile
 from base64 import b64decode
-from flask import Blueprint, flash, request, json, redirect
+from flask import Blueprint
+from flask import current_app
+from flask import flash
+from flask import json
+from flask import redirect
+from flask import request
 from flask.ext.admin import helpers
 from flask.ext.admin.babel import gettext
 from flask.ext.admin.form import RenderTemplateWidget
@@ -20,6 +26,55 @@ from wtforms.fields import TextField
 _unset_value = object()
 
 db = SQLAlchemy()
+
+# Copied from Django:
+# https://docs.djangoproject.com/en/1.9/_modules/django/core/files/images/
+def get_image_dimensions(file_or_path, close=False):
+    """
+    Returns the (width, height) of an image, given an open file or a path.  Set
+    'close' to True to close the file at the end if it is initially in an open
+    state.
+    """
+    p = ImageFile.Parser()
+    if hasattr(file_or_path, 'read'):
+        file = file_or_path
+        file_pos = file.tell()
+        file.seek(0)
+    else:
+        file = open(file_or_path, 'rb')
+        close = True
+    try:
+        # Most of the time Pillow only needs a small chunk to parse the image
+        # and get the dimensions, but with some TIFF files Pillow needs to
+        # parse the whole file.
+        chunk_size = 1024
+        while 1:
+            data = file.read(chunk_size)
+            if not data:
+                break
+            try:
+                p.feed(data)
+            except zlib.error as e:
+                # ignore zlib complaining on truncated stream, just feed more
+                # data to parser (ticket #19457).
+                if e.args[0].startswith("Error -5"):
+                    pass
+                else:
+                    raise
+            except struct.error:
+                # Ignore PIL failing on a too short buffer when reads return
+                # less bytes than expected. Skip and feed more data to the
+                # parser (ticket #24544).
+                pass
+            if p.image:
+                return p.image.size
+            chunk_size *= 2
+        return (None, None)
+    finally:
+        if close:
+            file.close()
+        else:
+            file.seek(file_pos)
 
 class RemoteFileModelMixin(object):
     def get_path(self):
@@ -130,6 +185,16 @@ class PictureField(TextField):
 
         picture.path = self.raw_data[0]
 
+        full_path = os.path.join(current_app.config['MEDIA_ROOT'], picture.path)
+        width, height = get_image_dimensions(full_path)
+
+        if width is None or height is None:
+            raise TypeError("The chosen file doesn't seem to be a valid image")
+
+        picture.width = width
+        picture.height = height
+
+
 class FileAdmin(LoginMixin, fileadmin.FileAdmin):
     list_template = "shelf-library-list.html"
     icon_list_template = "shelf-library-icon-list.html"
@@ -144,6 +209,15 @@ class FileAdmin(LoginMixin, fileadmin.FileAdmin):
         'image': ('.png', '.jpg', '.jpeg', '.gif'),
         'video': ('.mpg', '.mpeg', '.wmv', '.mp4', '.flv', '.mov'),
     }
+
+    def __init__(self, base_path = None, base_url = None, *args, **kwargs):
+        if base_path is None and 'MEDIA_ROOT' in current_app.config:
+            base_path = current_app.config['MEDIA_ROOT']
+
+        if base_url is None and 'MEDIA_URL' in current_app.config:
+            base_url = current_app.config['MEDIA_URL']
+
+        super(FileAdmin, self).__init__(base_path, base_url, *args, **kwargs)
 
     @expose('/modal-icons/')
     @expose('/modal-icons/b/<path:path>')
@@ -179,11 +253,19 @@ class FileAdmin(LoginMixin, fileadmin.FileAdmin):
             if self.is_accessible_path(rel_path) and not f.startswith('.'):
                 file_size = op.getsize(fp)
                 file_size = humanize.naturalsize(file_size, format = '%0.f')
-                items.append((f, rel_path, op.isdir(fp), file_size))
+
                 mimes[rel_path] = 'other'
                 for mime in self.mime_by_ext:
                     if op.splitext(rel_path)[1] in self.mime_by_ext[mime]:
                         mimes[rel_path] = mime
+
+                if mimes[rel_path] == 'image':
+                    dimensions = get_image_dimensions(fp)
+                else:
+                    dimensions = (None, None)
+
+                items.append((f, rel_path, op.isdir(fp), file_size, dimensions))
+
 
         # Sort by name
         items.sort(key=itemgetter(0))
@@ -316,12 +398,18 @@ class FileAdmin(LoginMixin, fileadmin.FileAdmin):
             if self.is_accessible_path(rel_path) and not f.startswith('.'):
                 file_size = op.getsize(fp)
                 file_size = humanize.naturalsize(file_size, format = '%0.f')
-                items.append((f, rel_path, op.isdir(fp), file_size))
+
                 mimes[rel_path] = 'other'
                 for mime in self.mime_by_ext:
                     if op.splitext(rel_path)[1] in self.mime_by_ext[mime]:
                         mimes[rel_path] = mime
 
+                if mimes[rel_path] == 'image':
+                    dimensions = get_image_dimensions(fp)
+                else:
+                    dimensions = (None, None)
+
+                items.append((f, rel_path, op.isdir(fp), file_size, dimensions))
 
         # Sort by name
         items.sort(key=itemgetter(0))

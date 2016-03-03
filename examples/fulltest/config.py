@@ -4,11 +4,11 @@ import os
 
 APP_ROOT = os.path.dirname(os.path.abspath(__file__))
 APP_STATIC = os.path.join(APP_ROOT, 'static')
-MEDIA_FOLDER = os.path.join(APP_STATIC, 'media')
+MEDIA_ROOT = os.path.join(APP_STATIC, 'media')
 MEDIA_URL = '/static/media/'
 
 try:
-    os.makedirs(MEDIA_FOLDER)
+    os.makedirs(MEDIA_ROOT)
 except OSError:
     pass
 
