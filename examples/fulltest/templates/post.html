@@ -13,7 +13,7 @@
     {% if post.picture %}
     <div class="row">
       <div class="col-md-6 col-md-offset-3">
-        <img src="{{ url_for('fileadmin.download', path=post.picture) }}" alt="{{post.title}}" class="img-responsive">
+        <img src="{{ post.picture.get_url() }}" alt="{{post.title}}" class="img-responsive">
       </div>
     </div>
     {% endif %}

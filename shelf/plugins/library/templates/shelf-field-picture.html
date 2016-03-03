@@ -2,7 +2,7 @@
     {% set path = field.data.path %}
     <input type="hidden" class="picture" id="{{ field.id }}" name="{{ field.name }}" value="{{ path }}">
     <div class="thumbnail">
-        <img src="{{ url_for('fileadmin.download', path=path) }}" alt="{{ field.id }}"{% if field.width %} width="{{ field.width }}"{% endif %}{% if field.height %} height="{{ field.height }}"{% endif %}/>
+        <img src="{{ field.data.get_url() }}" alt="{{ field.id }}"{% if field.width %} width="{{ field.width }}"{% endif %}{% if field.height %} height="{{ field.height }}"{% endif %}/>
     </div>
 {% else %}
     <input type="hidden" class="picture" id="{{ field.id }}" name="{{ field.name }}" value="">

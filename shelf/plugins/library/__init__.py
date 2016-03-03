@@ -3,6 +3,7 @@
 import humanize
 import os
 import os.path as op
+import re
 
 from PIL import ImageFile
 from base64 import b64decode
@@ -93,6 +94,12 @@ class PictureModelMixin(object):
     path = db.Column(db.String(255))
     width = db.Column(db.Integer, default=0)
     height = db.Column(db.Integer, default=0)
+
+    def get_url(self):
+        if not self.path:
+            return None
+
+        return re.sub(r'//+', '/', '%s/%s' % (current_app.config.get('MEDIA_URL', '/'), self.path))
 
     def __unicode__(self):
         return self.path
