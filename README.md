@@ -1,6 +1,8 @@
 [![Requirements Status](https://img.shields.io/requires/github/alexpirine/shelf-cms.svg)](https://requires.io/github/alexpirine/shelf-cms/requirements/)
 [![Build Status](https://img.shields.io/travis/alexpirine/shelf-cms.svg)](https://travis-ci.org/alexpirine/shelf-cms/)
 [![Downloads](https://img.shields.io/pypi/dm/ShelfCMS.svg)](https://pypi.python.org/pypi/ShelfCMS/)
+[![Documentation](https://img.shields.io/badge/docs-github%20wiki-blue.svg)](https://github.com/alexpirine/shelf-cms/wiki)
+
 
 #Shelf CMS
 Enhancing Flask microframework with a beautiful admin and cms-like features 
@@ -44,8 +46,13 @@ Here are the complete list :
 - Analytics : Google analytics providers for the dashboard system
 
 ##Documentation
+
 We are writing the documentation, it should be available soon.
+
+Meanwhile, you might find relevant information in the [Github's wiki](https://github.com/alexpirine/shelf-cms/wiki).
+
 ##Examples
+
 Examples are available in the examples/ directory.
 ##Installation
 Want to try Shelf ? Install it and its dependencies with pip :  
