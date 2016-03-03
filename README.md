@@ -44,8 +44,13 @@ Here are the complete list :
 - Analytics : Google analytics providers for the dashboard system
 
 ##Documentation
+
 We are writing the documentation, it should be available soon.
+
+Meanwhile, you might find relevant information in the [Github's wiki](https://github.com/alexpirine/shelf-cms/wiki).
+
 ##Examples
+
 Examples are available in the examples/ directory.
 ##Installation
 Want to try Shelf ? Install it and its dependencies with pip :  
