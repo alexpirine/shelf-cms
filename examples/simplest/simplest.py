@@ -1,5 +1,4 @@
 from flask import Flask
-from flask.ext.security import UserMixin, RoleMixin
 
 from shelf import Shelf
 from shelf.base import db

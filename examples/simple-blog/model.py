@@ -1,5 +1,3 @@
-from flask.ext.security import UserMixin, RoleMixin
-
 from shelf.base import db
 from shelf.plugins.library import PictureModelMixin
 from shelf.plugins.workflow import WorkflowModelMixin, WORKFLOW_STATES

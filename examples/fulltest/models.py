@@ -1,7 +1,5 @@
 # coding: utf-8
 
-from flask.ext.security import UserMixin, RoleMixin
-
 from shelf.base import db
 from shelf.plugins.library import PictureModelMixin, RemoteFileModelMixin
 from shelf.plugins.preview import PreviewableModelMixin

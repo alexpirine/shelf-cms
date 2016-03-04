@@ -14,8 +14,6 @@ from shelf.plugins.workflow import WorkflowViewMixin, StateField
 
 from models import Post, Tag, Page
 
-import config
-
 class DateTimeField(TextField):
     widget = DateTimePickerWidget()
 

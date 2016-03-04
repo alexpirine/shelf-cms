@@ -5,6 +5,8 @@ import humanize
 import os
 import os.path as op
 import re
+import struct
+import zlib
 
 from PIL import Image
 from PIL import ImageFile
@@ -12,7 +14,6 @@ from base64 import b64decode
 from flask import Blueprint
 from flask import current_app
 from flask import flash
-from flask import json
 from flask import redirect
 from flask import request
 from flask.ext.admin import helpers
@@ -38,11 +39,11 @@ def get_image_dimensions(file_or_path, close=False):
     """
     p = ImageFile.Parser()
     if hasattr(file_or_path, 'read'):
-        file = file_or_path
-        file_pos = file.tell()
-        file.seek(0)
+        f = file_or_path
+        file_pos = f.tell()
+        f.seek(0)
     else:
-        file = open(file_or_path, 'rb')
+        f = open(file_or_path, 'rb')
         close = True
     try:
         # Most of the time Pillow only needs a small chunk to parse the image
@@ -50,7 +51,7 @@ def get_image_dimensions(file_or_path, close=False):
         # parse the whole file.
         chunk_size = 1024
         while 1:
-            data = file.read(chunk_size)
+            data = f.read(chunk_size)
             if not data:
                 break
             try:
@@ -73,9 +74,9 @@ def get_image_dimensions(file_or_path, close=False):
         return (None, None)
     finally:
         if close:
-            file.close()
+            f.close()
         else:
-            file.seek(file_pos)
+            f.seek(file_pos)
 
 class RemoteFileModelMixin(object):
     def get_path(self):
@@ -329,6 +330,7 @@ class FileAdmin(LoginMixin, fileadmin.FileAdmin):
                            path=path, dir_path=parent_path,
                            width=width, height=height,
                            prev_view_type=prev_view_type,
+                           actions=actions,
                            actions_confirmation=actions_confirmation)
 
     @expose('/async_crop_save', methods=("POST",))
@@ -341,7 +343,7 @@ class FileAdmin(LoginMixin, fileadmin.FileAdmin):
         crop_width = int(request.form['crop_width'])
         crop_height = int(request.form['crop_height'])
 
-        media_path, full_path, path = self._normalize_path(path)
+        full_path, path = self._normalize_path(path)[1:]
 
         crop_part_name = ('_%d-%d_%dx%d' % (x, y, crop_width, crop_width))
         name, ext = os.path.splitext(full_path)
@@ -354,13 +356,11 @@ class FileAdmin(LoginMixin, fileadmin.FileAdmin):
         image = image.resize((crop_width, crop_height), Image.ANTIALIAS)
         image.save(crop_full_path)
 
-        res = {
+        return json.dumps({
             'error': False,
             'crop_path': crop_path,
             'crop_url': self._get_file_url(crop_path),
-        }
-
-        return json.dumps(res)
+        })
 
     @expose('/modal-upload/', methods = ("GET",))
     @expose('/modal-upload/b/<path:path>', methods = ("GET",))

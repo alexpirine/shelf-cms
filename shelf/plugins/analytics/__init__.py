@@ -74,10 +74,10 @@ class GoogleAnalytics(object):
         for row in raw_res.get('rows'):
             ptr = results
             if dimensions:
-                for i, dim in enumerate(dimensions):
-                    if row[i] not in ptr:
-                        ptr[row[i]] = {}
-                    ptr = ptr[row[i]]
+                for v in row[:len(dimensions)]:
+                    if v not in ptr:
+                        ptr[v] = {}
+                    ptr = ptr[v]
 
             for i, met in enumerate(metrics):
                 ptr[met] = row[i+len(dimensions) if dimensions else i]
