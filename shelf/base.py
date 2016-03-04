@@ -3,8 +3,11 @@ import admin
 from flask import Blueprint
 from flask.ext.security import SQLAlchemyUserDatastore
 from flask.ext.security import Security
+from flask.ext.sqlalchemy import SQLAlchemy
 from security.view import UserModelView
 from werkzeug.utils import import_string
+
+db = SQLAlchemy()
 
 class Shelf(object):
     """The Shelf object handles the admin, the plugins and the
@@ -29,12 +32,12 @@ class Shelf(object):
         adm = admin.Admin(self.app, *args, **kwargs)
         self.admin = adm
 
-    def init_db(self, db):
+    def init_db(self, db_object):
         """Init shelf with the db object"""
         if self.app is None:
             raise ValueError
-        self.db = db
-        db.create_all()
+        self.db = db_object
+        self.db.create_all()
 
     def init_security(self, user_cls, role_cls, datastore_cls=SQLAlchemyUserDatastore):
         self.user_datastore = datastore_cls(self.db, user_cls, role_cls)
@@ -66,6 +69,12 @@ class Shelf(object):
 
         if "SECURITY_POST_LOGOUT_VIEW" not in self.app.config:
             self.app.config["SECURITY_POST_LOGOUT_VIEW"] = "/login"
+
+        if "SECURITY_REGISTERABLE" not in self.app.config:
+            self.app.config["SECURITY_REGISTERABLE"] = True
+
+        if "SECURITY_RECOVERABLE" not in self.app.config:
+            self.app.config["SECURITY_RECOVERABLE"] = True
 
         self.security = Security(self.app, self.user_datastore)
 

@@ -3,7 +3,8 @@ from flask_security import current_user
 from shelf.admin.view import SQLAModelView
 
 class UserModelView(SQLAModelView):
-    default_forbidden_columns = ("password", "confirmed_at")
+    column_list = ('email', "active")
+    default_forbidden_columns = ("password",)
     can_edit = True
     can_create = True
     can_delete = True
@@ -29,7 +30,6 @@ class UserModelView(SQLAModelView):
         form = super(UserModelView, self).scaffold_form()
         for column in self.forbidden_columns:
             delattr(form, column)
-        delattr(form, "email")
         return form
 
     def is_accessible(self):

@@ -1,16 +1,13 @@
 # coding: utf-8
 
 from flask.ext.security import UserMixin, RoleMixin
-from flask.ext.sqlalchemy import SQLAlchemy
 
+from shelf.base import db
 from shelf.plugins.library import PictureModelMixin, RemoteFileModelMixin
 from shelf.plugins.preview import PreviewableModelMixin
 from shelf.plugins.i18n import LocalizedModelMixin
 from shelf.plugins.workflow import WorkflowModelMixin, WORKFLOW_STATES
 from shelf.plugins.page import PageModelMixin
-
-db = SQLAlchemy()
-
 
 #classe utilitaires
 
@@ -46,33 +43,6 @@ class RemoteFile(db.Model, RemoteFileModelMixin):
 
     def __unicode__(self):
         return self.path
-
-
-#classes necessaire à flask-security et shelf
-roles_users = db.Table('roles_users',
-    db.Column('user_id', db.Integer(), db.ForeignKey('user.id')),
-    db.Column('role_id', db.Integer(), db.ForeignKey('role.id')))
-
-
-class Role(db.Model, RoleMixin):
-    id = db.Column(db.Integer(), primary_key=True)
-    name = db.Column(db.String(80), unique=True)
-    description = db.Column(db.String(255))
-
-    def __unicode__(self):
-        return self.name
-
-
-class User(db.Model, UserMixin):
-    id = db.Column(db.Integer, primary_key=True)
-    email = db.Column(db.String(255), nullable=False)
-    password = db.Column(db.String(255))
-    firstname = db.Column(db.String(255))
-    lastname = db.Column(db.String(255))
-    active = db.Column(db.Boolean(), default=True)
-    confirmed_at = db.Column(db.DateTime())
-    roles = db.relationship('Role', secondary=roles_users,
-                            backref=db.backref('users', lazy='dynamic'))
 
 
 #classes de l'application

@@ -1,10 +1,9 @@
 from flask import Blueprint as FlaskBlueprint
-from flask.ext.sqlalchemy import SQLAlchemy
 from flask.ext.sqlalchemy import before_models_committed
 from flask_security.core import current_user
 from sqlalchemy.ext.declarative import declared_attr
 
-db = SQLAlchemy()
+from shelf.base import db
 
 class BlueprintModelMixin(object):
     """

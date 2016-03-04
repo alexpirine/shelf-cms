@@ -7,12 +7,13 @@ from flask.ext.security import SQLAlchemyUserDatastore
 from flask_security.utils import encrypt_password
 
 from shelf import Shelf
+from shelf.base import db
 from shelf.plugins.dashboard import DashboardView
 from shelf.plugins.page import Page as PagePlugin
+from shelf.security.models import User, Role
 
 from admin import init_admin, IndexPageModelView, ContactPageModelView
 from models import IndexPage, ContactPage
-from models import db, User, Role
 from view import init_views
 
 app = Flask(__name__)
@@ -65,8 +66,9 @@ with app.app_context():
         admin = User.query.join(User.roles).filter(Role.name == "superadmin").first()
         if not admin:
             admin = User(
-                firstname="Admin", lastname="Shelf",
-                email="admin@localhost")
+                email="admin@localhost",
+                active=True,
+            )
             for role_name in ["superadmin", "reviewer", "publisher"]:
                 role = user_datastore.find_role(role_name)
                 user_datastore.add_role_to_user(admin, role)

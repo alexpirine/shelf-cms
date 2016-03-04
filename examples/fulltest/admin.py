@@ -61,6 +61,13 @@ class BlogModelView(SQLAModelView, LibraryViewMixin, WysiwygViewMixin,
         "attachment",
     )
 
+    form_export_fields = (
+        'title',
+        'publication_date',
+        'abstract', 'text',
+        "attachment",
+    )
+
     column_labels = {
         "title": "Titre",
         "publication_date": u"Date de publication",
@@ -88,7 +95,7 @@ class BlogModelView(SQLAModelView, LibraryViewMixin, WysiwygViewMixin,
         "title": {"default": "", "unbound_field": TextField()},
         "abstract": {"default": "", "unbound_field": ClassicWysiwygField()},
         "text": {"default": "", "unbound_field": FullWysiwygField()},
-        "picture": {"width": 250, "height": 100},
+        "picture": {"width": 400, "height": 400},
     }
 
 

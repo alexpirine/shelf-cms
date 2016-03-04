@@ -18,17 +18,15 @@ from flask import request
 from flask.ext.admin import helpers
 from flask.ext.admin.babel import gettext
 from flask.ext.admin.form import RenderTemplateWidget
-from flask.ext.sqlalchemy import SQLAlchemy
 from flask_admin.base import expose
 from flask_admin.contrib import fileadmin
 from operator import itemgetter
+from shelf.base import db
 from shelf.security.mixin import LoginMixin
 from werkzeug import secure_filename
 from wtforms.fields import TextField
 
 _unset_value = object()
-
-db = SQLAlchemy()
 
 # Copied from Django:
 # https://docs.djangoproject.com/en/1.9/_modules/django/core/files/images/
