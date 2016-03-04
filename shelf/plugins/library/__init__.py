@@ -345,7 +345,7 @@ class FileAdmin(LoginMixin, fileadmin.FileAdmin):
 
         media_path, full_path, path = self._normalize_path(path)
 
-        crop_part_name = ('%d_%d_%dx%d' % (x, y, crop_width, crop_width))
+        crop_part_name = ('_%d-%d_%dx%d' % (x, y, crop_width, crop_width))
         name, ext = os.path.splitext(full_path)
         crop_full_path = name + crop_part_name + ext
         name, ext = os.path.splitext(path)

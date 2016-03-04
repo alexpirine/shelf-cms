@@ -88,7 +88,7 @@ class BlogModelView(SQLAModelView, LibraryViewMixin, WysiwygViewMixin,
         "title": {"default": "", "unbound_field": TextField()},
         "abstract": {"default": "", "unbound_field": ClassicWysiwygField()},
         "text": {"default": "", "unbound_field": FullWysiwygField()},
-        "picture": {"width": 300, "height": 300},
+        "picture": {"width": 250, "height": 100},
     }
 
 

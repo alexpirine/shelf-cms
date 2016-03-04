@@ -3,6 +3,9 @@
 <script language="javascript" src="{{ url_for('library.static', filename='smartcrop.js') }}"></script>
 <script language="javascript">
 (function($) {
+    var CROP_PREVIEW_MAX_WIDTH = 400;
+    var CROP_PREVIEW_MAX_HEIGHT = 300;
+
     $('.model-form').on('click', "button.modal-open", function() {
         var input_el = $(this).closest('.form-group').find('input');
         var modal = $(this).closest('.form-group').find('.modal');
@@ -56,32 +59,44 @@
                     validator.data('crop_width', thumb_el.attr('width'));
                     validator.data('crop_height', thumb_el.attr('height'));
 
+                    preview_width_ratio = thumb_el.attr('width') / CROP_PREVIEW_MAX_WIDTH;
+                    preview_height_ratio = thumb_el.attr('height') / CROP_PREVIEW_MAX_HEIGHT;
+                    preview_max_ratio = Math.max(1, preview_width_ratio, preview_height_ratio);
+
+                    preview_width = thumb_el.attr('width') / preview_max_ratio;
+                    preview_height = thumb_el.attr('height') / preview_max_ratio;
+
                     $('.image-cropper').cropit({
-                        width: thumb_el.attr('width'),
-                        height: thumb_el.attr('height'),
+                        imageState: {src: "{{ url_for('fileadmin.download', path='') }}" + $(this).data('path')},
+                        width: preview_width,
+                        height: preview_height,
+                        exportZoom: preview_max_ratio,
                         imageBackground: true,
                         allowDragNDrop: false,
                         imageBackground: true,
                         onImageLoaded: function() {
-                            validator.data('width', this.image.width);
-                            validator.data('height', this.image.height);
+                            validator.data('width', this.cropit.image.width);
+                            validator.data('height', this.cropit.image.height);
                             validator.removeClass('disabled');
 
-                            SmartCrop.crop(this.image, {width: thumb_el.attr('width'), height: thumb_el.attr('height')}, function(result) {
-                                $('.image-cropper').cropit('offset', {x: -result.topCrop.x, y: -result.topCrop.y});
-                                $('.image-cropper').cropit('zoom', (thumb_el.attr('width')/result.topCrop.width + thumb_el.attr('height')/result.topCrop.height) / 2);
+                            var $this = this;
+                            SmartCrop.crop(this.cropit.image, {width: thumb_el.attr('width'), height: thumb_el.attr('height')}, function(result) {
+                                $('.image-cropper').cropit('zoom', (preview_width/result.topCrop.width + preview_height/result.topCrop.height) / 2);
+                                $('.image-cropper').cropit('offset', {
+                                    x: -result.topCrop.x * $this.cropit.zoom,
+                                    y: -result.topCrop.y * $this.cropit.zoom
+                                });
                             });
                         },
                         onOffsetChange: function(offset) {
-                            validator.data('x', (-offset.x / $('.image-cropper').cropit('zoom')).toFixed());
-                            validator.data('y', (-offset.y / $('.image-cropper').cropit('zoom')).toFixed());
+                            validator.data('x', (-offset.x / this.cropit.zoom).toFixed());
+                            validator.data('y', (-offset.y / this.cropit.zoom).toFixed());
                         },
                         onZoomChange: function(zoom) {
-                            validator.data('width', (thumb_el.attr('width') / zoom).toFixed());
-                            validator.data('height', (thumb_el.attr('height') / zoom).toFixed());
+                            validator.data('width', (thumb_el.attr('width') / (zoom * this.exportZoom)).toFixed());
+                            validator.data('height', (thumb_el.attr('height') / (zoom * this.exportZoom)).toFixed());
                         }
                     });
-                    $('.image-cropper').cropit('imageSrc', "{{ url_for('fileadmin.download', path='') }}" + $(this).data('path'));
                 });
             }
 
