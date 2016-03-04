@@ -7,6 +7,88 @@ body {
   /* The html and body elements cannot have any padding or margin. */
 }
 
+.image-cropper {
+  overflow: hidden;
+  padding: 40px;
+}
+
+.image-cropper .cropit-preview {
+  margin: 0 auto;
+}
+
+.image-cropper .cropit-preview-image-container {
+  cursor: move;
+  border: 1px solid #e5e5e5;
+}
+
+.image-cropper .cropit-preview-background {
+  opacity: .2;
+}
+
+.image-cropper input.cropit-image-zoom-input {
+  position: relative;
+  -webkit-appearance: none;
+  -moz-appearance: none;
+  appearance: none;
+  height: 5px;
+  background: #eee;
+  -webkit-border-radius: 5px;
+  border-radius: 5px;
+  outline: none;
+  margin-top: 20px;
+}
+
+.image-cropper input.cropit-image-zoom-input::-moz-range-track {
+  -webkit-appearance:none;
+  -moz-appearance:none;
+  appearance:none;
+  height:5px;
+  background:#eee;
+  -webkit-border-radius:5px;
+  border-radius:5px;
+  outline:none;
+}
+
+.image-cropper input.cropit-image-zoom-input::-moz-range-thumb {
+  -webkit-appearance:none;
+  -moz-appearance:none;
+  appearance:none;
+  width:15px;
+  height:15px;
+  background:#888;
+  -webkit-border-radius:50%;
+  border-radius:50%;
+  -webkit-transition:background 0.25s;
+  -moz-transition:background 0.25s;
+  -o-transition:background 0.25s;
+  -ms-transition:background 0.25s;
+  transition:background 0.25s;
+}
+
+.image-cropper input.cropit-image-zoom-input::-webkit-slider-thumb {
+  -webkit-appearance:none;
+  -moz-appearance:none;
+  appearance:none;
+  width:15px;
+  height:15px;
+  background:#888;
+  -webkit-border-radius:50%;
+  border-radius:50%;
+  -webkit-transition:background 0.25s;
+  -moz-transition:background 0.25s;
+  -o-transition:background 0.25s;
+  -ms-transition:background 0.25s;
+  transition:background 0.25s;
+}
+
+.image-cropper input.cropit-image-zoom-input::-webkit-slider-thumb:hover,
+.image-cropper input.cropit-image-zoom-input::-webkit-slider-thumb:active,
+.image-cropper input.cropit-image-zoom-input::-moz-range-thumb:hover,
+.image-cropper input.cropit-image-zoom-input::-moz-range-thumb:active {
+  background:#bbb;
+}
+
+
 /* Wrapper for page content to push down footer */
 #wrap {
   min-height: 100%;

@@ -1,10 +1,12 @@
 # coding: utf-8
 
+import json
 import humanize
 import os
 import os.path as op
 import re
 
+from PIL import Image
 from PIL import ImageFile
 from base64 import b64decode
 from flask import Blueprint
@@ -209,6 +211,7 @@ class FileAdmin(LoginMixin, fileadmin.FileAdmin):
     modal_template = "shelf-library-modal-list.html"
     icon_modal_template = "shelf-library-modal-icon-list.html"
     upload_modal_template = "shelf-library-modal-upload.html"
+    crop_modal_template = "shelf-library-modal-crop.html"
 
     mime_by_ext = {
         'text': ('.pdf', '.txt', '.doc', '.html', '.xml', '.css'),
@@ -299,6 +302,67 @@ class FileAdmin(LoginMixin, fileadmin.FileAdmin):
                            mimes=mimes,
                            actions=actions,
                            actions_confirmation=actions_confirmation)
+
+    @expose('/modal-crop/b/<path:path>')
+    def modal_crop(self, path):
+        """
+            Index view method
+
+            :param path:
+                Optional directory path. If not provided, will use the base directory
+        """
+        prev_view_type = request.args.get('pvt', None)
+        if prev_view_type != 'list':
+            prev_view_type = 'icons'
+
+        # Get path and verify if it is valid
+        media_path, full_path, path = self._normalize_path(path)
+        parent_path = os.path.dirname(path)
+
+        if not self.is_accessible_path(full_path):
+            flash(gettext(gettext('Permission denied.')))
+            return redirect(self._get_dir_url('.index'))
+
+        width, height = get_image_dimensions(full_path)
+
+        actions, actions_confirmation = self.get_actions_list()
+
+        return self.render(self.crop_modal_template,
+                           path=path, dir_path=parent_path,
+                           width=width, height=height,
+                           prev_view_type=prev_view_type,
+                           actions_confirmation=actions_confirmation)
+
+    @expose('/async_crop_save', methods=("POST",))
+    def modal_crop_save(self):
+        path = request.form['path']
+        x = int(request.form['x'])
+        y = int(request.form['y'])
+        width = int(request.form['width'])
+        height = int(request.form['height'])
+        crop_width = int(request.form['crop_width'])
+        crop_height = int(request.form['crop_height'])
+
+        media_path, full_path, path = self._normalize_path(path)
+
+        crop_part_name = ('%d_%d_%dx%d' % (x, y, crop_width, crop_width))
+        name, ext = os.path.splitext(full_path)
+        crop_full_path = name + crop_part_name + ext
+        name, ext = os.path.splitext(path)
+        crop_path = name + crop_part_name + ext
+
+        image = Image.open(full_path)
+        image = image.crop((x, y, x + width, y + height))
+        image = image.resize((crop_width, crop_height), Image.ANTIALIAS)
+        image.save(crop_full_path)
+
+        res = {
+            'error': False,
+            'crop_path': crop_path,
+            'crop_url': self._get_file_url(crop_path),
+        }
+
+        return json.dumps(res)
 
     @expose('/modal-upload/', methods = ("GET",))
     @expose('/modal-upload/b/<path:path>', methods = ("GET",))

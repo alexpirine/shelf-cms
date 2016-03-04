@@ -24,6 +24,7 @@ $(function() {
             if (!validator.hasClass('disabled')) {
                 validator.addClass('disabled');
                 validator_msg.text('Validate');
+                validator.removeClass('modal_crop_required');
             }
         }
         else {
@@ -36,9 +37,11 @@ $(function() {
 
             if ($(this).hasClass('modal_crop_required')) {
                 validator_msg.text('Crop');
+                validator.addClass('modal_crop_required');
             }
             else {
                 validator_msg.text('Validate');
+                validator.removeClass('modal_crop_required');
             }
 
             validator.data('path', $(this).data('path'));
@@ -59,6 +62,12 @@ $(function() {
             return;
         }
 
+        if ($(this).hasClass('modal_crop_required')) {
+            var pvt = modal.find('.modal-body .model-icone').length ? 'icon' : 'list';
+            modal.load(modal.get(0).crop_base_url + $(this).data('path') + '?pvt=' + pvt);
+            return;
+        }
+
         if (modal.data('val-target')) {
             $(modal.data('val-target')).val(path);
         }
@@ -68,6 +77,46 @@ $(function() {
         }
 
         modal.modal('hide');
+    });
+
+    // validates file cropping in modal popup
+    $(document).on('click', '.modal .modal_file_validate_crop', function(e) {
+        e.preventDefault();
+        e.stopPropagation();
+
+        if ($(this).hasClass('disabled')) {
+            return;
+        }
+
+        var path = $(this).data('path');
+        var crop_save_url = $(this).data('crop-save-url');
+        var x = $(this).data('x');
+        var y = $(this).data('y');
+        var width = $(this).data('width');
+        var height = $(this).data('height');
+        var crop_width = $(this).data('crop_width');
+        var crop_height = $(this).data('crop_height');
+        var modal = $(this).closest('.modal');
+
+        $.post(crop_save_url, {
+            path: path,
+            x: x,
+            y: y,
+            width: width,
+            height: height,
+            crop_width: crop_width,
+            crop_height: crop_height
+        }, function(data) {
+            if (modal.data('val-target')) {
+                $(modal.data('val-target')).val(data.crop_path);
+            }
+
+            if (modal.data('src-target')) {
+                $(modal.data('src-target')).attr('src', data.crop_url);
+            }
+
+            modal.modal('hide');
+        }, 'json');
     });
 
     /**

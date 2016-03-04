@@ -1,5 +1,6 @@
 <script language="javascript" src="{{ url_for('shelf.static', filename='shelf/js/library_field.js') }}"></script>
 <script language="javascript" src="{{ url_for('shelf.static', filename='jquery/jquery.cropit.js') }}"></script>
+<script language="javascript" src="{{ url_for('library.static', filename='smartcrop.js') }}"></script>
 <script language="javascript">
 (function($) {
     $('.model-form').on('click', "button.modal-open", function() {
@@ -45,10 +46,49 @@
                         $(this).addClass('modal_crop_required');
                     }
                 });
+
+                modal.observe('added', '.image-cropper', function(record) {
+                    var preview = $(this).find('.cropit-preview').first();
+                    var validator = modal.find('.modal_file_validate_crop').first();
+
+                    validator.data('x', 0);
+                    validator.data('y', 0);
+                    validator.data('crop_width', thumb_el.attr('width'));
+                    validator.data('crop_height', thumb_el.attr('height'));
+
+                    $('.image-cropper').cropit({
+                        width: thumb_el.attr('width'),
+                        height: thumb_el.attr('height'),
+                        imageBackground: true,
+                        allowDragNDrop: false,
+                        imageBackground: true,
+                        onImageLoaded: function() {
+                            validator.data('width', this.image.width);
+                            validator.data('height', this.image.height);
+                            validator.removeClass('disabled');
+
+                            SmartCrop.crop(this.image, {width: thumb_el.attr('width'), height: thumb_el.attr('height')}, function(result) {
+                                $('.image-cropper').cropit('offset', {x: -result.topCrop.x, y: -result.topCrop.y});
+                                $('.image-cropper').cropit('zoom', (thumb_el.attr('width')/result.topCrop.width + thumb_el.attr('height')/result.topCrop.height) / 2);
+                            });
+                        },
+                        onOffsetChange: function(offset) {
+                            validator.data('x', (-offset.x / $('.image-cropper').cropit('zoom')).toFixed());
+                            validator.data('y', (-offset.y / $('.image-cropper').cropit('zoom')).toFixed());
+                        },
+                        onZoomChange: function(zoom) {
+                            validator.data('width', (thumb_el.attr('width') / zoom).toFixed());
+                            validator.data('height', (thumb_el.attr('height') / zoom).toFixed());
+                        }
+                    });
+                    $('.image-cropper').cropit('imageSrc', "{{ url_for('fileadmin.download', path='') }}" + $(this).data('path'));
+                });
             }
 
+            modal.get(0).crop_base_url = "{{ url_for('fileadmin.modal_crop', path='') }}";
+
             modal.modal({
-                remote: "/admin/fileadmin/modal-icons/",
+                remote: "{{ url_for('fileadmin.modal_iconic_index') }}",
                 toggle: "modal"
             }).on('hidden.bs.modal', function(e) {
                 modal.disconnect();

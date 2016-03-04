@@ -274,6 +274,9 @@ return /******/ (function(modules) { // webpackBootstrap
 	        _jquery2['default'].event.props.push('dataTransfer');
 	      }
 
+	      this.options.image = this.image;
+	      this.options.preImage = this.preImage;
+
 	      this.bindListeners();
 
 	      if (this.options.imageState && this.options.imageState.src) {
