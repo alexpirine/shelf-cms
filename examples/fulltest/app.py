@@ -3,7 +3,6 @@
 
 from flask import Flask
 from flask.ext.babel import Babel
-from flask.ext.security import SQLAlchemyUserDatastore
 from flask_security.utils import encrypt_password
 
 from shelf import Shelf
@@ -16,65 +15,52 @@ from admin import init_admin, IndexPageModelView, ContactPageModelView
 from models import IndexPage, ContactPage
 from view import init_views
 
-app = Flask(__name__)
+def create_app():
+    app = Flask(__name__)
 
-app.debug = True
-app.testing = False
+    app.debug = True
+    app.testing = False
 
-app.config.from_object('config')
+    app.config.from_object('config')
 
-app.config['SHELF_PAGES'] = {
-    "index": (IndexPage, IndexPageModelView),
-    "contact": (ContactPage, ContactPageModelView),
-}
+    app.config['SHELF_PAGES'] = {
+        "index": (IndexPage, IndexPageModelView),
+        "contact": (ContactPage, ContactPageModelView),
+    }
 
+    with app.app_context():
+        db.init_app(app)
+        db.create_all()
 
-with app.app_context():
-    db.init_app(app)
-    db.create_all()
+        babel = Babel(app)
 
-    babel = Babel(app)
+        shlf = Shelf(app)
+        shlf.init_db(db)
 
-    shlf = Shelf(app)
-    shlf.init_db(db)
+        dview = DashboardView()
+        shlf.init_admin(index_view=dview)
 
-    dview = DashboardView()
-    shlf.init_admin(index_view=dview)
+        shlf.init_security(User, Role)
 
-    user_datastore = SQLAlchemyUserDatastore(db, User, Role)
-    shlf.init_security(User, Role)
+        shlf.load_plugins((
+            "shelf.plugins.wysiwyg",
+            "shelf.plugins.workflow",
+            "shelf.plugins.i18n",
+            "shelf.plugins.library",
+            "shelf.plugins.preview",
+            "shelf.plugins.page",
+            "shelf.plugins.dashboard"
+        ))
+        init_admin(shlf.admin, db.session)
+        shlf.setup_plugins()
 
-    shlf.load_plugins((
-        "shelf.plugins.wysiwyg",
-        "shelf.plugins.workflow",
-        "shelf.plugins.i18n",
-        "shelf.plugins.library",
-        "shelf.plugins.preview",
-        "shelf.plugins.page",
-        "shelf.plugins.dashboard"
-    ))
-    init_admin(shlf.admin, db.session)
-    shlf.setup_plugins()
+        page = shlf.get_plugin_by_class(PagePlugin)
+        page.register_pages(app, shlf.db)
 
-    page = shlf.get_plugin_by_class(PagePlugin)
-    page.register_pages(app, shlf.db)
+        init_views(app)
 
-    init_views(app)
-
-    @app.before_first_request
-    def create_admin():
-        admin = User.query.join(User.roles).filter(Role.name == "superadmin").first()
-        if not admin:
-            admin = User(
-                email="admin@localhost",
-                active=True,
-            )
-            for role_name in ["superadmin", "reviewer", "publisher"]:
-                role = user_datastore.find_role(role_name)
-                user_datastore.add_role_to_user(admin, role)
-            admin.password = encrypt_password("admin31!")
-            db.session.add(admin)
-            db.session.commit()
+    return app
 
 if __name__ == "__main__":
+    app = create_app()
     app.run('0.0.0.0', port=5000)
