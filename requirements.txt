@@ -6,6 +6,7 @@ Flask-Babel==0.9
 Flask-Login==0.3.2
 Flask-Mail==0.9.1
 Flask-Principal==0.4.0
+Flask-Script==2.0.5
 Flask-Security==1.7.5
 Flask-SQLAlchemy==2.1
 Flask-WTF==0.12
