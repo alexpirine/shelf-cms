@@ -70,6 +70,9 @@ class Shelf(object):
         if "SECURITY_POST_LOGOUT_VIEW" not in self.app.config:
             self.app.config["SECURITY_POST_LOGOUT_VIEW"] = "/login"
 
+        if "SECURITY_SEND_PASSWORD_RESET_NOTICE_EMAIL" not in self.app.config:
+            self.app.config["SECURITY_SEND_PASSWORD_RESET_NOTICE_EMAIL"] = False
+
         if "SECURITY_REGISTERABLE" not in self.app.config:
             self.app.config["SECURITY_REGISTERABLE"] = False
 
