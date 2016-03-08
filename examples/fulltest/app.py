@@ -25,7 +25,7 @@ app.config.from_object('config')
 
 app.config['SHELF_PAGES'] = {
     "index": (IndexPage, IndexPageModelView),
-    "contact": (ContactPage, ContactPageModelView)
+    "contact": (ContactPage, ContactPageModelView),
 }
 
 

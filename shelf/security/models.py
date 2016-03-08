@@ -18,7 +18,7 @@ class Role(db.Model, RoleMixin):
 
 class User(db.Model, UserMixin):
     id = db.Column(db.Integer, primary_key=True)
+    roles = db.relationship('Role', secondary=roles_users, backref=db.backref('users', lazy='dynamic'))
     email = db.Column(db.String(255), nullable=False)
     password = db.Column(db.String(255))
     active = db.Column(db.Boolean(), default=False)
-    roles = db.relationship('Role', secondary=roles_users, backref=db.backref('users', lazy='dynamic'))
