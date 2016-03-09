@@ -1,9 +1,19 @@
+$.fn.check = function(status) {
+    if (typeof status === "undefined") {
+        status = true;
+    }
+
+    $(this).prop('checked', status);
+    $(this).triggerHandler('change');
+    return $(this);
+};
+
 var AdminModelActions = function(actionErrorMessage, actionConfirmations) {
     // Actions helpers. TODO: Move to separate file
     this.execute = function(name) {
         var selected = $('input.action-checkbox:checked').size();
 
-        if (selected === 0) {
+        if (selected === 0 && name != 'export_all') {
             alert(actionErrorMessage);
             return false;
         }
@@ -32,7 +42,7 @@ var AdminModelActions = function(actionErrorMessage, actionConfirmations) {
         $('.select-all a').click(function(e) {
             $('.select-all').hide();
             $('.select-none').show();
-            $('.model-list thead input.action-rowtoggle').prop('checked', true);
+            $('.model-list thead input.action-rowtoggle').check();
             $('#select-all').val("1");
         });
 
@@ -41,8 +51,8 @@ var AdminModelActions = function(actionErrorMessage, actionConfirmations) {
             $('.select-all').show();
             $('.select-all a').hide();
             $('.select-all span').html('0');
-            $('.model-list thead input.action-rowtoggle').prop('checked', false);
-            $('.model-list tbody tr input.action-checkbox:checked').prop('checked', false);
+            $('.model-list thead input.action-rowtoggle').check(false);
+            $('.model-list tbody tr input.action-checkbox:checked').check(false);
             $('.model-list tbody tr.selected').removeClass('selected');
             $('#select-all').val("0");
             $('#select-page').val("0");
@@ -69,9 +79,9 @@ var AdminModelActions = function(actionErrorMessage, actionConfirmations) {
 
             $('.select-all span').html($('.model-list tbody tr.selected').length);
             if ($('.model-list tbody tr.selected').length > 0)
-                $("li.actions.delete").removeClass('disabled');
+                $("li.actions.action-delete").removeClass('disabled');
             else
-                $("li.actions.delete").addClass('disabled');
+                $("li.actions.action-delete").addClass('disabled');
         });
 
         $('input.action-checkbox').change(function() {
@@ -83,23 +93,16 @@ var AdminModelActions = function(actionErrorMessage, actionConfirmations) {
            }
         });
 
-        $('.model-list tbody tr').click(function (e) {
+        $('.model-list tbody tr').on('click', function (e) {
             if ($(this).find('input.action-checkbox').length == 0) {
                 return;
             }
-            
-            /* state switch when row is clicked */
-            if ($(this).hasClass('selected'))
-            {
-                $(this).removeClass('selected');
-                $(this).find('input.action-checkbox').prop("checked", false);
-            }
-            else
-            {
-                $(this).addClass('selected');
-                $(this).find('input.action-checkbox').prop("checked", true);
-            }
 
+            /* state switch when row is clicked */
+            $(this).find('input.action-checkbox').check(!$(this).hasClass('selected'));
+        });
+
+        $('.model-list tbody tr input.action-checkbox').on('change', function(e) {
             /* changing count value */
             $('.select-all span').html($('.model-list tbody tr.selected').length);
 
@@ -122,11 +125,13 @@ var AdminModelActions = function(actionErrorMessage, actionConfirmations) {
                 $('#select-page').val("0");
             }
 
-            if ($('.model-list tbody tr.selected').length > 0)
-                $("li.actions.delete").removeClass('disabled');
-            else
-                $("li.actions.delete").addClass('disabled');
-        });
+            if ($('.model-list tbody tr.selected').length > 0) {
+                $("li.actions.action-delete").removeClass('disabled');
+            }
+            else {
+                $("li.actions.action-delete").addClass('disabled');
+            }
+        }).triggerHandler('change');
 
         /* Set selected class on already checked row */
         $('.model-list tbody tr input.action-checkbox:checked').each(

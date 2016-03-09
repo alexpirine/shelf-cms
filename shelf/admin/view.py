@@ -205,12 +205,12 @@ class SQLAModelView(LoginMixin, sqla.ModelView, ActionsMixin):
     # Default model actions
     def is_action_allowed(self, name):
         # Check delete action permission
-        if name == 'export' and not self.can_export:
+        if name == 'export_all' and not self.can_export:
             return False
 
         return super(SQLAModelView, self).is_action_allowed(name)
 
-    @action('export', lazy_gettext('Export'))
+    @action('export_all', lazy_gettext("Export all"))
     def action_export(self, ids, query):
         return redirect(self.get_url('.export_csv'))
 
