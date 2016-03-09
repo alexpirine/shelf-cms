@@ -14,6 +14,10 @@ manager = Manager(create_app)
 manager.add_command('shelf', shelf_manager)
 
 @manager.command
+def test():
+    print("Hello world!")
+
+@manager.command
 def create_admin():
     user_datastore = current_app.extensions['security'].datastore
 
