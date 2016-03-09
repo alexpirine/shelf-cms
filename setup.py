@@ -25,7 +25,7 @@ setup(
         'WTForms',
         'Werkzeug',
         'humanize',
-        'py-bcrypt',
+        'bcrypt',
     ],
     classifiers=[
         'License :: OSI Approved :: BSD License',
