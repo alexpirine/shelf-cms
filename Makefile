@@ -28,7 +28,8 @@ requirements: develop
 test:
 	python setup.py test
 uninstall:
-	pip freeze | grep -v "^-e" | xargs pip uninstall -y ShelfCMS
+	pip uninstall -y ShelfCMS
+	pip freeze | grep -v "^-e" | xargs pip uninstall -y
 clean:
 	python setup.py clean
 	rm -fr build/ dist/ .eggs/
