@@ -23,7 +23,7 @@ ADMIN_PWD = 'admin31!'
 
 class TestManagement(TestCase):
     @staticmethod
-    def _remvoe_db_file(self):
+    def _remvoe_db_file():
         if os.path.exists(DB_PATH):
             os.remove(DB_PATH)
 
