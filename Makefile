@@ -17,10 +17,9 @@ develop:
 sdist:
 	python setup.py sdist --formats=gztar,zip
 pypi: sdist
-	sh -c 'read -s -p "Enter GPG passphrase: " pwd && echo && echo $$pwd > .gpg.passphrase.tmp'
-	gpg --detach-sign --batch --yes --armor --passphrase-file .gpg.passphrase.tmp dist/ShelfCMS-${VERSION}.tar.gz
-	gpg --detach-sign --batch --yes --armor --passphrase-file .gpg.passphrase.tmp dist/ShelfCMS-${VERSION}.zip
-	rm .gpg.passphrase.tmp
+	sh -c 'read -s -p "Enter GPG passphrase: " pwd && \
+	gpg --detach-sign --batch --yes --armor --passphrase $$pwd dist/ShelfCMS-${VERSION}.tar.gz && \
+	gpg --detach-sign --batch --yes --armor --passphrase $$pwd dist/ShelfCMS-${VERSION}.zip'
 	twine upload dist/ShelfCMS-${VERSION}*
 requirements: develop
 	pip freeze | grep -E "^${DEV_TOOLS}=" > requirements-dev.txt
