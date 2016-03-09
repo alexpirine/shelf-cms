@@ -36,7 +36,6 @@ pip-log.txt
 # Unit test / coverage reports
 .coverage
 .tox
-tests/test-output
 
 # Translations
 *.mo
