@@ -1,5 +1,6 @@
 from flask_admin.contrib import sqla
 from actions import ActionsMixin
+from flask import redirect
 from flask.ext.admin.babel import lazy_gettext, ngettext, gettext
 from flask.ext.admin.actions import action
 from flask.ext.admin.base import AdminIndexView
@@ -103,7 +104,7 @@ class SQLAModelView(LoginMixin, sqla.ModelView, ActionsMixin):
             return self.additionnal_context()
         return bp
 
-    def get_list(self, page, sort_column, sort_desc, search, filters, execute=True, nolimit=False):
+    def get_list(self, page, sort_column, sort_desc, search, filters, execute=True, nolimit=False, page_size = None):
         """
             Return models from the database.
 
@@ -200,6 +201,18 @@ class SQLAModelView(LoginMixin, sqla.ModelView, ActionsMixin):
             query = query.all()
 
         return count, query
+
+    # Default model actions
+    def is_action_allowed(self, name):
+        # Check delete action permission
+        if name == 'export' and not self.can_export:
+            return False
+
+        return super(SQLAModelView, self).is_action_allowed(name)
+
+    @action('export', lazy_gettext('Export'))
+    def action_export(self, ids, query):
+        return redirect(self.get_url('.export_csv'))
 
     @action('delete',
             lazy_gettext('Delete'),
