@@ -1,4 +1,4 @@
-from oauth2client.client import SignedJwtAssertionCredentials
+from oauth2client.service_account import ServiceAccountCredentials
 from apiclient.discovery import build
 from httplib2 import Http
 from urllib import urlencode
@@ -42,12 +42,11 @@ class GoogleAnalytics(object):
     def prepare(self):
         self.http = Http()
 
-        with file(self.keyfile, "rb") as f:
-            credentials = SignedJwtAssertionCredentials(
-                self.email,
-                f.read(),
-                scope='https://www.googleapis.com/auth/analytics.readonly'
-            )
+        credentials = ServiceAccountCredentials.from_p12_keyfile(
+            self.email,
+            self.keyfile,
+            scopes='https://www.googleapis.com/auth/analytics.readonly'
+        )
 
         self.http = credentials.authorize(self.http)
         self.analytics = build('analytics', 'v3', http=self.http)
