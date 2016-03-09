@@ -8,5 +8,5 @@ script:
   - make test
   - make requirements
   - make sdist
-  - make clean
   - make uninstall
+  - make clean
