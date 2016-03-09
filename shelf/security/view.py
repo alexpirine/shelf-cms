@@ -13,6 +13,7 @@ class UserModelView(SQLAModelView):
     can_edit = True
     can_create = True
     can_delete = True
+    can_export = True
 
     def __init__(self, *args, **kwargs):
         self.forbidden_columns = self.default_forbidden_columns

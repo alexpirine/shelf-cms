@@ -1,7 +1,7 @@
 VERSION := $(shell python setup.py --version)
 DEV_TOOLS := ($(shell python -c 'import setup; print "|".join(setup.DEV_TOOLS)'))
 
-all help:
+help:
 	@echo "make install       - Install on local system"
 	@echo "make develop       - Install on local system in development mode"
 	@echo "make sdist         - Create python source packages"
