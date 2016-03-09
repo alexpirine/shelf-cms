@@ -33,6 +33,9 @@ class TestManagement(TestCase):
         os.chdir(TESTS_OUTPUT_PATH)
 
     def tearDown(self):
+        # restores current directory
+        os.chdir(BASE_PATH)
+
         # removes files created during the tests
         self.env.clear()
 
