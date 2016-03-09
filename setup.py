@@ -3,9 +3,15 @@
 
 from setuptools import setup, find_packages
 
+TESTING_TOOLS = [
+    'selenium',
+    'scripttest',
+    'nose',
+]
+
 setup(
     name='ShelfCMS',
-    version='0.12.2',
+    version='0.12.3',
     url='https://github.com/iriahi/shelf-cms',
     license='BSD',
     author='Ismael Riahi',
@@ -25,11 +31,14 @@ setup(
         'Flask-Security',
         'Flask-WTF',
         'Jinja2',
+        'Pillow',
         'SQLAlchemy',
         'WTForms',
         'Werkzeug',
         'bcrypt',
+        'google-api-python-client',
         'humanize',
+        'pyOpenSSL',
     ],
     classifiers=[
         'License :: OSI Approved :: BSD License',
@@ -43,4 +52,9 @@ setup(
         'Programming Language :: Python :: 2',
         'Programming Language :: Python :: 2.7',
     ],
+    tests_require = TESTING_TOOLS,
+    extras_require = {
+        'dev': TESTING_TOOLS,
+    },
+    test_suite = 'nose.collector',
 )

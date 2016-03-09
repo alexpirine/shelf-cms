@@ -1,14 +1,18 @@
-VERSION :=$(shell python setup.py --version )
-
+VERSION := $(shell python setup.py --version)
+DEV_TOOLS := (nose|scripttest|selenium)
 all:
 	python setup.py build
+install:
+	pip install .
 clean:
+	pip freeze | grep -v "^-e" | xargs pip uninstall -y
 	python setup.py clean
-	rm -fr build
-	rm -fr dist
+	rm -fr build/
+	rm -fr dist/
+	rm -fr .eggs/
 	rm -fr ShelfCMS.egg-info/
 develop:
-	python setup.py develop
+	pip install -e .[dev]
 sdist:
 	python setup.py sdist --formats=gztar,zip
 pypi: sdist
@@ -18,7 +22,7 @@ pypi: sdist
 	rm .gpg.passphrase.tmp
 	twine upload dist/ShelfCMS-${VERSION}*
 requirements:
-	pip freeze | grep -v "^-e" > requirements-dev.txt
-	grep -Ev "^(nose=|scripttest=|selenium=)" requirements-dev.txt > requirements.txt
+	pip freeze | grep -E "^${DEV_TOOLS}=" > requirements-dev.txt
+	pip freeze | grep -vE "^(-e |${DEV_TOOLS}=)" > requirements.txt
 test:
-	nosetests
+	python setup.py test
