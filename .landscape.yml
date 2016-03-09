@@ -4,3 +4,6 @@ uses:
   - flask
 requirements:
   - requirements.txt
+pylint:
+  disable:
+    - super-on-old-class
