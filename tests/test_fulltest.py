@@ -2,12 +2,7 @@
 
 import os
 import shutil
-import signal
-import subprocess
-import time
 
-from selenium import webdriver
-from selenium.webdriver.common.keys import Keys
 from scripttest import TestFileEnvironment
 from unittest import TestCase
 
@@ -21,7 +16,8 @@ ADMIN_USER = 'admin@localhost'
 ADMIN_PWD = 'admin31!'
 
 class TestManagement(TestCase):
-    def _remvoe_db_file(self):
+    @staticmethod
+    def _remvoe_db_file():
         if os.path.exists(DB_PATH):
             os.remove(DB_PATH)
 
