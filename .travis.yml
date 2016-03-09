@@ -5,7 +5,8 @@ python:
 install:
   - make install
 script:
-  - make sdist
   - make test
+  - make requirements
+  - make sdist
   - make clean
   - make uninstall
