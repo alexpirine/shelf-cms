@@ -27,8 +27,9 @@ requirements: develop
 	pip freeze | grep -vE "^(-e |${DEV_TOOLS}=)" > requirements.txt
 test:
 	python setup.py test
+uninstall:
+	pip freeze | grep -v "^-e" | xargs pip uninstall -y ShelfCMS
 clean:
-	pip freeze | grep -v "^-e" | xargs pip uninstall -y
 	python setup.py clean
 	rm -fr build/ dist/ .eggs/
 	rm -fr ShelfCMS.egg-info/
