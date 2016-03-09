@@ -1,5 +1,6 @@
 VERSION := $(shell python setup.py --version)
-DEV_TOOLS := (nose|scripttest|selenium)
+DEV_TOOLS := ($(shell python -c 'import setup; print "|".join(setup.DEV_TOOLS)'))
+
 all:
 	python setup.py build
 install:
@@ -21,7 +22,7 @@ pypi: sdist
 	gpg --detach-sign --batch --yes --armor --passphrase-file .gpg.passphrase.tmp dist/ShelfCMS-${VERSION}.zip
 	rm .gpg.passphrase.tmp
 	twine upload dist/ShelfCMS-${VERSION}*
-requirements:
+requirements: develop
 	pip freeze | grep -E "^${DEV_TOOLS}=" > requirements-dev.txt
 	pip freeze | grep -vE "^(-e |${DEV_TOOLS}=)" > requirements.txt
 test:
