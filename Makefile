@@ -1,17 +1,17 @@
 VERSION := $(shell python setup.py --version)
 DEV_TOOLS := ($(shell python -c 'import setup; print "|".join(setup.DEV_TOOLS)'))
 
-all:
-	python setup.py build
+all help:
+	@echo "make install       - Install on local system"
+	@echo "make develop       - Install on local system in development mode"
+	@echo "make sdist         - Create python source packages"
+	@echo "make pypi          - Update PyPI package"
+	@echo "make requirements  - Update requirements files"
+	@echo "make test          - Run tests"
+	@echo "make clean         - Get rid of scratch and byte files"
+
 install:
 	pip install .
-clean:
-	pip freeze | grep -v "^-e" | xargs pip uninstall -y
-	python setup.py clean
-	rm -fr build/
-	rm -fr dist/
-	rm -fr .eggs/
-	rm -fr ShelfCMS.egg-info/
 develop:
 	pip install -e .[dev]
 sdist:
@@ -27,3 +27,9 @@ requirements: develop
 	pip freeze | grep -vE "^(-e |${DEV_TOOLS}=)" > requirements.txt
 test:
 	python setup.py test
+clean:
+	pip freeze | grep -v "^-e" | xargs pip uninstall -y
+	python setup.py clean
+	rm -fr build/ dist/ .eggs/
+	rm -fr ShelfCMS.egg-info/
+	find . -name '*.pyc' -delete
