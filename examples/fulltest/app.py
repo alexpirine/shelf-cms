@@ -2,8 +2,6 @@
 # coding: utf-8
 
 from flask import Flask
-from flask.ext.babel import Babel
-from flask_security.utils import encrypt_password
 
 from shelf import Shelf
 from shelf.base import db
@@ -31,8 +29,6 @@ def create_app():
     with app.app_context():
         db.init_app(app)
         db.create_all()
-
-        babel = Babel(app)
 
         shlf = Shelf(app)
         shlf.init_db(db)
