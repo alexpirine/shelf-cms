@@ -96,3 +96,7 @@ class TestManagement(TestCase):
         self.driver.find_element_by_id('submit').click()
         self.assertEquals(self.driver.title, "Home - Admin")
 
+        self.driver.find_element_by_css_selector('ul.nav>li>a[href="/admin/user/"]').click()
+        self.assertEquals(self.driver.current_url, "http://127.0.0.1:5000/admin/user/")
+        self.assertEquals(self.driver.title, "User - Admin")
+
