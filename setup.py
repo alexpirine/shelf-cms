@@ -4,9 +4,10 @@
 from setuptools import setup, find_packages
 
 DEV_TOOLS = [
-    'selenium',
-    'scripttest',
+    'coverage',
     'nose',
+    'scripttest',
+    'selenium',
 ]
 
 if __name__ == '__main__':

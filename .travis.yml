@@ -10,3 +10,7 @@ script:
   - make sdist
   - make uninstall
   - make clean
+before_install:
+  - pip install codecov
+after_success:
+  - codecov

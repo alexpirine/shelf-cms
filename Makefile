@@ -12,23 +12,30 @@ help:
 
 install:
 	pip install .
+
 develop:
 	pip install -e .[dev]
+
 sdist:
 	python setup.py sdist --formats=gztar,zip
+
 pypi: sdist
 	sh -c 'read -s -p "Enter GPG passphrase: " pwd && \
 	gpg --detach-sign --batch --yes --armor --passphrase $$pwd dist/ShelfCMS-${VERSION}.tar.gz && \
 	gpg --detach-sign --batch --yes --armor --passphrase $$pwd dist/ShelfCMS-${VERSION}.zip'
 	twine upload dist/ShelfCMS-${VERSION}*
+
 requirements: develop
 	pip freeze | grep -E "^${DEV_TOOLS}=" > requirements-dev.txt
 	pip freeze | grep -vE "^(-e |${DEV_TOOLS}=)" > requirements.txt
-test:
-	python setup.py test
+
+test: develop
+	coverage run setup.py test
+
 uninstall:
 	pip uninstall -y ShelfCMS
 	pip freeze | grep -v "^-e" | xargs pip uninstall -y
+
 clean:
 	python setup.py clean
 	rm -fr build/ dist/ .eggs/
