@@ -57,7 +57,7 @@ class TestManagement(TestCase):
                 'test_host': TEST_HOST,
                 'test_port': TEST_PORT,
             },
-            shell = True, stdout=self.fnull, stderr=self.fnull, preexec_fn=os.setsid,
+            shell = True, preexec_fn=os.setsid,
         )
         time.sleep(10)
 
