@@ -59,7 +59,7 @@ class TestManagement(TestCase):
             },
             shell = True, stdout=self.fnull, stderr=self.fnull, preexec_fn=os.setsid,
         )
-        time.sleep(3)
+        time.sleep(10)
 
         # sets up the browser
         self.driver = webdriver.PhantomJS()
