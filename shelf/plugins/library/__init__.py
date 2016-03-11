@@ -124,20 +124,6 @@ config = {
         }
     }
 }
-'''"extend": {
-    "admin": {
-        "auto_join": "auto_joins",
-        "form": "form",
-        "list_column": "list_column"
-    },
-    "security": {
-        "roles": ["librarian"]
-    },
-    "script": {
-        "compute_thumbs": "compute_thumbs"
-    }
-},'''
-
 
 class RemoteFileWidget(RenderTemplateWidget):
     def __init__(self):

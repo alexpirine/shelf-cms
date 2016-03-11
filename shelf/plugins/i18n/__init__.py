@@ -75,49 +75,9 @@ config = {
     }
 }
 
-
-'''"extend": {
-        "admin": {
-            "auto_join": "auto_join",
-            "form": "form",
-            "list_columns": "list_columns",
-            "sortable_columns": "sortable_columns"
-        },
-        "view": {
-            "admin.edit": {
-                "tail_js": "tail",
-                "head_css": "head",
-                "left_buttons": "left_buttons"
-                "page_content": "page_content",
-            },
-            "admin.create": {
-                "tail_js": "tail",
-                "head_css": "head",
-                "left_buttons": "left_buttons"
-                "page_content": "page_content"
-            }
-        },
-        "security": {
-            "roles": ["translator"]
-        },
-        "script": {
-            "import_po": "import_po",
-            "export_po": "export_po"
-        }
-    },
-    "config": [
-        "SHELF_I18N_LANGS"
-    ]
-'''
-
 class LocalizedWidget(RenderTemplateWidget):
     def __init__(self):
         RenderTemplateWidget.__init__(self, "localized-widget.html")
-
-    # def __call__(self, field, **kwargs):
-    #     kwargs.setdefault('id', field.id)
-    #     self.langs = field.langs
-    #     return render_template("localized-widget.html", id=field.id, field=field, data=field.data, langs=field.langs)
 
 class LocalizedField(FieldList):
     widget = LocalizedWidget()

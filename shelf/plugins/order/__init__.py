@@ -24,24 +24,6 @@ config = {
         }
     }
 }
-'''"extend": {
-    "admin": {
-        "actions": "actions",
-        "form": "form",
-        "list_column": "list_column",
-        "sortable_columns": "sortable_columns"
-    },
-    "view": {
-        "modelview.list": {
-            "tail_js": "tail",
-            "head_css": "head"
-        },
-    }
-    "security": ["sorter"]
-},
-"config": [
-    "SHELF_ORDER_DESCEND"
-]'''
 
 class PositionField(Select2Field):
     pass
@@ -151,5 +133,3 @@ class OrderingInlineFieldList(InlineModelFormList):
 
         while len(self.entries) < self.min_entries:
             self._add_entry(formdata)
-
-
