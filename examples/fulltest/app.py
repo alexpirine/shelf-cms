@@ -2,6 +2,7 @@
 # coding: utf-8
 
 from flask import Flask
+from flask.ext.babel import Babel
 
 from shelf import Shelf
 from shelf.base import db
@@ -19,7 +20,8 @@ def create_app():
     app.debug = True
     app.testing = False
 
-    app.config.from_object('config')
+    import config
+    app.config.from_object(config)
 
     app.config['SHELF_PAGES'] = {
         "index": (IndexPage, IndexPageModelView),
@@ -29,6 +31,8 @@ def create_app():
     with app.app_context():
         db.init_app(app)
         db.create_all()
+
+        babel = Babel(app)
 
         shlf = Shelf(app)
         shlf.init_db(db)

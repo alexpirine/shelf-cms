@@ -2,13 +2,15 @@
 
 import os
 import shutil
-import signal
 import subprocess
 import time
 
-from selenium import webdriver
+from multiprocessing import Process
 from scripttest import TestFileEnvironment
+from selenium import webdriver
 from unittest import TestCase
+
+from examples.fulltest.app import create_app
 
 TESTS_PATH = os.path.dirname(__file__)
 TESTS_OUTPUT_PATH = os.path.join(TESTS_PATH, 'tests-output')
@@ -20,6 +22,8 @@ TEST_HOST = '127.0.0.1'
 TEST_PORT = 5000
 ADMIN_USER = 'admin@localhost'
 ADMIN_PWD = 'admin31!'
+
+app = create_app()
 
 class TestManagement(TestCase):
     @staticmethod
@@ -51,15 +55,9 @@ class TestManagement(TestCase):
         p.wait()
 
         # runs the testing server
-        self.server_p = subprocess.Popen(
-            '%(cmd)s runserver -h %(test_host)s -p %(test_port)d' % {
-                'cmd': os.path.join(EXAMPLE_PATH, 'manage.py'),
-                'test_host': TEST_HOST,
-                'test_port': TEST_PORT,
-            },
-            shell = True, preexec_fn=os.setsid,
-        )
-        time.sleep(10)
+        self.server_p = Process(target = app.run, args = (TEST_HOST, TEST_PORT), kwargs = {'use_reloader': False})
+        self.server_p.start()
+        time.sleep(5)
 
         # sets up the browser
         self.driver = webdriver.PhantomJS()
@@ -70,8 +68,7 @@ class TestManagement(TestCase):
         self.driver.quit()
 
         # stops the testing server
-        os.killpg(os.getpgid(self.server_p.pid), signal.SIGTERM)
-        self.server_p.wait()
+        self.server_p.terminate()
 
         # closes /dev/null
         self.fnull.close()
