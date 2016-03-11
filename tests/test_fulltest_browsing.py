@@ -4,6 +4,7 @@ import os
 import random
 import shutil
 import subprocess
+import sys
 import time
 
 from multiprocessing import Process
@@ -26,7 +27,7 @@ ADMIN_PWD = 'admin31!'
 
 app = create_app()
 
-class TestManagement(TestCase):
+class TestBrowsing(TestCase):
     @staticmethod
     def _remvoe_db_file():
         if os.path.exists(DB_PATH):
@@ -42,6 +43,7 @@ class TestManagement(TestCase):
             base_path = TESTS_OUTPUT_PATH,
             start_clear = True,
         )
+        cls.env.clear()
 
         # sets up working directory
         os.chdir(TESTS_OUTPUT_PATH)
@@ -88,14 +90,19 @@ class TestManagement(TestCase):
         # restores current directory
         os.chdir(BASE_PATH)
 
-        # removes files created during the tests
-        cls.env.clear()
-
-        # remove the test output folder
-        shutil.rmtree(TESTS_OUTPUT_PATH)
-
         # removes the database file
         cls._remvoe_db_file()
+
+    def tearDown(self):
+        if not sys.exc_info()[0]:
+            return
+
+        try:
+            file_name = '%s.%s.png' % (self.__class__.__name__, self._testMethodName)
+            file_path = os.path.join(TESTS_OUTPUT_PATH, file_name)
+            self.driver.save_screenshot(file_path)
+        except:
+            pass
 
     def test_user_list(self):
         # goes to the user list
@@ -114,7 +121,7 @@ class TestManagement(TestCase):
         self.driver.find_element_by_css_selector('.navbar-fixed-bottom li.actions.new>a').click()
         time.sleep(1)
         self.driver.find_element_by_id('name').send_keys(folder_name)
-        self.driver.find_element_by_css_selector('#dir-modal ul.nav>li.actions.validate>a').click()
+        self.driver.find_element_by_css_selector('#dir-modal ul.navi>li.actions.validate>a').click()
         self.assertTrue("Successfully created directory: test_library" in self.driver.find_element_by_css_selector('#wrap .alert.alert-info').text)
         self.assertTrue(os.path.exists(folder_path))
         os.rmdir(folder_path)

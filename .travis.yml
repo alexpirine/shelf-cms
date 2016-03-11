@@ -11,5 +11,8 @@ script:
   - make sdist
 before_install:
   - pip install codecov
+after_failure:
+  - pip install imgurpython
+  - python tests/upload_failure_screens.py
 after_success:
   - codecov
