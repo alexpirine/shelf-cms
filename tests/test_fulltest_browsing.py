@@ -1,6 +1,7 @@
 # coding: utf-8
 
 import os
+import random
 import shutil
 import subprocess
 import time
@@ -19,7 +20,7 @@ EXAMPLE_PATH = os.path.join(BASE_PATH, 'examples', 'fulltest')
 DB_PATH = os.path.join(EXAMPLE_PATH, 'demo.sqlite')
 
 TEST_HOST = '127.0.0.1'
-TEST_PORT = 5000
+TEST_PORT = 5000 + random.randint(0, 5000)
 ADMIN_USER = 'admin@localhost'
 ADMIN_PWD = 'admin31!'
 
@@ -60,8 +61,24 @@ class TestManagement(TestCase):
         cls.server_p.start()
         time.sleep(5)
 
+        # sets up the browser
+        cls.driver = webdriver.PhantomJS()
+        cls.driver.set_window_size(1400, 800)
+        cls.driver.implicitly_wait(3)
+
+        # logs in
+        cls.driver.get('http://%(host)s:%(port)d/admin/' % {'host': TEST_HOST, 'port': TEST_PORT})
+        cls.driver.find_element_by_id('email').send_keys(ADMIN_USER)
+        cls.driver.find_element_by_id('password').send_keys(ADMIN_PWD)
+        cls.driver.find_element_by_id('remember').click()
+        cls.driver.find_element_by_id('submit').click()
+        assert cls.driver.current_url == 'http://%(host)s:%(port)d/admin/' % {'host': TEST_HOST, 'port': TEST_PORT}
+
     @classmethod
     def tearDownClass(cls):
+        # closes the browser
+        cls.driver.quit()
+
         # stops the testing server
         cls.server_p.terminate()
 
@@ -80,33 +97,16 @@ class TestManagement(TestCase):
         # removes the database file
         cls._remvoe_db_file()
 
-    def setUp(self):
-        # sets up the browser
-        self.driver = webdriver.PhantomJS()
-        self.driver.set_window_size(1024, 768)
-        self.driver.implicitly_wait(3)
-
-        # logs in
-        self.driver.get('http://127.0.0.1:5000/admin/')
-        self.driver.find_element_by_id('email').send_keys(ADMIN_USER)
-        self.driver.find_element_by_id('password').send_keys(ADMIN_PWD)
-        self.driver.find_element_by_id('remember').click()
-        self.driver.find_element_by_id('submit').click()
-        self.assertEquals(self.driver.title, "Home - Admin")
-
-    def tearDown(self):
-        # closes the browser
-        self.driver.quit()
-
     def test_user_list(self):
         # goes to the user list
-        self.driver.get('http://127.0.0.1:5000/admin/user/')
-        self.assertEquals(self.driver.current_url, 'http://127.0.0.1:5000/admin/user/')
+        self.driver.get('http://%(host)s:%(port)d/admin/user/' % {'host': TEST_HOST, 'port': TEST_PORT})
+        self.assertEquals(self.driver.current_url, 'http://%(host)s:%(port)d/admin/user/' % {'host': TEST_HOST, 'port': TEST_PORT})
         self.assertEquals(self.driver.title, "User - Admin")
 
     def test_library_create_folder(self):
         # goes to the library files list
-        self.driver.get('http://127.0.0.1:5000/admin/fileadmin/')
+        self.driver.get('http://%(host)s:%(port)d/admin/fileadmin/' % {'host': TEST_HOST, 'port': TEST_PORT})
+        self.assertEquals(self.driver.current_url, 'http://%(host)s:%(port)d/admin/fileadmin/' % {'host': TEST_HOST, 'port': TEST_PORT})
 
         # creates a new folder
         folder_name = 'test_library'
@@ -121,16 +121,16 @@ class TestManagement(TestCase):
 
     def test_new_blog_entry(self):
         # goes to the posts list
-        self.driver.get('http://127.0.0.1:5000/admin/post/')
+        self.driver.get('http://%(host)s:%(port)d/admin/post/' % {'host': TEST_HOST, 'port': TEST_PORT})
+        self.assertEquals(self.driver.current_url, 'http://%(host)s:%(port)d/admin/post/' % {'host': TEST_HOST, 'port': TEST_PORT})
 
         # fills-in a new post entry
         self.driver.find_element_by_css_selector('.navbar-fixed-bottom ul.navbar-right>li.actions>a>i.fa-plus').click()
-        self.assertEquals(self.driver.current_url, 'http://127.0.0.1:5000/admin/post/new/?url=%2Fadmin%2Fpost%2F')
         self.driver.find_element_by_id('publication_date').click()
         self.driver.find_element_by_css_selector('.daterangepicker .calendar-date td.today').click()
         self.driver.find_element_by_id('title-fr').send_keys("Test title")
 
         # submits the new post entry
         self.driver.find_element_by_css_selector('.navbar-fixed-bottom ul.navbar-right>li.actions>a.save-model>i.fa-check').click()
-        self.assertEquals(self.driver.current_url, 'http://127.0.0.1:5000/admin/post/')
+        self.assertEquals(self.driver.current_url, 'http://%(host)s:%(port)d/admin/post/' % {'host': TEST_HOST, 'port': TEST_PORT})
         self.assertEquals(len(self.driver.find_elements_by_css_selector('#wrap table.model-list>tbody>tr')), 1)
