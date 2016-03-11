@@ -31,12 +31,13 @@ class TestManagement(TestCase):
         if os.path.exists(DB_PATH):
             os.remove(DB_PATH)
 
-    def setUp(self):
+    @classmethod
+    def setUpClass(cls):
         # removes the database file
-        self._remvoe_db_file()
+        cls._remvoe_db_file()
 
         # sets up ScriptTest testing environement
-        self.env = TestFileEnvironment(
+        cls.env = TestFileEnvironment(
             base_path = TESTS_OUTPUT_PATH,
             start_clear = True,
         )
@@ -45,47 +46,47 @@ class TestManagement(TestCase):
         os.chdir(TESTS_OUTPUT_PATH)
 
         # sets up /dev/null
-        self.fnull = open(os.devnull, 'wb')
+        cls.fnull = open(os.devnull, 'wb')
 
         # creates admin user
         p = subprocess.Popen(
             '%s create_admin' % os.path.join(EXAMPLE_PATH, 'manage.py'),
-            shell = True, stdout = self.fnull,
+            shell = True, stdout = cls.fnull,
         )
         p.wait()
 
         # runs the testing server
-        self.server_p = Process(target = app.run, args = (TEST_HOST, TEST_PORT), kwargs = {'use_reloader': False})
-        self.server_p.start()
+        cls.server_p = Process(target = app.run, args = (TEST_HOST, TEST_PORT), kwargs = {'use_reloader': False})
+        cls.server_p.start()
         time.sleep(5)
 
-        # sets up the browser
-        self.driver = webdriver.PhantomJS()
-        self.driver.set_window_size(1024, 768)
-
-    def tearDown(self):
-        # closes the browser
-        self.driver.quit()
-
+    @classmethod
+    def tearDownClass(cls):
         # stops the testing server
-        self.server_p.terminate()
+        cls.server_p.terminate()
 
         # closes /dev/null
-        self.fnull.close()
+        cls.fnull.close()
 
         # restores current directory
         os.chdir(BASE_PATH)
 
         # removes files created during the tests
-        self.env.clear()
+        cls.env.clear()
 
         # remove the test output folder
         shutil.rmtree(TESTS_OUTPUT_PATH)
 
         # removes the database file
-        self._remvoe_db_file()
+        cls._remvoe_db_file()
 
-    def test_login(self):
+    def setUp(self):
+        # sets up the browser
+        self.driver = webdriver.PhantomJS()
+        self.driver.set_window_size(1024, 768)
+        self.driver.implicitly_wait(3)
+
+        # logs in
         self.driver.get('http://127.0.0.1:5000/admin/')
         self.driver.find_element_by_id('email').send_keys(ADMIN_USER)
         self.driver.find_element_by_id('password').send_keys(ADMIN_PWD)
@@ -93,7 +94,43 @@ class TestManagement(TestCase):
         self.driver.find_element_by_id('submit').click()
         self.assertEquals(self.driver.title, "Home - Admin")
 
-        self.driver.find_element_by_css_selector('ul.nav>li>a[href="/admin/user/"]').click()
-        self.assertEquals(self.driver.current_url, "http://127.0.0.1:5000/admin/user/")
+    def tearDown(self):
+        # closes the browser
+        self.driver.quit()
+
+    def test_user_list(self):
+        # goes to the user list
+        self.driver.get('http://127.0.0.1:5000/admin/user/')
+        self.assertEquals(self.driver.current_url, 'http://127.0.0.1:5000/admin/user/')
         self.assertEquals(self.driver.title, "User - Admin")
 
+    def test_library_create_folder(self):
+        # goes to the library files list
+        self.driver.get('http://127.0.0.1:5000/admin/fileadmin/')
+
+        # creates a new folder
+        folder_name = 'test_library'
+        folder_path = os.path.join(app.config['MEDIA_ROOT'], folder_name)
+        self.driver.find_element_by_css_selector('.navbar-fixed-bottom li.actions.new>a').click()
+        time.sleep(1)
+        self.driver.find_element_by_id('name').send_keys(folder_name)
+        self.driver.find_element_by_css_selector('#dir-modal ul.nav>li.actions.validate>a').click()
+        self.assertTrue("Successfully created directory: test_library" in self.driver.find_element_by_css_selector('#wrap .alert.alert-info').text)
+        self.assertTrue(os.path.exists(folder_path))
+        os.rmdir(folder_path)
+
+    def test_new_blog_entry(self):
+        # goes to the posts list
+        self.driver.get('http://127.0.0.1:5000/admin/post/')
+
+        # fills-in a new post entry
+        self.driver.find_element_by_css_selector('.navbar-fixed-bottom ul.navbar-right>li.actions>a>i.fa-plus').click()
+        self.assertEquals(self.driver.current_url, 'http://127.0.0.1:5000/admin/post/new/?url=%2Fadmin%2Fpost%2F')
+        self.driver.find_element_by_id('publication_date').click()
+        self.driver.find_element_by_css_selector('.daterangepicker .calendar-date td.today').click()
+        self.driver.find_element_by_id('title-fr').send_keys("Test title")
+
+        # submits the new post entry
+        self.driver.find_element_by_css_selector('.navbar-fixed-bottom ul.navbar-right>li.actions>a.save-model>i.fa-check').click()
+        self.assertEquals(self.driver.current_url, 'http://127.0.0.1:5000/admin/post/')
+        self.assertEquals(len(self.driver.find_elements_by_css_selector('#wrap table.model-list>tbody>tr')), 1)

@@ -185,6 +185,9 @@ class PictureField(TextField):
         self.height = height
 
     def populate_obj(self, obj, name):
+        if not self.raw_data[0]:
+            return
+
         if getattr(obj, name) is None:
             picture = getattr(obj.__class__, name).mapper.class_()
             setattr(obj, name, picture)
