@@ -7,12 +7,9 @@ install:
   - make install
 script:
   - make test
-  - make requirements
-  - make sdist
-before_install:
-  - pip install codecov
 after_failure:
   - pip install imgurpython
   - python tests/upload_failure_screens.py
 after_success:
+  - pip install codecov
   - codecov

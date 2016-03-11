@@ -121,7 +121,7 @@ class TestBrowsing(TestCase):
         self.driver.find_element_by_css_selector('.navbar-fixed-bottom li.actions.new>a').click()
         time.sleep(1)
         self.driver.find_element_by_id('name').send_keys(folder_name)
-        self.driver.find_element_by_css_selector('#dir-modal ul.navi>li.actions.validate>a').click()
+        self.driver.find_element_by_css_selector('#dir-modal ul.nav>li.actions.validate>a').click()
         self.assertTrue("Successfully created directory: test_library" in self.driver.find_element_by_css_selector('#wrap .alert.alert-info').text)
         self.assertTrue(os.path.exists(folder_path))
         os.rmdir(folder_path)
