@@ -87,6 +87,12 @@ class RemoteFileModelMixin(object):
             path = None
         self.path = path
 
+    def get_url(self):
+        if not self.path:
+            return None
+
+        return re.sub(r'//+', '/', '%s/%s' % (current_app.config.get('MEDIA_URL', '/'), self.path))
+
     def __unicode__(self):
         return self.path
 
