@@ -31,8 +31,7 @@ requirements: develop
 
 test: develop
 	coverage erase
-	export COVERAGE_PROCESS_START=`pwd`./.coveragerc
-	coverage run --source=shelf -p --concurrency=multiprocessing `pwd`/setup.py test
+	coverage run --source=shelf -p --concurrency=multiprocessing setup.py test
 	coverage combine
 
 uninstall:

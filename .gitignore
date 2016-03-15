@@ -34,10 +34,11 @@ pip-log.txt
 *.db
 *.sqlite
 
-# Unit test / coverage reports
+# Tests & tests coverage reports
 .coverage
 .tox
 coverage.xml
+tests/tests-output
 
 # Translations
 *.mo
