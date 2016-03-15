@@ -30,7 +30,10 @@ requirements: develop
 	pip freeze | grep -vE "^(-e |${DEV_TOOLS}=)" > requirements.txt
 
 test: develop
-	coverage run setup.py test
+	coverage erase
+	export COVERAGE_PROCESS_START=`pwd`./.coveragerc
+	coverage run --source=shelf -p --concurrency=multiprocessing `pwd`/setup.py test
+	coverage combine
 
 uninstall:
 	pip uninstall -y ShelfCMS
