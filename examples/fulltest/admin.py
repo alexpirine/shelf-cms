@@ -43,12 +43,14 @@ class TagModelView(SQLAModelView, LocalizedViewMixin):
 
 class BlogModelView(SQLAModelView, LibraryViewMixin, WysiwygViewMixin,
                     RemoteFileModelMixin, LocalizedViewMixin, WorkflowViewMixin):
-    column_list = ('title', 'publication_date', "tags", "state")
+    column_list = ('title', 'publication_date', "tags", "state", "mode")
 
     form_columns = (
         "state",
         'publication_date', 'title',
+        "mode",
         'abstract', 'text',
+        "video_link",
         "picture", "attachment",
     )
 
