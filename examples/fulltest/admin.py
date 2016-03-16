@@ -46,8 +46,9 @@ class BlogModelView(SQLAModelView, LibraryViewMixin, WysiwygViewMixin,
     column_list = ('title', 'publication_date', "tags", "state", "mode")
 
     form_columns = (
+        'title',
         "state",
-        'publication_date', 'title',
+        'publication_date',
         "mode",
         'abstract', 'text',
         "video_link",

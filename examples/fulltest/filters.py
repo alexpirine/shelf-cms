@@ -6,4 +6,9 @@ def init_filters(app):
 
 
 def generate_youtube_embed_url(youtube_url):
-    return youtube_url.replace("https://www.youtube.com/watch?v=", "https://www.youtube.com/embed/")
+    try:
+        return youtube_url.replace(
+            "https://www.youtube.com/watch?v=",
+            "https://www.youtube.com/embed/")
+    except:
+        return None

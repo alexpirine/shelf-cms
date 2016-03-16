@@ -14,14 +14,19 @@
         <h3 class="panel-title">{{post.title}}</h3>
         </div>
         {% if post.mode == "text" %}
-        <div class="panel-body">
-          {{post.abstract | safe}}
-        </div>
-        <div class="panel-footer"><a href="{{url_for('post_view', post_id=post.id)}}">Voir la suite</a></div>
+          <div class="panel-body">
+            {{post.abstract | safe}}
+          </div>
+          <div class="panel-footer"><a href="{{url_for('post_view', post_id=post.id)}}">Voir la suite</a></div>
         {% elif post.mode == "video" %}
-        <div class="panel-body">
-          <iframe width="100%" height="315" src="{{post.video_link | youtube}}" frameborder="0" allowfullscreen></iframe>
-        </div>
+        {% set youtube_link = post.video_link | youtube %}
+          <div class="panel-body">
+            {% if youtube_link %}
+              <iframe width="100%" height="315" src="{{post.video_link | youtube}}" frameborder="0" allowfullscreen></iframe>
+            {% else %}
+              Vidéo non disponible :-(
+            {% endif %}
+          </div>
         {% endif %}
       </div>
     </div>
