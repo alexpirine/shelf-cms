@@ -9,6 +9,7 @@ from shelf.plugins.page import PageModelMixin
 
 #classe utilitaires
 
+
 class LocalizedString(db.Model, LocalizedModelMixin):
     __tablename__ = "localized_string"
     id = db.Column(db.Integer, primary_key=True)
@@ -69,6 +70,8 @@ class Post(db.Model, WorkflowModelMixin, PreviewableModelMixin):
     id = db.Column(db.Integer, primary_key=True)
     created_on = db.Column(db.DateTime, default=db.func.now())
 
+    mode = db.Column(db.Enum("text", "video"), default="text")
+
     publication_date = db.Column(db.Date)
     state = db.Column(db.Enum(*WORKFLOW_STATES))
 
@@ -86,6 +89,8 @@ class Post(db.Model, WorkflowModelMixin, PreviewableModelMixin):
 
     attachment_id = db.Column(db.Integer, db.ForeignKey('remote_file.id'))
     attachment = db.relationship("RemoteFile")
+
+    video_link = db.Column(db.String(50))
 
 
 class Page(db.Model, PreviewableModelMixin, PageModelMixin):

@@ -13,6 +13,7 @@ from shelf.security.models import User, Role
 from admin import init_admin, IndexPageModelView, ContactPageModelView
 from models import IndexPage, ContactPage
 from view import init_views
+from filters import init_filters
 
 def create_app():
     app = Flask(__name__)
@@ -58,6 +59,7 @@ def create_app():
         page.register_pages(app, shlf.db)
 
         init_views(app)
+        init_filters(app)
 
     return app
 
