@@ -1,49 +1,40 @@
 <script src="//cdn.tinymce.com/4/tinymce.min.js"></script>
 <script language="javascript">
 (function($) {
+	var classic_config = {
+		plugins: "paste,link,code,nonbreaking,autoresize",
+		toolbar: "bold italic | bullist numlist blockquote | link nonbreaking | code",
+		menubar: false,
+		statusbar: false,
+		paste_as_text: true
+	};
+
+	var full_config = {
+		plugins: "paste,autoresize,image,link,code,searchreplace,table,media",
+		toolbar: false,
+		menubar: true,
+		statusbar: false,
+		paste_as_text: true,
+		removed_menuitems: 'cut paste pastetext'
+	};
+
 	$('.model-form').on('DOMNodeInserted', "div.inline-field-list", function(event) {
 		if ($(event.target).hasClass('inline-field'))
 		{
 			if ($(event.target).find('.wysiwyg-classic').length > 0)
 			{
-				tinymce.init({
-					selector: "#" + $(event.target).attr('id') + " .wysiwyg-classic",
-					menubar: false,
-					toolbar: "bold italic | bullist numlist blockquote | link nonbreaking | code",
-					plugins: "paste,link,code,nonbreaking,autoresize",
-					paste_as_text: true,
-					statusbar: false
-				});
+				var selector = "#" + $(event.target).attr('id') + " .wysiwyg-classic";
+				tinymce.init($.extend({}, classic_config, {selector: selector}));
 			}
 			if ($(event.target).find('.wysiwyg-full').length > 0)
 			{
-				tinymce.init({
-					selector: "#" + $(event.target).attr('id') + " .wysiwyg-full",
-					toolbar: false,
-					statusbar: false,
-					plugins: "paste,autoresize,image,link,code,searchreplace,table,media",
-					paste_as_text: true,
-					removed_menuitems: 'cut paste pastetext'
-				});
+				var selector = "#" + $(event.target).attr('id') + " .wysiwyg-full";
+				tinymce.init($.extend({}, full_config, {selector: selector}));
 			}
 		}
 
 	});
-	tinymce.init({
-		selector: ".wysiwyg-classic",
-		menubar: false,
-		toolbar: "bold italic | bullist numlist blockquote | link nonbreaking | code",
-		plugins: "paste,link,code,nonbreaking,autoresize",
-		paste_as_text: true,
-		statusbar: false
-	});
-	tinymce.init({
-		selector: ".wysiwyg-full",
-		toolbar: false,
-		statusbar: false,
-		plugins: "paste,autoresize,image,link,code,searchreplace,table,media",
-		paste_as_text: true,
-		removed_menuitems: 'cut paste pastetext'
-	});
+	tinymce.init($.extend({}, classic_config, {selector: ".wysiwyg-classic"}));
+	tinymce.init($.extend({}, full_config, {selector: ".wysiwyg-full"}));
 })(jQuery);
 </script>
