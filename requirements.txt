@@ -1,4 +1,4 @@
-Babel==2.3.2
+Babel==2.3.3
 bcrypt==2.0.0
 blinker==1.4
 cffi==1.5.2
