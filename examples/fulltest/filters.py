@@ -10,5 +10,5 @@ def generate_youtube_embed_url(youtube_url):
         return youtube_url.replace(
             "https://www.youtube.com/watch?v=",
             "https://www.youtube.com/embed/")
-    except:
+    except AttributeError:
         return None

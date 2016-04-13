@@ -13,3 +13,5 @@ after_failure:
 after_success:
   - pip install codecov
   - codecov
+git:
+  depth: 3
