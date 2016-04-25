@@ -130,7 +130,6 @@ class TestBrowsing(TestCase):
         # goes to the posts list
         self.driver.get('http://%(host)s:%(port)d/admin/post/' % {'host': TEST_HOST, 'port': TEST_PORT})
         self.assertEquals(self.driver.current_url, 'http://%(host)s:%(port)d/admin/post/' % {'host': TEST_HOST, 'port': TEST_PORT})
-        time.sleep(2)
 
         # fills-in a new post entry
         self.driver.find_element_by_css_selector('.navbar-fixed-bottom ul.navbar-right>li.actions>a>i.fa-plus').click()
