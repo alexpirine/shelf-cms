@@ -1,5 +1,6 @@
 # coding: utf-8
 
+from shelf import ModelForm
 from shelf.base import db
 from shelf.plugins.library import PictureModelMixin, RemoteFileModelMixin
 from shelf.plugins.preview import PreviewableModelMixin
@@ -72,7 +73,7 @@ class Post(db.Model, WorkflowModelMixin, PreviewableModelMixin):
 
     mode = db.Column(db.Enum("text", "video"), default="text")
 
-    publication_date = db.Column(db.Date)
+    publication_date = db.Column(db.Date, info={'label': 'Name'})
     state = db.Column(db.Enum(*WORKFLOW_STATES))
 
     title_id = db.Column(db.Integer, db.ForeignKey('localized_string.id'))

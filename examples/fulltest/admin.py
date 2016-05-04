@@ -71,7 +71,6 @@ class BlogModelView(SQLAModelView, LibraryViewMixin, WysiwygViewMixin,
 
     column_labels = {
         "title": "Titre",
-        "publication_date": u"Date de publication",
         "abstract": u"Résumé",
         "picture": "Photo",
         "attachment": "Fichier",
