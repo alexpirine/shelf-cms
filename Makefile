@@ -1,5 +1,4 @@
 NAME := $(shell python setup.py --name)
-NAME_NORMALIZED := $(shell echo ${NAME} | sed s/-/_/)
 VERSION := $(shell python setup.py --version)
 DEV_TOOLS := ($(shell python -c 'import setup; print "|".join(setup.DEV_TOOLS)'))
 IS_INSTALLED := $(shell if [[ `pip show ${NAME}` != "" ]]; then echo yes; else echo no; fi)
@@ -30,18 +29,18 @@ wheel:
 dist: sdist wheel
 
 sign_wheel:
-	wheel sign dist/${NAME_NORMALIZED}-${VERSION}-*.whl
+	wheel sign dist/${NAME}-${VERSION}-*.whl
 
 sign:
-	wheel verify dist/${NAME_NORMALIZED}-${VERSION}-*.whl
+	wheel verify dist/${NAME}-${VERSION}-*.whl
 	sh -c 'read -s -p "Enter GPG passphrase: " pwd && \
 	gpg --detach-sign --batch --yes --armor --passphrase $$pwd dist/${NAME}-${VERSION}.tar.gz && \
 	gpg --detach-sign --batch --yes --armor --passphrase $$pwd dist/${NAME}-${VERSION}.zip && \
-	gpg --detach-sign --batch --yes --armor --passphrase $$pwd dist/${NAME_NORMALIZED}-${VERSION}-*.whl'
+	gpg --detach-sign --batch --yes --armor --passphrase $$pwd dist/${NAME}-${VERSION}-*.whl'
 	@echo
 
 pypi: dist sign
-	twine upload dist/{${NAME},${NAME_NORMALIZED}}-${VERSION}*
+	twine upload dist/${NAME}-${VERSION}*
 
 requirements_std: install
 	pip freeze | grep -vE "^${NAME}=" > requirements.txt
