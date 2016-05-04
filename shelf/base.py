@@ -4,10 +4,19 @@ from flask import Blueprint
 from flask.ext.security import SQLAlchemyUserDatastore
 from flask.ext.security import Security
 from flask.ext.sqlalchemy import SQLAlchemy
+from flask.ext.wtf import Form
 from security.view import UserModelView
 from werkzeug.utils import import_string
+from wtforms_alchemy import model_form_factory
 
 db = SQLAlchemy()
+
+# WTForms-Alchemy snippet for Flask-WTF
+BaseModelForm = model_form_factory(Form)
+class ModelForm(BaseModelForm):
+    @classmethod
+    def get_session(self):
+        return db.session
 
 class Shelf(object):
     """The Shelf object handles the admin, the plugins and the

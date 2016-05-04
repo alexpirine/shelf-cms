@@ -4,7 +4,9 @@
 from setuptools import setup, find_packages
 
 DEV_TOOLS = [
+    'codecov',
     'coverage',
+    'imgurpython',
     'nose',
     'scripttest',
     'selenium',
@@ -36,6 +38,7 @@ if __name__ == '__main__':
             'Pillow',
             'SQLAlchemy',
             'WTForms',
+            'WTForms-Alchemy',
             'Werkzeug',
             'bcrypt',
             'google-api-python-client',
