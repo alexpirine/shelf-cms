@@ -38,6 +38,7 @@ if __name__ == '__main__':
             'Pillow',
             'SQLAlchemy',
             'SQLAlchemy-Defaults',
+            'SQLAlchemy-Utils',
             'WTForms',
             'WTForms-Alchemy',
             'Werkzeug',
