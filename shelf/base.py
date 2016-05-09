@@ -18,7 +18,7 @@ class ModelForm(BaseModelForm):
     def get_session(self):
         return db.session
 
-class = LazyConfigured(object):
+class LazyConfigured(object):
     __lazy_options__ = {}
 
 class Shelf(object):
