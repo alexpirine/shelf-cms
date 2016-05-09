@@ -1,9 +1,10 @@
 from flask import Blueprint as FlaskBlueprint
 from flask.ext.sqlalchemy import before_models_committed
 from flask_security.core import current_user
-from sqlalchemy.ext.declarative import declared_attr
-
+from shelf import LazyConfigured
 from shelf.base import db
+from sqlalchemy.ext.declarative import declared_attr
+from sqlalchemy_defaults import Column
 
 class BlueprintModelMixin(object):
     """
@@ -13,12 +14,12 @@ class BlueprintModelMixin(object):
     - date_updated: last modification date of the object
     - modified_by: user who modified the object for the last time
     """
-    date_created = db.Column(db.DateTime, default=db.func.now())
-    date_updated = db.Column(db.DateTime, default=db.func.now(), onupdate=db.func.now())
+    date_created = Column(db.DateTime, default=db.func.now())
+    date_updated = Column(db.DateTime, default=db.func.now(), onupdate=db.func.now())
 
     @declared_attr
     def modified_by_id(cls):
-        return db.Column(db.Integer, db.ForeignKey('user.id'))
+        return Column(db.Integer, db.ForeignKey('user.id'))
 
     @declared_attr
     def modified_by(cls):

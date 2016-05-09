@@ -5,11 +5,11 @@ from flask_principal import PermissionDenied
 
 from ...security.decorators import allow_superadmin
 
-REVIEWER_ROLE = "reviewer"
-PUBLISHER_ROLE = "publisher"
-DRAFT_STATE = "draft"
-REVIEW_STATE = "review"
-PUBLIC_STATE = "published"
+REVIEWER_ROLE = u"reviewer"
+PUBLISHER_ROLE = u"publisher"
+DRAFT_STATE = u"draft"
+REVIEW_STATE = u"review"
+PUBLIC_STATE = u"published"
 WORKFLOW_STATES = (DRAFT_STATE, REVIEW_STATE, PUBLIC_STATE)
 
 class WorkflowViewMixin(object):
@@ -37,8 +37,8 @@ config = {
     "description": "Workflow fonctionnality",
     "security": {
         "roles": (
-            (REVIEWER_ROLE, "Allow user to put articles for review"),
-            (PUBLISHER_ROLE, "Allow user to publish or unpublish stuff")
+            (REVIEWER_ROLE, u"Allow user to put articles for review"),
+            (PUBLISHER_ROLE, u"Allow user to publish or unpublish stuff")
         )
     },
     "admin": {

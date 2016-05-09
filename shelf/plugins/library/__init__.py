@@ -22,8 +22,10 @@ from flask.ext.admin.form import RenderTemplateWidget
 from flask_admin.base import expose
 from flask_admin.contrib import fileadmin
 from operator import itemgetter
+from shelf import LazyConfigured
 from shelf.base import db
 from shelf.security.mixin import LoginMixin
+from sqlalchemy_defaults import Column
 from werkzeug import secure_filename
 from wtforms.fields import TextField
 
@@ -98,9 +100,9 @@ class RemoteFileModelMixin(object):
 
 
 class PictureModelMixin(object):
-    path = db.Column(db.String(255))
-    width = db.Column(db.Integer, default=0)
-    height = db.Column(db.Integer, default=0)
+    path = Column(db.Unicode(255))
+    width = Column(db.Integer, default=0)
+    height = Column(db.Integer, default=0)
 
     def get_url(self):
         if not self.path:

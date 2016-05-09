@@ -21,6 +21,7 @@ class ModelForm(BaseModelForm):
         return db.session
 
 class LazyConfigured(db.Model):
+    __abstract__ = True
     __lazy_options__ = {}
 
 class Shelf(object):
@@ -57,8 +58,8 @@ class Shelf(object):
     def init_security(self, user_cls, role_cls, datastore_cls=SQLAlchemyUserDatastore):
         self.user_datastore = datastore_cls(self.db, user_cls, role_cls)
         self.admin.add_view(UserModelView(user_cls, self.db.session))
-        self.user_datastore.find_or_create_role("admin", description="Enable admin access")
-        self.user_datastore.find_or_create_role("superadmin", description="Enable debug access")
+        self.user_datastore.find_or_create_role(u"admin", description=u"Enable admin access")
+        self.user_datastore.find_or_create_role(u"superadmin", description=u"Enable debug access")
         self.db.session.commit()
 
         if "SECURITY_LOGIN_USER_TEMPLATE" not in self.app.config:

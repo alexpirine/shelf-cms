@@ -28,11 +28,10 @@ def test():
 
 @manager.command
 def create_tags():
-
-    names = ["news", "article", "interview", "test", "review", u"témoignage"]
+    names = [u"news", u"article", u"interview", u"test", u"review", u"témoignage"]
     for name in names:
         tag = Tag()
-        name = LocalizedString(value=name, lang="fr")
+        name = LocalizedString(value=name, lang=u"fr")
         tag.name = name
         db.session.add(tag)
         db.session.commit()
@@ -40,27 +39,26 @@ def create_tags():
 
 @manager.command
 def create_posts():
-
-    names = ["news", "article", "interview", "test", "review", u"témoignage"]
+    names = [u"news", u"article", u"interview", u"test", u"review", u"témoignage"]
     titles = [
-        "voici un super post", "un article trop cool", u"une bonne idée",
-        "nouvel article", "un petit article", u"regardez ca !", "petit retour"]
+        u"voici un super post", u"un article trop cool", u"une bonne idée",
+        u"nouvel article", u"un petit article", u"regardez ca !", u"petit retour"]
 
     for index in range(12):
         post = Post(mode="text")
         title = random.choice(titles)
-        title = LocalizedString(value=title, lang="fr")
+        title = LocalizedString(value=title, lang=u"fr")
         post.title = title
         post.state = "published"
 
         post.publication_date = datetime.datetime.now()
 
         text = generate_lorem_ipsum()
-        text = LocalizedText(value=text, lang="fr")
+        text = LocalizedText(value=text, lang=u"fr")
         post.text = text
 
         abstract = generate_lorem_ipsum(n=1, max=60)
-        abstract = LocalizedText(value=abstract, lang="fr")
+        abstract = LocalizedText(value=abstract, lang=u"fr")
         post.abstract = abstract
 
         db.session.add(post)
@@ -77,21 +75,21 @@ def create_posts():
 
         print post
         print tag
-    
+
 
 @manager.command
 def create_admin():
     user_datastore = current_app.extensions['security'].datastore
 
-    admin = User.query.join(User.roles).filter(Role.name == 'superadmin').first()
+    admin = User.query.join(User.roles).filter(Role.name == u'superadmin').first()
     if not admin:
-        admin_email = 'admin@localhost'
-        admin_pwd = 'admin31!'
+        admin_email = u'admin@localhost'
+        admin_pwd = u'admin31!'
         admin = User(
             email=admin_email,
             active=True,
         )
-        for role_name in ['superadmin', 'reviewer', 'publisher']:
+        for role_name in [u'superadmin', u'reviewer', u'publisher']:
             role = user_datastore.find_role(role_name)
             user_datastore.add_role_to_user(admin, role)
         admin.password = encrypt_password(admin_pwd)
