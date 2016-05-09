@@ -9,8 +9,8 @@ from shelf.base import db
 
 class Client(LazyConfigured):
     id = Column(db.Integer, primary_key=True)
-    user_id = Column(db.Integer, db.ForeignKey('user.id'), unique=True)
     user = db.relationship("User", backref='client')
+    user_id = Column(db.Integer, db.ForeignKey('user.id'), unique=True)
 
     created_on = Column(db.DateTime, auto_now=True, label=_(u"registration date"))
     first_name = Column(db.Unicode(255), label=_(u"first name"))
@@ -33,7 +33,6 @@ class Address(LazyConfigured):
     exemple, le code postal sera imprimé après le nom de la localité pour les
     envois au Canada.
     """
-
     id = Column(db.Integer, primary_key=True)
     client = db.relationship(Client, backref='addresses')
     client_id = Column(db.Integer, db.ForeignKey('client.id'))
@@ -84,3 +83,38 @@ class Address(LazyConfigured):
         address2 = u'\n'.join(address[-3:]).upper()
 
         return u'\n'.join(filter(None, [address1, address2]))
+
+class Carrier(LazyConfigured):
+    id = Column(db.Integer, primary_key=True)
+    name = Column(db.Unicode(63), unique=True)
+    api = Column(db.String(63), nullable=True)
+
+    def __unicode__(self):
+        return self.name
+
+class Country(LazyConfigured):
+    code = Column(db.String(2), primary_key=True)
+    name = Column(db.Unicode(63))
+
+    def __unicode__(self):
+        return u"%s (%s)" % (self.name, self.code)
+
+class DeliveryZone(LazyConfigured):
+    id = Column(db.Integer, primary_key=True)
+    carrier = db.relationship(Carrier, backref='delivery_zones')
+    carrier_id = Column(db.Integer, db.ForeignKey('carrier.id'))
+    countries = db.relationship(
+        Country,
+        secondary=db.Table(
+            'delivery_zone_countries',
+            db.Column('delivery_zone_id', db.Integer, db.ForeignKey('delivery_zone.id')),
+            db.Column('country_code', db.String(2), db.ForeignKey('country.code')),
+        ),
+        backref='delivery_zones'
+    )
+    country_id = Column(db.String(2), db.ForeignKey('country.id'))
+    name = Column(db.Unicode(63))
+
+    def __unicode__(self):
+        return self.name
+
