@@ -18,6 +18,9 @@ class ModelForm(BaseModelForm):
     def get_session(self):
         return db.session
 
+class = LazyConfigured(object):
+    __lazy_options__ = {}
+
 class Shelf(object):
     """The Shelf object handles the admin, the plugins and the
     link between them"""
