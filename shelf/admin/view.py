@@ -1,15 +1,15 @@
-from flask_admin.contrib import sqla
 from actions import ActionsMixin
-from flask import redirect
-from flask.ext.admin.babel import lazy_gettext, ngettext, gettext
-from flask.ext.admin.actions import action
-from flask.ext.admin.base import AdminIndexView
 from flask import flash, request
-from sqlalchemy.orm import joinedload
+from flask import redirect
+from flask.ext.admin.actions import action
+from flask.ext.admin.babel import lazy_gettext, ngettext, gettext
+from flask.ext.admin.base import AdminIndexView
 from flask.ext.admin.contrib.sqla import tools
-from sqlalchemy import or_
+from flask_admin.contrib import sqla
 from form import ModelConverter, InlineModelConverter
 from shelf.security.mixin import LoginMixin
+from sqlalchemy import or_
+from sqlalchemy.orm import joinedload
 
 class IndexView(LoginMixin, AdminIndexView):
     def __init__(self, name=None, category=None,
@@ -46,6 +46,24 @@ class SQLAModelView(LoginMixin, sqla.ModelView, ActionsMixin):
         self.extensions = {}
 
         self.form_shortcuts = getattr(self, 'form_shortcuts', tuple())
+
+    def get_column_name(self, field):
+        """
+            Return a human-readable column name.
+            :param field:
+                Model field name.
+        """
+        if self.column_labels and field in self.column_labels:
+            return self.column_labels[field]
+        else:
+            if hasattr(self.model, field):
+                model_field = getattr(self.model, field)
+                if 'label' in model_field.info and model_field.info['label']:
+                    return "%s%s" % (model_field.info['label'][:1].upper(), model_field.info['label'][1:])
+            return self._prettify_name(field)
+
+    def prettify_name(self, field):
+        return self.get_column_name(field)
 
     def scaffold_sortable_columns(self):
         columns = sqla.ModelView.scaffold_sortable_columns(self)

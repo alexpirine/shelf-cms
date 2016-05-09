@@ -1,4 +1,5 @@
 from flask.ext.admin.contrib.sqla import form
+from flask_admin._backwards import get_property
 from shelf.plugins.order import OrderingInlineFieldList
 
 class ShortcutValidator(object):
@@ -29,6 +30,43 @@ class ModelConverter(form.AdminModelConverter):
         res = super(ModelConverter, self).convert(model, mapper, prop, kwargs, hidden_pk)
 
         return res
+
+    def _get_label(self, name, field_args):
+        """
+            Label for field name. If it is not specified explicitly,
+            then the views prettify_name method is used to find it.
+            :param field_args:
+                Dictionary with additional field arguments
+        """
+        if 'label' in field_args:
+            return field_args['label']
+
+        column_labels = get_property(self.view, 'column_labels', 'rename_columns')
+
+        if column_labels and name in column_labels:
+            return column_labels.get(name)
+
+        prettify_override = getattr(self.view, 'prettify_name', None)
+        if prettify_override:
+            return prettify_override(name)
+
+        return prettify_name(name)
+
+    def _get_description(self, name, field_args):
+        if 'description' in field_args:
+            return field_args['description']
+
+        column_descriptions = getattr(self.view, 'column_descriptions', None)
+
+        if column_descriptions and name in column_descriptions:
+            return column_descriptions.get(name)
+
+        if hasattr(self.view.model, name):
+            model_field = getattr(self.view.model, name)
+            if 'description' in model_field.info and model_field.info['description']:
+                return "%s%s" % (model_field.info['description'][:1].upper(), model_field.info['description'][1:])
+
+        return None
 
 class InlineModelConverter(form.InlineModelConverter):
     inline_field_list_type = OrderingInlineFieldList

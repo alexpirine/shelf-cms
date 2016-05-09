@@ -77,9 +77,6 @@ class BlogModelView(SQLAModelView, LibraryViewMixin, WysiwygViewMixin,
         "state": "Etat"
     }
 
-    column_descriptions = {
-        "publication_date": u"Si la date de publication est dans le futur, l'article n'apparaîtra qu'à la date indiquée",
-    }
 
     form_overrides = {
         "state": StateField,

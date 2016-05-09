@@ -73,7 +73,7 @@ class Post(LazyConfigured, WorkflowModelMixin, PreviewableModelMixin):
 
     mode = Column(db.Enum("text", "video"), default="text")
 
-    publication_date = Column(db.Date, label=_(u"desired date of publication"))
+    publication_date = Column(db.Date, label=_(u"date of publication"), description=_(u"desired date of publication; can be in future"))
     state = Column(db.Enum(*WORKFLOW_STATES))
 
     title_id = Column(db.Integer, db.ForeignKey('localized_string.id'))
