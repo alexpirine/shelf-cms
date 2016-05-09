@@ -81,7 +81,6 @@ class BlogModelView(SQLAModelView, LibraryViewMixin, WysiwygViewMixin,
     form_overrides = {
         "state": StateField,
         "title": LocalizedField,
-        "date": DateTimeField,
         "abstract": LocalizedField,
         "text": LocalizedField,
         "picture": PictureField,

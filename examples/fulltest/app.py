@@ -44,13 +44,14 @@ def create_app():
         shlf.init_security(User, Role)
 
         shlf.load_plugins((
-            "shelf.plugins.wysiwyg",
-            "shelf.plugins.workflow",
+            "shelf.plugins.dashboard",
+            "shelf.plugins.ecommerce",
             "shelf.plugins.i18n",
             "shelf.plugins.library",
-            "shelf.plugins.preview",
             "shelf.plugins.page",
-            "shelf.plugins.dashboard"
+            "shelf.plugins.preview",
+            "shelf.plugins.workflow",
+            "shelf.plugins.wysiwyg",
         ))
         init_admin(shlf.admin, db.session)
         shlf.setup_plugins()
