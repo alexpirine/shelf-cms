@@ -1,4 +1,5 @@
 import admin
+import sqlalchemy
 
 from flask import Blueprint
 from flask.ext.security import SQLAlchemyUserDatastore
@@ -6,6 +7,7 @@ from flask.ext.security import Security
 from flask.ext.sqlalchemy import SQLAlchemy
 from flask.ext.wtf import Form
 from security.view import UserModelView
+from sqlalchemy_defaults import make_lazy_configured
 from werkzeug.utils import import_string
 from wtforms_alchemy import model_form_factory
 
@@ -50,6 +52,7 @@ class Shelf(object):
             raise ValueError
         self.db = db_object
         self.db.create_all()
+        make_lazy_configured(sqlalchemy.orm.mapper)
 
     def init_security(self, user_cls, role_cls, datastore_cls=SQLAlchemyUserDatastore):
         self.user_datastore = datastore_cls(self.db, user_cls, role_cls)

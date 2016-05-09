@@ -37,6 +37,7 @@ if __name__ == '__main__':
             'Jinja2',
             'Pillow',
             'SQLAlchemy',
+            'SQLAlchemy-Defaults',
             'WTForms',
             'WTForms-Alchemy',
             'Werkzeug',
