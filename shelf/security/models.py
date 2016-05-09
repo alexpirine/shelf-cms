@@ -25,3 +25,6 @@ class User(LazyConfigured, UserMixin):
     email = Column(db.String(255), unique=True, label=_(u"e-mail"))
     password = Column(db.String(255), nullable=True, label=_(u"password"))
     active = Column(db.Boolean(), default=False, label=_(u"active"))
+
+    def __unicode__(self):
+        return self.email

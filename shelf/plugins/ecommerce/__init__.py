@@ -6,12 +6,6 @@ from shelf.plugins.ecommerce import models
 class ClientModelView(SQLAModelView):
     column_list = ('first_name', 'last_name', 'created_on')
 
-    form_columns = (
-        'first_name',
-        "last_name",
-        'created_on',
-    )
-
     form_shortcuts = (
         'first_name',
         'last_name',

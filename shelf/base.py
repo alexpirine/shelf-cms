@@ -114,6 +114,8 @@ class Shelf(object):
                 )
 
     def setup_plugins(self):
+        self.db.create_all()
+
         for plugin in self.plugins:
             model_config = plugin.config.get("model")
             if model_config:

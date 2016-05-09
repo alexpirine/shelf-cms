@@ -9,8 +9,8 @@ from shelf.base import db
 
 class Client(LazyConfigured):
     id = Column(db.Integer, primary_key=True)
-    user = db.relationship("User", backref='client')
-    user_id = Column(db.Integer, db.ForeignKey('user.id'), unique=True)
+    user = db.relationship("User", backref='client', info={'label':_(u"user")})
+    user_id = Column(db.Integer, db.ForeignKey('user.id'), unique=True, nullable=False)
 
     created_on = Column(db.DateTime, auto_now=True, label=_(u"registration date"))
     first_name = Column(db.Unicode(255), label=_(u"first name"))
@@ -107,14 +107,20 @@ class DeliveryZone(LazyConfigured):
         Country,
         secondary=db.Table(
             'delivery_zone_countries',
-            db.Column('delivery_zone_id', db.Integer, db.ForeignKey('delivery_zone.id')),
-            db.Column('country_code', db.String(2), db.ForeignKey('country.code')),
+            Column('delivery_zone_id', db.Integer, db.ForeignKey('delivery_zone.id')),
+            Column('country_code', db.String(2), db.ForeignKey('country.code')),
         ),
         backref='delivery_zones'
     )
-    country_id = Column(db.String(2), db.ForeignKey('country.id'))
     name = Column(db.Unicode(63))
 
     def __unicode__(self):
         return self.name
 
+class ShippingOption(LazyConfigured):
+    id = Column(db.Integer, primary_key=True)
+    name = Column(db.Unicode(63))
+    price = Column(db.Numeric(11, 2))
+
+    def __unicode__(self):
+        return self.name
