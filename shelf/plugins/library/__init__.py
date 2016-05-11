@@ -155,10 +155,18 @@ class RemoteFileField(TextField):
 
     def populate_obj(self, obj, name):
         if getattr(obj, name) is None:
-            newfile = getattr(obj.__class__, name).mapper.class_()
-            setattr(obj, name, newfile)
-            if self.raw_data and len(self.raw_data):
-                getattr(obj, name).set_path(self.raw_data[0])
+            if not self.raw_data[0]:
+                return
+            remote_file = getattr(obj.__class__, name).mapper.class_()
+            setattr(obj, name, remote_file)
+        else:
+            remote_file = getattr(obj, name)
+            if not self.raw_data[0]:
+                db.session.delete(remote_file)
+                setattr(obj, name, None)
+                return
+
+        remote_file.set_path(self.raw_data[0])
 
 
 class PictureWidget(RenderTemplateWidget):
@@ -179,14 +187,17 @@ class PictureField(TextField):
         self.height = height
 
     def populate_obj(self, obj, name):
-        if not self.raw_data[0]:
-            return
-
         if getattr(obj, name) is None:
+            if not self.raw_data[0]:
+                return
             picture = getattr(obj.__class__, name).mapper.class_()
             setattr(obj, name, picture)
         else:
             picture = getattr(obj, name)
+            if not self.raw_data[0]:
+                db.session.delete(picture)
+                setattr(obj, name, None)
+                return
 
         picture.path = self.raw_data[0]
 

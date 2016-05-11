@@ -1,5 +1,5 @@
-{% if field.data and field.data.get_path() and field.data.get_path() != "None" %}
-    {% set url = field.data.get_path() %}   
+{% if field.data and field.data.path %}
+    {% set url = field.data.get_path() %}
     <input class="form-control remote-file" type="text" id="{{ field.id }}" name="{{ field.name }}" value="{{ url }}">
 {% else %}
     <input class="form-control remote-file" type="text" id="{{ field.id }}" name="{{ field.name }}" value="">
