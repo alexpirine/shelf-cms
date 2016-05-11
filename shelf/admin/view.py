@@ -58,7 +58,7 @@ class SQLAModelView(LoginMixin, sqla.ModelView, ActionsMixin):
         else:
             if hasattr(self.model, field):
                 model_field = getattr(self.model, field)
-                if 'label' in model_field.info and model_field.info['label']:
+                if hasattr(model_field, 'info') and 'label' in model_field.info and model_field.info['label']:
                     return "%s%s" % (model_field.info['label'][:1].upper(), model_field.info['label'][1:])
             return self._prettify_name(field)
 
