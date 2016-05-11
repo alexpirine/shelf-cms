@@ -15,7 +15,7 @@ class AbstractClient(LazyConfigured):
 
     @declared_attr
     def user(cls):
-        return db.relationship('User', backref='client', info={'label':_(u"user")})
+        return db.relationship('User', backref=backref('client', uselist=False), info={'label':_(u"user")})
 
     @declared_attr
     def user_id(cls):
