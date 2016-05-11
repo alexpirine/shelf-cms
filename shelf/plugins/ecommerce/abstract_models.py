@@ -3,6 +3,7 @@
 from flask.ext.babel import lazy_gettext as _
 from flask.ext.security import UserMixin, RoleMixin
 from sqlalchemy.ext.declarative import declared_attr
+from sqlalchemy.orm import backref
 from sqlalchemy_defaults import Column
 
 from shelf import LazyConfigured
