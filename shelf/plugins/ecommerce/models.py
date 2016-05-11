@@ -48,3 +48,21 @@ if not current_app.config.get('shelf.ec.models.ShippingOption'):
         pass
 else:
     ShippingOption = current_app.config.get('shelf.ec.models.ShippingOption')
+
+if not current_app.config.get('shelf.ec.models.Order'):
+    class Order(AM.AbstractOrder):
+        pass
+else:
+    Order = current_app.config.get('shelf.ec.models.Order')
+
+if not current_app.config.get('shelf.ec.models.Item'):
+    class Item(AM.AbstractItem):
+        pass
+else:
+    Item = current_app.config.get('shelf.ec.models.Item')
+
+if not current_app.config.get('shelf.ec.models.ShippingInfo'):
+    class ShippingInfo(AM.AbstractShippingInfo):
+        pass
+else:
+    ShippingInfo = current_app.config.get('shelf.ec.models.ShippingInfo')

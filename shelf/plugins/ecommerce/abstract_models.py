@@ -1,5 +1,8 @@
 # coding: utf-8
 
+import sqlalchemy as sa
+import sqlalchemy_utils as su
+
 from flask.ext.babel import lazy_gettext as _
 from flask.ext.security import UserMixin, RoleMixin
 from sqlalchemy.ext.declarative import declared_attr
@@ -12,7 +15,7 @@ from shelf.base import db
 class AbstractClient(LazyConfigured):
     __abstract__ = True
 
-    id = Column(db.Integer, primary_key=True)
+    id = Column(sa.Integer, primary_key=True)
 
     @declared_attr
     def user(cls):
@@ -20,12 +23,12 @@ class AbstractClient(LazyConfigured):
 
     @declared_attr
     def user_id(cls):
-        return Column(db.Integer, db.ForeignKey('user.id'), unique=True, nullable=False)
+        return Column(sa.Integer, db.ForeignKey('user.id'), unique=True, nullable=False)
 
-    created_on = Column(db.DateTime, auto_now=True, label=_(u"registration date"))
-    first_name = Column(db.Unicode(255), label=_(u"first name"))
-    last_name = Column(db.Unicode(255), label=_(u"last name"))
-    tel = Column(db.Unicode(20), nullable=True, label=_(u"telephone number"))
+    created_on = Column(sa.DateTime, auto_now=True, label=_(u"registration date"))
+    first_name = Column(sa.Unicode(255), label=_(u"first name"))
+    last_name = Column(sa.Unicode(255), label=_(u"last name"))
+    tel = Column(sa.Unicode(20), nullable=True, label=_(u"telephone number"))
 
     def __unicode__(self):
         return u"%s %s" % (self.first_name, self.last_name)
@@ -47,7 +50,7 @@ class AbstractAddress(LazyConfigured):
     exemple, le code postal sera imprimé après le nom de la localité pour les
     envois au Canada.
     """
-    id = Column(db.Integer, primary_key=True)
+    id = Column(sa.Integer, primary_key=True)
 
     @declared_attr
     def client(cls):
@@ -55,15 +58,15 @@ class AbstractAddress(LazyConfigured):
 
     @declared_attr
     def client_id(cls):
-        return Column(db.Integer, db.ForeignKey('client.id'))
+        return Column(sa.Integer, db.ForeignKey('client.id'))
 
-    line1 = Column(db.Unicode(38), label=_(u"line 1"))
-    line2 = Column(db.Unicode(38), nullable=True, label=_(u"line 2"))
-    line3 = Column(db.Unicode(38), nullable=True, label=_(u"line 3"))
-    line4 = Column(db.Unicode(38), nullable=True, label=_(u"line 4"))
-    city = Column(db.Unicode(38), label=_(u"city"))
-    zip_code = Column(db.Unicode(20), label=_(u"zip code"))
-    country = Column(db.Unicode(38), label=_(u"country"))
+    line1 = Column(sa.Unicode(38), label=_(u"line 1"))
+    line2 = Column(sa.Unicode(38), nullable=True, label=_(u"line 2"))
+    line3 = Column(sa.Unicode(38), nullable=True, label=_(u"line 3"))
+    line4 = Column(sa.Unicode(38), nullable=True, label=_(u"line 4"))
+    city = Column(sa.Unicode(38), label=_(u"city"))
+    zip_code = Column(sa.Unicode(20), label=_(u"zip code"))
+    country = Column(sa.Unicode(38), label=_(u"country"))
 
     def __unicode__(self):
         # ligne 5 : localité et code postal
@@ -111,9 +114,9 @@ class AbstractAddress(LazyConfigured):
 class AbstractCarrier(LazyConfigured):
     __abstract__ = True
 
-    id = Column(db.Integer, primary_key=True)
-    name = Column(db.Unicode(63), unique=True, label=_(u"name"))
-    api = Column(db.String(63), nullable=True, label=_(u"API"))
+    id = Column(sa.Integer, primary_key=True)
+    name = Column(sa.Unicode(63), unique=True, label=_(u"name"))
+    api = Column(sa.String(63), nullable=True, label=_(u"API"))
 
     def __unicode__(self):
         return self.name
@@ -121,8 +124,8 @@ class AbstractCarrier(LazyConfigured):
 class AbstractCountry(LazyConfigured):
     __abstract__ = True
 
-    code = Column(db.String(2), primary_key=True, label=_(u"code"))
-    name = Column(db.Unicode(63), label=_(u"name"))
+    code = Column(sa.String(2), primary_key=True, label=_(u"code"))
+    name = Column(sa.Unicode(63), label=_(u"name"))
 
     def __unicode__(self):
         return u"%s (%s)" % (self.name, self.code)
@@ -130,7 +133,7 @@ class AbstractCountry(LazyConfigured):
 class AbstractDeliveryZone(LazyConfigured):
     __abstract__ = True
 
-    id = Column(db.Integer, primary_key=True)
+    id = Column(sa.Integer, primary_key=True)
 
     @declared_attr
     def carrier(cls):
@@ -138,7 +141,7 @@ class AbstractDeliveryZone(LazyConfigured):
 
     @declared_attr
     def carrier_id(cls):
-        return Column(db.Integer, db.ForeignKey('carrier.id'))
+        return Column(sa.Integer, db.ForeignKey('carrier.id'))
 
     @declared_attr
     def countries(cls):
@@ -154,7 +157,7 @@ class AbstractDeliveryZone(LazyConfigured):
             info={'label': _(u"countries")},
         )
 
-    name = Column(db.Unicode(63), label=_(u"name"))
+    name = Column(sa.Unicode(63), label=_(u"name"))
 
     def __unicode__(self):
         return self.name
@@ -162,11 +165,125 @@ class AbstractDeliveryZone(LazyConfigured):
 class AbstractShippingOption(LazyConfigured):
     __abstract__ = True
 
-    id = Column(db.Integer, primary_key=True)
-    name = Column(db.Unicode(63), label=_(u"name"))
-    price = Column(db.Numeric(11, 2), label=_(u"price"))
-    delivery_time = Column(db.SmallInteger, min=0, max=1440, label=_(u"delivery time"))
-    packaging_formats = Column(db.String(255)) # TODO
+    PACKAGING_FORMATS = (
+        ('E', _(u"enveloppes")),
+        ('B', _(u"boxes")),
+        ('A', _(u"all")),
+    )
+
+    id = Column(sa.Integer, primary_key=True)
+
+    @declared_attr
+    def delivery_zone(cls):
+        return db.relationship('DeliveryZone', backref='shipping_options', info={'label': _(u"delivery_zone")})
+
+    @declared_attr
+    def delivery_zone_id(cls):
+        return Column(sa.Integer, db.ForeignKey('delivery_zone.id'))
+
+    name = Column(sa.Unicode(63), label=_(u"name"))
+    price = Column(sa.Numeric(11, 2), label=_(u"price"))
+    delivery_time = Column(sa.SmallInteger, min=0, max=1440, label=_(u"delivery time"))
+    packaging_format = Column(su.ChoiceType(PACKAGING_FORMATS, impl=sa.String(1)))
+    max_weight = Column(sa.SmallInteger, default=0, min=0, label=_(u"max weight"))
+    max_x = Column(sa.SmallInteger, default=0, min=0, label=_(u"max X dim."))
+    max_y = Column(sa.SmallInteger, default=0, min=0, label=_(u"max X dim."))
+    max_z = Column(sa.SmallInteger, default=0, min=0, label=_(u"max X dim."))
+    deleted = Column(sa.Boolean, default=False, label=_(u"deleted"))
 
     def __unicode__(self):
         return self.name
+
+
+class AbstractShippingInfo(LazyConfigured):
+    __abstract__ = True
+
+    id = Column(sa.Integer, primary_key=True)
+    tel = Column(sa.Unicode(20), nullable=True, label=_(u"telephone number"))
+    instructions = Column(sa.Unicode(255), nullable=True, label=_(u"delivery instructions"))
+
+    @declared_attr
+    def address(cls):
+        return db.relationship('Address', backref='shipping_infos', info={'label':_(u"address")})
+
+    @declared_attr
+    def address_id(cls):
+        return Column(sa.Integer, db.ForeignKey('address.id'))
+
+    @declared_attr
+    def order(cls):
+        return db.relationship('Order', backref=backref('shipping_info', uselist=False), info={'label':_(u"order")})
+
+    @declared_attr
+    def order_id(cls):
+        return Column(sa.Integer, db.ForeignKey('order.id'))
+
+    def __unicode__(self):
+        return u"Shipping info for Order No.%d" % self.order_id
+
+
+class AbstractOrder(LazyConfigured):
+    __abstract__ = True
+
+    STEPS = (
+        (10, _(u"created")),
+        (20, _(u"accepted")),
+        (30, _(u"processed")),
+        (40, _(u"sent")),
+        (50, _(u"delivered")),
+    )
+
+    ERRORS = (
+        (1, _(u"cancelled")),
+        (100, _(u"no_stock")),
+        (200, _(u"picking")),
+        (299, _(u"delivery")),
+    )
+
+    id = Column(sa.Integer, primary_key=True)
+
+    @declared_attr
+    def client(cls):
+        return db.relationship('Client', backref='orders', info={'label':_(u"client")})
+
+    @declared_attr
+    def client_id(cls):
+        return Column(sa.Integer, db.ForeignKey('client.id'))
+
+    @declared_attr
+    def shipping_option(cls):
+        return db.relationship('ShippingOption', backref='orders', info={'label':_(u"shipping option")})
+
+    @declared_attr
+    def shipping_option_id(cls):
+        return Column(sa.Integer, db.ForeignKey('shipping_option.id'))
+
+    date = Column(sa.DateTime, auto_now=True, label=_(u"date"))
+    tracknb = Column(sa.String(30), nullable=True, label=_(u"tracking number"))
+    shipping_fee = Column(sa.Numeric(11,2), label=_(u"shipping fee"))
+    discount = Column(sa.Numeric(11,2), label=_(u"discount"))
+    step = Column(su.ChoiceType(STEPS, impl=sa.Integer()), label=_(u"step"))
+    error = Column(su.ChoiceType(ERRORS, impl=sa.Integer()), nullable=True, label=_(u"error"))
+    closed = Column(sa.Boolean, default=False, label=_(u"closed"))
+
+    def __unicode__(self):
+        return u"Order No.%d for %s" % (self.id, self.client)
+
+class AbstractItem(LazyConfigured):
+    __abstract__ = True
+
+    id = Column(sa.Integer, primary_key=True)
+
+    @declared_attr
+    def order(cls):
+        return db.relationship('Order', backref='items', info={'label':_(u"order")})
+
+    @declared_attr
+    def order_id(cls):
+        return Column(sa.Integer, db.ForeignKey('order.id'))
+
+    qty = Column(sa.SmallInteger, min=1, label=_(u"quantity"))
+    price = Column(sa.Numeric(11,2), label=_(u"unit price"))
+
+    def __unicode__(self):
+        return u"Order No.%d for %s" % (self.id, self.client)
