@@ -12,7 +12,7 @@ from sqlalchemy_defaults import Column
 from shelf import LazyConfigured
 from shelf.base import db
 
-class AbstractClient(LazyConfigured):
+class Client(LazyConfigured):
     __abstract__ = True
 
     id = Column(sa.Integer, primary_key=True)
@@ -33,7 +33,7 @@ class AbstractClient(LazyConfigured):
     def __unicode__(self):
         return u"%s %s" % (self.first_name, self.last_name)
 
-class AbstractAddress(LazyConfigured):
+class Address(LazyConfigured):
     __abstract__ = True
 
     """
@@ -111,7 +111,7 @@ class AbstractAddress(LazyConfigured):
     def short(self):
         return u"%s %s %s" % (self.line1, self.zip_code, self.city)
 
-class AbstractCarrier(LazyConfigured):
+class Carrier(LazyConfigured):
     __abstract__ = True
 
     id = Column(sa.Integer, primary_key=True)
@@ -121,7 +121,7 @@ class AbstractCarrier(LazyConfigured):
     def __unicode__(self):
         return self.name
 
-class AbstractCountry(LazyConfigured):
+class Country(LazyConfigured):
     __abstract__ = True
 
     code = Column(sa.String(2), primary_key=True, label=_(u"code"))
@@ -130,7 +130,7 @@ class AbstractCountry(LazyConfigured):
     def __unicode__(self):
         return u"%s (%s)" % (self.name, self.code)
 
-class AbstractDeliveryZone(LazyConfigured):
+class DeliveryZone(LazyConfigured):
     __abstract__ = True
 
     id = Column(sa.Integer, primary_key=True)
@@ -162,7 +162,7 @@ class AbstractDeliveryZone(LazyConfigured):
     def __unicode__(self):
         return self.name
 
-class AbstractShippingOption(LazyConfigured):
+class ShippingOption(LazyConfigured):
     __abstract__ = True
 
     PACKAGING_FORMATS = (
@@ -195,7 +195,7 @@ class AbstractShippingOption(LazyConfigured):
         return self.name
 
 
-class AbstractShippingInfo(LazyConfigured):
+class ShippingInfo(LazyConfigured):
     __abstract__ = True
 
     id = Column(sa.Integer, primary_key=True)
@@ -222,7 +222,7 @@ class AbstractShippingInfo(LazyConfigured):
         return u"Shipping info for Order No.%d" % self.order_id
 
 
-class AbstractOrder(LazyConfigured):
+class Order(LazyConfigured):
     __abstract__ = True
 
     STEPS = (
@@ -277,7 +277,7 @@ class AbstractOrder(LazyConfigured):
     def __unicode__(self):
         return u"Order No.%d for %s" % (self.id, self.client)
 
-class AbstractItem(LazyConfigured):
+class Item(LazyConfigured):
     __abstract__ = True
 
     id = Column(sa.Integer, primary_key=True)
@@ -295,3 +295,4 @@ class AbstractItem(LazyConfigured):
 
     def __unicode__(self):
         return u"Order No.%d for %s" % (self.id, self.client)
+
