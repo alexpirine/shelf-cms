@@ -19,7 +19,7 @@ class Client(LazyConfigured):
 
     @declared_attr
     def user(cls):
-        return db.relationship('User', backref=backref('client', uselist=False), info={'label':_(u"user")})
+        return db.relationship('User', backref=backref('client', uselist=False), info={'label': _(u"user")})
 
     @declared_attr
     def user_id(cls):
@@ -204,7 +204,7 @@ class ShippingInfo(LazyConfigured):
 
     @declared_attr
     def address(cls):
-        return db.relationship('Address', backref='shipping_infos', info={'label':_(u"address")})
+        return db.relationship('Address', backref='shipping_infos', info={'label': _(u"address")})
 
     @declared_attr
     def address_id(cls):
@@ -212,7 +212,7 @@ class ShippingInfo(LazyConfigured):
 
     @declared_attr
     def order(cls):
-        return db.relationship('Order', backref=backref('shipping_info', uselist=False), info={'label':_(u"order")})
+        return db.relationship('Order', backref=backref('shipping_info', uselist=False), info={'label': _(u"order")})
 
     @declared_attr
     def order_id(cls):
@@ -244,7 +244,7 @@ class Order(LazyConfigured):
 
     @declared_attr
     def client(cls):
-        return db.relationship('Client', backref='orders', info={'label':_(u"client")})
+        return db.relationship('Client', backref='orders', info={'label': _(u"client")})
 
     @declared_attr
     def client_id(cls):
@@ -252,7 +252,7 @@ class Order(LazyConfigured):
 
     @declared_attr
     def shipping_option(cls):
-        return db.relationship('ShippingOption', backref='orders', info={'label':_(u"shipping option")})
+        return db.relationship('ShippingOption', backref='orders', info={'label': _(u"shipping option")})
 
     @declared_attr
     def shipping_option_id(cls):
@@ -260,7 +260,7 @@ class Order(LazyConfigured):
 
     @declared_attr
     def billing_address(cls):
-        return db.relationship('Address', backref='billed_orders', info={'label':_(u"billing address")})
+        return db.relationship('Address', backref='billed_orders', info={'label': _(u"billing address")})
 
     @declared_attr
     def billing_address_id(cls):
@@ -284,7 +284,7 @@ class Item(LazyConfigured):
 
     @declared_attr
     def order(cls):
-        return db.relationship('Order', backref='items', info={'label':_(u"order")})
+        return db.relationship('Order', backref='items', info={'label': _(u"order")})
 
     @declared_attr
     def order_id(cls):
