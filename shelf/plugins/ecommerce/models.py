@@ -11,6 +11,16 @@ __all__ = [
     'Country',
     'DeliveryZone',
     'ShippingOption',
+    'ShippingInfo',
+    'Order',
+    'Item',
+    'CategoryType',
+    'Category',
+    'ProductType',
+    'VariationType',
+    'Variation',
+    'Product',
+    'ProductVariation',
 ]
 
 if not current_app.config.get('shelf.ec.models.Client'):
@@ -49,6 +59,12 @@ if not current_app.config.get('shelf.ec.models.ShippingOption'):
 else:
     ShippingOption = current_app.config.get('shelf.ec.models.ShippingOption')
 
+if not current_app.config.get('shelf.ec.models.ShippingInfo'):
+    class ShippingInfo(AM.ShippingInfo):
+        pass
+else:
+    ShippingInfo = current_app.config.get('shelf.ec.models.ShippingInfo')
+
 if not current_app.config.get('shelf.ec.models.Order'):
     class Order(AM.Order):
         pass
@@ -61,8 +77,44 @@ if not current_app.config.get('shelf.ec.models.Item'):
 else:
     Item = current_app.config.get('shelf.ec.models.Item')
 
-if not current_app.config.get('shelf.ec.models.ShippingInfo'):
-    class ShippingInfo(AM.ShippingInfo):
+if not current_app.config.get('shelf.ec.models.CategoryType'):
+    class CategoryType(AM.CategoryType):
         pass
 else:
-    ShippingInfo = current_app.config.get('shelf.ec.models.ShippingInfo')
+    CategoryType = current_app.config.get('shelf.ec.models.CategoryType')
+
+if not current_app.config.get('shelf.ec.models.Category'):
+    class Category(AM.Category):
+        pass
+else:
+    Category = current_app.config.get('shelf.ec.models.Category')
+
+if not current_app.config.get('shelf.ec.models.ProductType'):
+    class ProductType(AM.ProductType):
+        pass
+else:
+    ProductType = current_app.config.get('shelf.ec.models.ProductType')
+
+if not current_app.config.get('shelf.ec.models.VariationType'):
+    class VariationType(AM.VariationType):
+        pass
+else:
+    VariationType = current_app.config.get('shelf.ec.models.VariationType')
+
+if not current_app.config.get('shelf.ec.models.Variation'):
+    class Variation(AM.Variation):
+        pass
+else:
+    Variation = current_app.config.get('shelf.ec.models.Variation')
+
+if not current_app.config.get('shelf.ec.models.Product'):
+    class Product(AM.Product):
+        pass
+else:
+    Product = current_app.config.get('shelf.ec.models.Product')
+
+if not current_app.config.get('shelf.ec.models.ProductVariation'):
+    class ProductVariation(AM.ProductVariation):
+        pass
+else:
+    ProductVariation = current_app.config.get('shelf.ec.models.ProductVariation')

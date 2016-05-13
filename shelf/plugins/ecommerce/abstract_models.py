@@ -57,6 +57,7 @@ class Address(LazyConfigured):
     city = Column(sa.Unicode(38), label=_(u"city"))
     zip_code = Column(sa.Unicode(20), label=_(u"zip code"))
     country = Column(sa.Unicode(38), label=_(u"country"))
+    deleted = Column(sa.Boolean, default=False, index=True, label=_(u"deleted"))
 
     @declared_attr
     def client(cls):
@@ -64,7 +65,7 @@ class Address(LazyConfigured):
 
     @declared_attr
     def client_id(cls):
-        return Column(sa.Integer, db.ForeignKey('client.id'))
+        return Column(sa.Integer, db.ForeignKey('client.id'), nullable=False)
 
     def __unicode__(self):
         # ligne 5 : localité et code postal
@@ -123,13 +124,16 @@ class Country(LazyConfigured):
     __abstract__ = True
 
     code = Column(sa.String(2), primary_key=True, label=_(u"code"))
-    name = Column(sa.Unicode(63), label=_(u"name"))
+    name = Column(sa.Unicode(63), unique=True, label=_(u"name"))
 
     def __unicode__(self):
         return u"%s (%s)" % (self.name, self.code)
 
 class DeliveryZone(LazyConfigured):
     __abstract__ = True
+    __table_args__ = (
+        sa.UniqueConstraint('carrier_id', 'name'),
+    )
 
     id = Column(sa.Integer, primary_key=True)
     name = Column(sa.Unicode(63), label=_(u"name"))
@@ -140,7 +144,7 @@ class DeliveryZone(LazyConfigured):
 
     @declared_attr
     def carrier_id(cls):
-        return Column(sa.Integer, db.ForeignKey('carrier.id'))
+        return Column(sa.Integer, db.ForeignKey('carrier.id'), nullable=False)
 
     @declared_attr
     def countries(cls):
@@ -148,8 +152,9 @@ class DeliveryZone(LazyConfigured):
             'Country',
             secondary=db.Table(
                 'delivery_zone_countries',
-                Column('delivery_zone_id', db.Integer, db.ForeignKey('delivery_zone.id')),
-                Column('country_code', db.String(2), db.ForeignKey('country.code')),
+                Column('delivery_zone_id', db.Integer, db.ForeignKey('delivery_zone.id'), nullable=False),
+                Column('country_code', db.String(2), db.ForeignKey('country.code'), nullable=False),
+                sa.UniqueConstraint('delivery_zone_id', 'country_code'),
                 extend_existing=True,
             ),
             backref='delivery_zones',
@@ -177,7 +182,7 @@ class ShippingOption(LazyConfigured):
     max_x = Column(sa.SmallInteger, default=0, min=0, label=_(u"max X dim."))
     max_y = Column(sa.SmallInteger, default=0, min=0, label=_(u"max X dim."))
     max_z = Column(sa.SmallInteger, default=0, min=0, label=_(u"max X dim."))
-    deleted = Column(sa.Boolean, default=False, label=_(u"deleted"))
+    deleted = Column(sa.Boolean, default=False, index=True, label=_(u"deleted"))
 
     @declared_attr
     def delivery_zone(cls):
@@ -185,7 +190,7 @@ class ShippingOption(LazyConfigured):
 
     @declared_attr
     def delivery_zone_id(cls):
-        return Column(sa.Integer, db.ForeignKey('delivery_zone.id'))
+        return Column(sa.Integer, db.ForeignKey('delivery_zone.id'), nullable=False)
 
     def __unicode__(self):
         return self.name
@@ -204,15 +209,7 @@ class ShippingInfo(LazyConfigured):
 
     @declared_attr
     def address_id(cls):
-        return Column(sa.Integer, db.ForeignKey('address.id'))
-
-    @declared_attr
-    def order(cls):
-        return db.relationship('Order', backref=backref('shipping_info', uselist=False), info={'label': _(u"order")})
-
-    @declared_attr
-    def order_id(cls):
-        return Column(sa.Integer, db.ForeignKey('order.id'))
+        return Column(sa.Integer, db.ForeignKey('address.id'), nullable=False)
 
     def __unicode__(self):
         return u"Shipping info for Order No.%d" % self.order_id
@@ -243,7 +240,7 @@ class Order(LazyConfigured):
     discount = Column(sa.Numeric(11,2), label=_(u"discount"))
     step = Column(su.ChoiceType(STEPS, impl=sa.Integer()), label=_(u"step"))
     error = Column(su.ChoiceType(ERRORS, impl=sa.Integer()), nullable=True, label=_(u"error"))
-    closed = Column(sa.Boolean, default=False, label=_(u"closed"))
+    closed = Column(sa.Boolean, default=False, index=True, label=_(u"closed"))
 
     @declared_attr
     def client(cls):
@@ -251,7 +248,7 @@ class Order(LazyConfigured):
 
     @declared_attr
     def client_id(cls):
-        return Column(sa.Integer, db.ForeignKey('client.id'))
+        return Column(sa.Integer, db.ForeignKey('client.id'), nullable=False)
 
     @declared_attr
     def shipping_option(cls):
@@ -259,7 +256,15 @@ class Order(LazyConfigured):
 
     @declared_attr
     def shipping_option_id(cls):
-        return Column(sa.Integer, db.ForeignKey('shipping_option.id'))
+        return Column(sa.Integer, db.ForeignKey('shipping_option.id'), nullable=False)
+
+    @declared_attr
+    def shipping_info(cls):
+        return db.relationship('ShippingInfo', backref=backref('order', uselist=False), info={'label': _(u"shipping info")})
+
+    @declared_attr
+    def shipping_info_id(cls):
+        return Column(sa.Integer, db.ForeignKey('shipping_info.id'), unique=True, nullable=False)
 
     @declared_attr
     def billing_address(cls):
@@ -267,17 +272,20 @@ class Order(LazyConfigured):
 
     @declared_attr
     def billing_address_id(cls):
-        return Column(sa.Integer, db.ForeignKey('address.id'))
+        return Column(sa.Integer, db.ForeignKey('address.id'), nullable=False)
 
     def __unicode__(self):
         return u"Order No.%d for %s" % (self.id, self.client)
 
 class Item(LazyConfigured):
     __abstract__ = True
+    __table_args__ = (
+        sa.UniqueConstraint('order_id', 'product_id'),
+    )
 
     id = Column(sa.Integer, primary_key=True)
-    qty = Column(sa.SmallInteger, min=1, label=_(u"quantity"))
-    price = Column(sa.Numeric(11,2), label=_(u"unit price"))
+    qty = Column(sa.SmallInteger, min=1, nullable=False, label=_(u"quantity"))
+    price = Column(sa.Numeric(11,2), min=0, nullable=False, label=_(u"unit price"))
 
     @declared_attr
     def order(cls):
@@ -285,8 +293,172 @@ class Item(LazyConfigured):
 
     @declared_attr
     def order_id(cls):
-        return Column(sa.Integer, db.ForeignKey('order.id'))
+        return Column(sa.Integer, db.ForeignKey('order.id'), nullable=False)
+
+    @declared_attr
+    def product(cls):
+        return db.relationship('Product', backref='items', info={'label': _(u"product")})
+
+    @declared_attr
+    def product_id(cls):
+        return Column(sa.Integer, db.ForeignKey('product.id'), nullable=False)
 
     def __unicode__(self):
         return u"Order No.%d for %s" % (self.id, self.client)
 
+
+class CategoryType(LazyConfigured):
+    __abstract__ = True
+
+    id = Column(sa.Integer, primary_key=True)
+    name = Column(sa.Unicode(255), unique=True, label=_(u"name"))
+
+    def __unicode__(self):
+        return self.name
+
+class Category(LazyConfigured):
+    __abstract__ = True
+
+    id = Column(sa.Integer, primary_key=True)
+
+    @declared_attr
+    def category_type(cls):
+        return db.relationship('CategoryType', backref='categories', info={'label': _(u"category type")})
+
+    @declared_attr
+    def category_type_id(cls):
+        return Column(sa.Integer, db.ForeignKey('category_type.id'), nullable=False)
+
+    @declared_attr
+    def parent_category(cls):
+        return db.relationship('Category', backref='children', remote_side=[cls.id], info={'label': _(u"parent category")})
+
+    @declared_attr
+    def parent_category_id(cls):
+        return Column(sa.Integer, db.ForeignKey('category.id'), nullable=True)
+
+    name = Column(sa.Unicode(255), label=_(u"name"))
+
+    def __unicode__(self):
+        return self.name
+
+class ProductType(LazyConfigured):
+    __abstract__ = True
+
+    id = Column(sa.Integer, primary_key=True)
+    name = Column(sa.Unicode(255), unique=True, label=_(u"name"))
+
+    def __unicode__(self):
+        return self.name
+
+class VariationType(LazyConfigured):
+    __abstract__ = True
+
+    id = Column(sa.Integer, primary_key=True)
+    name = Column(sa.Unicode(255), unique=True, label=_(u"name"))
+
+    def __unicode__(self):
+        return self.name
+
+class Variation(LazyConfigured):
+    __abstract__ = True
+    __table_args__ = (
+        sa.UniqueConstraint('variation_type_id', 'value'),
+    )
+
+    id = Column(sa.Integer, primary_key=True)
+
+    @declared_attr
+    def variation_type(cls):
+        return db.relationship('VariationType', backref='variations', info={'label': _(u"variation type")})
+
+    @declared_attr
+    def variation_type_id(cls):
+        return Column(sa.Integer, db.ForeignKey('variation_type.id'), nullable=False)
+
+    value = Column(sa.Unicode(255), unique=True, label=_(u"value"))
+
+    def __unicode__(self):
+        return self.name
+
+class Product(LazyConfigured):
+    __abstract__ = True
+
+    id = Column(sa.Integer, primary_key=True)
+
+    @declared_attr
+    def product_type(cls):
+        return db.relationship('ProductType', backref='products', info={'label': _(u"product type")})
+
+    @declared_attr
+    def product_type_id(cls):
+        return Column(sa.Integer, db.ForeignKey('product_type.id'), nullable=False)
+
+    @declared_attr
+    def categories(cls):
+        return db.relationship(
+            'Category',
+            secondary=db.Table(
+                'product_categories',
+                Column('product_id', db.Integer, db.ForeignKey('product.id'), nullable=False),
+                Column('category_id', db.Integer, db.ForeignKey('category.id'), nullable=False),
+                sa.UniqueConstraint('product_id', 'category_id'),
+                extend_existing=True,
+            ),
+            backref='products',
+            info={'label': _(u"categories")}
+        )
+
+    @declared_attr
+    def variation_of(cls):
+        return db.relationship('ProductVariation', backref='children', foreign_keys='Product.variation_of_id', info={'label': _(u"variation of…")})
+
+    @declared_attr
+    def variation_of_id(cls):
+        return Column(sa.Integer, db.ForeignKey('product_variation.id'), nullable=True)
+
+    code = Column(sa.Unicode(63), unique=True, label=_(u"code"))
+    ean13 = Column(sa.Numeric(13, 0), nullable=True, label=_(u"EAN-13 code"))
+    name = Column(sa.Unicode(255), label=_(u"name"))
+    price = Column(sa.Numeric(11, 2), min=0, label=_(u"price"))
+    weight = Column(sa.Integer, min=0, default=0, label=_(u"weight"))
+    dim_x = Column(sa.Integer, min=0, default=0, label=_(u"dim_x"))
+    dim_y = Column(sa.Integer, min=0, default=0, label=_(u"dim_y"))
+    dim_z = Column(sa.Integer, min=0, default=0, label=_(u"dim_z"))
+    qty = Column(sa.Integer, min=0, default=0, label=_(u"quantity"))
+    qty_reserved = Column(sa.Integer, min=0, default=0, label=_(u"reserved quantity"))
+    deleted = Column(sa.Boolean, default=False, index=True, label=_(u"deleted"))
+
+    def __unicode__(self):
+        return self.name
+
+class ProductVariation(LazyConfigured):
+    __abstract__ = True
+
+    id = Column(sa.Integer, primary_key=True)
+
+    @declared_attr
+    def parent(cls):
+        return db.relationship('Product', backref=backref('variation', uselist=False), foreign_keys='ProductVariation.parent_id', info={'label': _(u"parent product")})
+
+    @declared_attr
+    def parent_id(cls):
+        return Column(sa.Integer, db.ForeignKey('product.id'), unique=True, nullable=False)
+
+    @declared_attr
+    def variation_types(cls):
+        return db.relationship(
+            'VariationType',
+            secondary=db.Table(
+                'product_variation_types',
+                Column('product_variation_id', db.Integer, db.ForeignKey('product_variation.id'), nullable=False),
+                Column('variation_type_id', db.Integer, db.ForeignKey('variation_type.id'), nullable=False),
+                sa.UniqueConstraint('product_variation_id', 'variation_type_id'),
+                extend_existing=True,
+            ),
+            backref='product_variation',
+            info={'label': _(u"variation types")},
+        )
+
+    def __unicode__(self):
+        return self.parent
