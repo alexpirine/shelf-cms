@@ -258,6 +258,14 @@ class AbstractOrder(LazyConfigured):
     def shipping_option_id(cls):
         return Column(sa.Integer, db.ForeignKey('shipping_option.id'))
 
+    @declared_attr
+    def billing_address(cls):
+        return db.relationship('Address', backref='billed_orders', info={'label':_(u"billing address")})
+
+    @declared_attr
+    def billing_address_id(cls):
+        return Column(sa.Integer, db.ForeignKey('address.id'))
+
     date = Column(sa.DateTime, auto_now=True, label=_(u"date"))
     tracknb = Column(sa.String(30), nullable=True, label=_(u"tracking number"))
     shipping_fee = Column(sa.Numeric(11,2), label=_(u"shipping fee"))
