@@ -11,6 +11,27 @@ from sqlalchemy_defaults import Column
 
 from shelf import LazyConfigured
 from shelf.base import db
+from shelf.plugins.library import PictureModelMixin
+
+__all__ = [
+    'Client',
+    'Address',
+    'Carrier',
+    'Country',
+    'DeliveryZone',
+    'ShippingOption',
+    'ShippingInfo',
+    'Order',
+    'OrderedItem',
+    'CategoryType',
+    'Category',
+    'ProductType',
+    'VariationType',
+    'Variation',
+    'Product',
+    'ProductVariation',
+    'ProductPicture',
+]
 
 class Client(LazyConfigured):
     __abstract__ = True
@@ -277,7 +298,7 @@ class Order(LazyConfigured):
     def __unicode__(self):
         return u"Order No.%d for %s" % (self.id, self.client)
 
-class Item(LazyConfigured):
+class OrderedItem(LazyConfigured):
     __abstract__ = True
     __table_args__ = (
         sa.UniqueConstraint('order_id', 'product_id'),
@@ -459,6 +480,25 @@ class ProductVariation(LazyConfigured):
             backref='product_variation',
             info={'label': _(u"variation types")},
         )
+
+    def __unicode__(self):
+        return self.parent
+
+class ProductPicture(LazyConfigured, PictureModelMixin):
+    __abstract__ = True
+
+    id = Column(sa.Integer, primary_key=True)
+
+    @declared_attr
+    def product(cls):
+        return db.relationship('Product', backref='pictures', info={'label': _(u"product")})
+
+    @declared_attr
+    def product_id(cls):
+        return Column(sa.Integer, db.ForeignKey('product.id'), unique=True, nullable=False)
+
+    name = Column(sa.Unicode(255), label=_(u"name"))
+    position = Column(sa.SmallInteger, min=0, default=0, label=_(u"position"))
 
     def __unicode__(self):
         return self.parent
