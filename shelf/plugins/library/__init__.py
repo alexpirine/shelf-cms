@@ -19,6 +19,7 @@ from flask import request
 from flask.ext.admin import helpers
 from flask.ext.admin.babel import gettext
 from flask.ext.admin.form import RenderTemplateWidget
+from flask.ext.babel import lazy_gettext as _
 from flask_admin.base import expose
 from flask_admin.contrib import fileadmin
 from operator import itemgetter
@@ -100,9 +101,9 @@ class RemoteFileModelMixin(object):
 
 
 class PictureModelMixin(object):
-    path = Column(db.Unicode(255))
-    width = Column(db.Integer, default=0)
-    height = Column(db.Integer, default=0)
+    path = Column(db.Unicode(255), info={'label': _(u"path")})
+    width = Column(db.Integer, default=0, info={'label': _(u"width")})
+    height = Column(db.Integer, default=0, info={'label': _(u"height")})
 
     def get_url(self):
         if not self.path:
@@ -249,7 +250,7 @@ class FileAdmin(LoginMixin, fileadmin.FileAdmin):
         base_path, directory, path = self._normalize_path(path)
 
         if not self.is_accessible_path(path):
-            flash(gettext(gettext('Permission denied.')))
+            flash(gettext('Permission denied.'))
             return redirect(self._get_dir_url('.index'))
 
         # Get directory listing
@@ -327,7 +328,7 @@ class FileAdmin(LoginMixin, fileadmin.FileAdmin):
         parent_path = os.path.dirname(path)
 
         if not self.is_accessible_path(full_path):
-            flash(gettext(gettext('Permission denied.')))
+            flash(gettext('Permission denied.'))
             return redirect(self._get_dir_url('.index'))
 
         width, height = get_image_dimensions(full_path)
@@ -387,7 +388,7 @@ class FileAdmin(LoginMixin, fileadmin.FileAdmin):
         base_path, directory, path = self._normalize_path(path)
 
         if not self.is_accessible_path(path):
-            flash(gettext(gettext('Permission denied.')))
+            flash(gettext('Permission denied.'))
             return redirect(self._get_dir_url('.index'))
 
         # Get directory listing
@@ -454,7 +455,7 @@ class FileAdmin(LoginMixin, fileadmin.FileAdmin):
         base_path, directory, path = self._normalize_path(path)
 
         if not self.is_accessible_path(path):
-            flash(gettext(gettext('Permission denied.')))
+            flash(gettext('Permission denied.'))
             return redirect(self._get_dir_url('.index'))
 
         # Get directory listing
@@ -544,7 +545,7 @@ class FileAdmin(LoginMixin, fileadmin.FileAdmin):
             return redirect(self._get_dir_url('.index', path))
 
         if not self.is_accessible_path(path):
-            flash(gettext(gettext('Permission denied.')))
+            flash(gettext('Permission denied.'))
             return redirect(self._get_dir_url('.index'))
 
         form = self.upload_form()
@@ -590,7 +591,7 @@ class FileAdmin(LoginMixin, fileadmin.FileAdmin):
         base_path, directory, path = self._normalize_path(path)
 
         if not self.is_accessible_path(path):
-            flash(gettext(gettext('Permission denied.')))
+            flash(gettext('Permission denied.'))
             return redirect(self._get_dir_url('.index'))
 
         # Get directory listing
@@ -657,7 +658,7 @@ class FileAdmin(LoginMixin, fileadmin.FileAdmin):
         base_path, directory, path = self._normalize_path(path)
 
         if not self.is_accessible_path(path):
-            flash(gettext(gettext('Permission denied.')))
+            flash(gettext('Permission denied.'))
             return redirect(self._get_dir_url('.index'))
 
         # Get directory listing

@@ -9,7 +9,8 @@ from ..base import db
 
 roles_users = db.Table('roles_users',
     Column('user_id', db.Integer(), db.ForeignKey('user.id')),
-    Column('role_id', db.Integer(), db.ForeignKey('role.id')))
+    Column('role_id', db.Integer(), db.ForeignKey('role.id'))
+)
 
 class Role(LazyConfigured, RoleMixin):
     id = Column(db.Integer(), primary_key=True)
