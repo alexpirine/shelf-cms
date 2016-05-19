@@ -48,6 +48,7 @@ class PriceDecimal(sa.types.TypeDecorator):
         except TypeError:
             return Price(0)
 
+
 class Client(LazyConfigured):
     __abstract__ = True
 
@@ -135,16 +136,16 @@ class Address(LazyConfigured):
 
         return u'\n'.join(filter(None, [address1, address2]))
 
+    @property
+    def short(self):
+        return u"%s %s %s" % (self.line1, self.zip_code, self.city)
+
     def set_lines(self, lines):
         lines = [l.strip() for l in lines.strip().split('\n')]
         self.line1 = lines[0] if len(lines) > 0 else ''
         self.line2 = lines[1] if len(lines) > 1 else ''
         self.line3 = lines[2] if len(lines) > 2 else ''
         self.line4 = lines[3] if len(lines) > 3 else ''
-
-    @property
-    def short(self):
-        return u"%s %s %s" % (self.line1, self.zip_code, self.city)
 
 class Carrier(LazyConfigured):
     __abstract__ = True
@@ -327,40 +328,40 @@ class Order(LazyConfigured):
         self.check_not_closed()
         self.check_no_errors()
 
-        if self.step >= self.STEP['accepted']:
+        if self.step >= self.STEPS['accepted']:
             raise Exception(_(u"This order has already been accepted"))
 
     def accept(self):
         self.can_accept()
-        self.step = self.STEP['accepted']
+        self.step = self.STEPS['accepted']
 
     def can_process(self):
         self.check_not_closed()
         self.check_no_errors()
 
-        if self.step < self.STEP['accepted']:
+        if self.step < self.STEPS['accepted']:
             raise Exception(_(u"This order has not been accepted yet."))
 
-        if self.step >= self.STEP['processed']:
+        if self.step >= self.STEPS['processed']:
             raise Exception(_(u"This order has already been processed"))
 
     def process(self):
         self.can_process()
-        self.step = self.STEP['processed']
+        self.step = self.STEPS['processed']
 
     def can_send(self):
         self.check_not_closed()
         self.check_no_errors()
 
-        if self.step < self.STEP['processed']:
+        if self.step < self.STEPS['processed']:
             raise Exception(_(u"This order has not been processed yet."))
 
-        if self.step >= self.STEP['sent']:
+        if self.step >= self.STEPS['sent']:
             raise Exception(_(u"This order has already been sent"))
 
     def send(self):
         self.can_send()
-        self.step = self.STEP['sent']
+        self.step = self.STEPS['sent']
 
     def can_cancel(self):
         self.check_not_closed()
@@ -420,6 +421,7 @@ class Category(LazyConfigured):
     __abstract__ = True
 
     id = Column(sa.Integer, primary_key=True)
+    name = Column(sa.Unicode(255), label=_(u"name"))
 
     @declared_attr
     def category_type(cls):
@@ -436,8 +438,6 @@ class Category(LazyConfigured):
     @declared_attr
     def parent_category_id(cls):
         return Column(sa.Integer, db.ForeignKey('category.id'), nullable=True)
-
-    name = Column(sa.Unicode(255), label=_(u"name"))
 
     def __unicode__(self):
         return self.name
@@ -467,6 +467,7 @@ class Variation(LazyConfigured):
     )
 
     id = Column(sa.Integer, primary_key=True)
+    value = Column(sa.Unicode(255), unique=True, label=_(u"value"))
 
     @declared_attr
     def variation_type(cls):
@@ -475,8 +476,6 @@ class Variation(LazyConfigured):
     @declared_attr
     def variation_type_id(cls):
         return Column(sa.Integer, db.ForeignKey('variation_type.id'), nullable=False)
-
-    value = Column(sa.Unicode(255), unique=True, label=_(u"value"))
 
     def __unicode__(self):
         return self.name
@@ -566,6 +565,8 @@ class ProductPicture(LazyConfigured, PictureModelMixin):
     __abstract__ = True
 
     id = Column(sa.Integer, primary_key=True)
+    name = Column(sa.Unicode(255), label=_(u"name"))
+    position = Column(sa.SmallInteger, min=0, default=0, label=_(u"position"))
 
     @declared_attr
     def product(cls):
@@ -574,9 +575,6 @@ class ProductPicture(LazyConfigured, PictureModelMixin):
     @declared_attr
     def product_id(cls):
         return Column(sa.Integer, db.ForeignKey('product.id'), unique=True, nullable=False)
-
-    name = Column(sa.Unicode(255), label=_(u"name"))
-    position = Column(sa.SmallInteger, min=0, default=0, label=_(u"position"))
 
     def __unicode__(self):
         return self.parent
