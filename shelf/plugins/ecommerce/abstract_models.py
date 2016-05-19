@@ -5,6 +5,7 @@ import sqlalchemy_utils as su
 
 from flask.ext.babel import lazy_gettext as _
 from flask.ext.security import UserMixin, RoleMixin
+from prices import Price
 from sqlalchemy.ext.declarative import declared_attr
 from sqlalchemy.orm import backref
 from sqlalchemy_defaults import Column
@@ -32,6 +33,20 @@ __all__ = [
     'ProductVariation',
     'ProductPicture',
 ]
+
+class PriceDecimal(sa.types.TypeDecorator):
+    impl = sa.types.DECIMAL
+
+    def process_bind_param(self, value, dialect):
+        if value is None:
+            return 0
+        return value.gross
+
+    def process_result_value(self, value, dialect):
+        try:
+            return Price(value / Decimal(1.2), gross=value, currency="EUR").quantize('0.01')
+        except TypeError:
+            return Price(0)
 
 class Client(LazyConfigured):
     __abstract__ = True
@@ -239,19 +254,21 @@ class ShippingInfo(LazyConfigured):
 class Order(LazyConfigured):
     __abstract__ = True
 
-    STEPS = (
-        (10, _(u"created")),
-        (20, _(u"accepted")),
-        (30, _(u"processed")),
-        (40, _(u"sent")),
-        (50, _(u"delivered")),
-    )
+    STEPS = {
+        'created': 10,
+        'accepted': 20,
+        'processed': 30,
+        'sent': 40,
+        'delivered': 50,
+    }
+
+    STEPS_CHOICES = [(v, _(k.decode('utf-8'))) for k, v in STEPS.items()]
 
     ERRORS = (
-        (1, _(u"cancelled")),
-        (100, _(u"no_stock")),
-        (200, _(u"picking")),
-        (299, _(u"delivery")),
+        ('cancelled', _(u"cancelled")),
+        ('no_stock', _(u"no_stock")),
+        ('picking', _(u"picking")),
+        ('delivery', _(u"delivery")),
     )
 
     id = Column(sa.Integer, primary_key=True)
@@ -259,8 +276,8 @@ class Order(LazyConfigured):
     tracknb = Column(sa.String(30), nullable=True, label=_(u"tracking number"))
     shipping_fee = Column(sa.Numeric(11,2), label=_(u"shipping fee"))
     discount = Column(sa.Numeric(11,2), label=_(u"discount"))
-    step = Column(su.ChoiceType(STEPS, impl=sa.Integer()), label=_(u"step"))
-    error = Column(su.ChoiceType(ERRORS, impl=sa.Integer()), nullable=True, label=_(u"error"))
+    step = Column(su.ChoiceType(STEPS_CHOICES, impl=sa.Integer()), label=_(u"step"))
+    error = Column(su.ChoiceType(ERRORS, impl=sa.String(63)), nullable=True, label=_(u"error"))
     closed = Column(sa.Boolean, default=False, index=True, label=_(u"closed"))
 
     @declared_attr
@@ -297,6 +314,68 @@ class Order(LazyConfigured):
 
     def __unicode__(self):
         return u"Order No.%d for %s" % (self.id, self.client)
+
+    def check_no_errors(self):
+        if self.error:
+            raise Exception(_(u"This order has an unsolved issue."))
+
+    def check_not_closed(self):
+        if self.closed:
+            raise Exception(_(u"This order is archived."))
+
+    def can_accept(self):
+        self.check_not_closed()
+        self.check_no_errors()
+
+        if self.step >= self.STEP['accepted']:
+            raise Exception(_(u"This order has already been accepted"))
+
+    def accept(self):
+        self.can_accept()
+        self.step = self.STEP['accepted']
+
+    def can_process(self):
+        self.check_not_closed()
+        self.check_no_errors()
+
+        if self.step < self.STEP['accepted']:
+            raise Exception(_(u"This order has not been accepted yet."))
+
+        if self.step >= self.STEP['processed']:
+            raise Exception(_(u"This order has already been processed"))
+
+    def process(self):
+        self.can_process()
+        self.step = self.STEP['processed']
+
+    def can_send(self):
+        self.check_not_closed()
+        self.check_no_errors()
+
+        if self.step < self.STEP['processed']:
+            raise Exception(_(u"This order has not been processed yet."))
+
+        if self.step >= self.STEP['sent']:
+            raise Exception(_(u"This order has already been sent"))
+
+    def send(self):
+        self.can_send()
+        self.step = self.STEP['sent']
+
+    def can_cancel(self):
+        self.check_not_closed()
+
+        if self.error == 'cancelled':
+            raise Exception(_(u"This order is already cancelled."))
+
+        if self.step >= STEP['sent']:
+            raise Exception(_(u"This order has already been sent."))
+
+    def cancel(self):
+        self.can_cancel()
+
+        self.error = 'cancelled'
+        self.closed = True
 
 class OrderedItem(LazyConfigured):
     __abstract__ = True
@@ -406,6 +485,17 @@ class Product(LazyConfigured):
     __abstract__ = True
 
     id = Column(sa.Integer, primary_key=True)
+    code = Column(sa.Unicode(63), unique=True, label=_(u"code"))
+    ean13 = Column(sa.Numeric(13, 0), nullable=True, label=_(u"EAN-13 code"))
+    name = Column(sa.Unicode(255), label=_(u"name"))
+    price = Column(sa.Numeric(11, 2), min=0, label=_(u"price"))
+    weight = Column(sa.Integer, min=0, default=0, label=_(u"weight"))
+    dim_x = Column(sa.Integer, min=0, default=0, label=_(u"dim_x"))
+    dim_y = Column(sa.Integer, min=0, default=0, label=_(u"dim_y"))
+    dim_z = Column(sa.Integer, min=0, default=0, label=_(u"dim_z"))
+    qty = Column(sa.Integer, min=0, default=0, label=_(u"quantity"))
+    qty_reserved = Column(sa.Integer, min=0, default=0, label=_(u"reserved quantity"))
+    deleted = Column(sa.Boolean, default=False, index=True, label=_(u"deleted"))
 
     @declared_attr
     def product_type(cls):
@@ -437,18 +527,6 @@ class Product(LazyConfigured):
     @declared_attr
     def variation_of_id(cls):
         return Column(sa.Integer, db.ForeignKey('product_variation.id'), nullable=True)
-
-    code = Column(sa.Unicode(63), unique=True, label=_(u"code"))
-    ean13 = Column(sa.Numeric(13, 0), nullable=True, label=_(u"EAN-13 code"))
-    name = Column(sa.Unicode(255), label=_(u"name"))
-    price = Column(sa.Numeric(11, 2), min=0, label=_(u"price"))
-    weight = Column(sa.Integer, min=0, default=0, label=_(u"weight"))
-    dim_x = Column(sa.Integer, min=0, default=0, label=_(u"dim_x"))
-    dim_y = Column(sa.Integer, min=0, default=0, label=_(u"dim_y"))
-    dim_z = Column(sa.Integer, min=0, default=0, label=_(u"dim_z"))
-    qty = Column(sa.Integer, min=0, default=0, label=_(u"quantity"))
-    qty_reserved = Column(sa.Integer, min=0, default=0, label=_(u"reserved quantity"))
-    deleted = Column(sa.Boolean, default=False, index=True, label=_(u"deleted"))
 
     def __unicode__(self):
         return self.name
