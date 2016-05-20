@@ -35,7 +35,7 @@ __all__ = [
 ]
 
 class PriceDecimal(sa.types.TypeDecorator):
-    impl = sa.types.DECIMAL
+    impl = sa.types.NUMERIC
 
     def process_bind_param(self, value, dialect):
         if value is None:
