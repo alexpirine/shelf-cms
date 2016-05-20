@@ -212,7 +212,7 @@ class ShippingOption(LazyConfigured):
 
     id = Column(sa.Integer, primary_key=True)
     name = Column(sa.Unicode(63), label=_(u"name"))
-    price = Column(sa.Numeric(11, 2), label=_(u"price"))
+    price = Column(PriceDecimal(11, 2), label=_(u"price"))
     delivery_time = Column(sa.SmallInteger, min=0, max=1440, label=_(u"delivery time"))
     packaging_format = Column(su.ChoiceType(PACKAGING_FORMATS, impl=sa.String(1)))
     max_weight = Column(sa.SmallInteger, default=0, min=0, label=_(u"max weight"))
@@ -275,8 +275,8 @@ class Order(LazyConfigured):
     id = Column(sa.Integer, primary_key=True)
     date = Column(sa.DateTime, auto_now=True, label=_(u"date"))
     tracknb = Column(sa.String(30), nullable=True, label=_(u"tracking number"))
-    shipping_fee = Column(sa.Numeric(11,2), label=_(u"shipping fee"))
-    discount = Column(sa.Numeric(11,2), label=_(u"discount"))
+    shipping_fee = Column(PriceDecimal(11, 2), label=_(u"shipping fee"))
+    discount = Column(PriceDecimal(11, 2), label=_(u"discount"))
     step = Column(su.ChoiceType(STEPS_CHOICES, impl=sa.Integer()), label=_(u"step"))
     error = Column(su.ChoiceType(ERRORS, impl=sa.String(63)), nullable=True, label=_(u"error"))
     closed = Column(sa.Boolean, default=False, index=True, label=_(u"closed"))
@@ -315,6 +315,9 @@ class Order(LazyConfigured):
 
     def __unicode__(self):
         return u"Order No.%d for %s" % (self.id, self.client)
+
+    def get_total_price(self):
+        return sum([item.get_total_price() for item in self.items])
 
     def check_no_errors(self):
         if self.error:
@@ -386,7 +389,7 @@ class OrderedItem(LazyConfigured):
 
     id = Column(sa.Integer, primary_key=True)
     qty = Column(sa.SmallInteger, min=1, nullable=False, label=_(u"quantity"))
-    price = Column(sa.Numeric(11,2), min=0, nullable=False, label=_(u"unit price"))
+    price = Column(PriceDecimal(11, 2), min=0, nullable=False, label=_(u"unit price"))
 
     @declared_attr
     def order(cls):
@@ -406,6 +409,9 @@ class OrderedItem(LazyConfigured):
 
     def __unicode__(self):
         return u"Order No.%d for %s" % (self.id, self.client)
+
+    def get_total_price(self):
+        return self.qty * self.price
 
 
 class CategoryType(LazyConfigured):
@@ -487,7 +493,7 @@ class Product(LazyConfigured):
     code = Column(sa.Unicode(63), unique=True, label=_(u"code"))
     ean13 = Column(sa.Numeric(13, 0), nullable=True, label=_(u"EAN-13 code"))
     name = Column(sa.Unicode(255), label=_(u"name"))
-    price = Column(sa.Numeric(11, 2), min=0, label=_(u"price"))
+    price = Column(PriceDecimal(11, 2), min=0, label=_(u"price"))
     weight = Column(sa.Integer, min=0, default=0, label=_(u"weight"))
     dim_x = Column(sa.Integer, min=0, default=0, label=_(u"dim_x"))
     dim_y = Column(sa.Integer, min=0, default=0, label=_(u"dim_y"))
