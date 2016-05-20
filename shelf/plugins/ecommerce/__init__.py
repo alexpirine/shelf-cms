@@ -5,6 +5,9 @@ from flask.ext.babel import lazy_gettext as _
 from shelf.admin.view import SQLAModelView
 from shelf.base import db
 
+def init():
+    from shelf.plugins.ecommerce import models
+
 def get_model(model_name):
     from shelf.plugins.ecommerce import models
 
