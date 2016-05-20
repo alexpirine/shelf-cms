@@ -3,6 +3,7 @@
 import sqlalchemy as sa
 import sqlalchemy_utils as su
 
+from decimal import Decimal
 from flask.ext.babel import lazy_gettext as _
 from flask.ext.security import UserMixin, RoleMixin
 from prices import Price
@@ -13,6 +14,7 @@ from sqlalchemy_defaults import Column
 from shelf import LazyConfigured
 from shelf.base import db
 from shelf.plugins.library import PictureModelMixin
+from shelf.plugins.ecommerce import get_model
 
 __all__ = [
     'Client',
@@ -68,6 +70,7 @@ class Client(LazyConfigured):
 
     def __unicode__(self):
         return u"%s %s" % (self.first_name, self.last_name)
+
 
 class Address(LazyConfigured):
     __abstract__ = True
@@ -277,7 +280,7 @@ class Order(LazyConfigured):
     tracknb = Column(sa.String(30), nullable=True, label=_(u"tracking number"))
     shipping_fee = Column(PriceDecimal(11, 2), label=_(u"shipping fee"))
     discount = Column(PriceDecimal(11, 2), label=_(u"discount"))
-    step = Column(su.ChoiceType(STEPS_CHOICES, impl=sa.Integer()), label=_(u"step"))
+    step = Column(su.ChoiceType(STEPS_CHOICES, impl=sa.Integer()), default=STEPS['created'], label=_(u"step"))
     error = Column(su.ChoiceType(ERRORS, impl=sa.String(63)), nullable=True, label=_(u"error"))
     closed = Column(sa.Boolean, default=False, index=True, label=_(u"closed"))
 
@@ -380,6 +383,9 @@ class Order(LazyConfigured):
 
         self.error = 'cancelled'
         self.closed = True
+
+    def add_item(self, product, quantity):
+        pass
 
 class OrderedItem(LazyConfigured):
     __abstract__ = True
