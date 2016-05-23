@@ -48,7 +48,8 @@ class CarrierView(SQLAModelView):
     pass
 
 class CountryView(SQLAModelView):
-    pass
+    column_list = ('code', 'name')
+    form_columns = ('code', 'name')
 
 class DeliveryZoneView(SQLAModelView):
     pass

@@ -252,7 +252,10 @@ class ShippingInfo(LazyConfigured):
         return Column(sa.Integer, db.ForeignKey('address.id'), nullable=False)
 
     def __unicode__(self):
-        return u"Shipping info for Order No.%d" % self.order_id
+        if self.order:
+            return u"Shipping info for Order No.%d" % self.order.id
+        else:
+            return u"Shipping info #%d" % self.id
 
 
 class Order(LazyConfigured):
@@ -334,7 +337,7 @@ class Order(LazyConfigured):
         self.check_not_closed()
         self.check_no_errors()
 
-        if self.step >= self.STEPS['accepted']:
+        if self.step.code >= self.STEPS['accepted']:
             raise Exception(_(u"This order has already been accepted"))
 
     def accept(self):
@@ -345,10 +348,10 @@ class Order(LazyConfigured):
         self.check_not_closed()
         self.check_no_errors()
 
-        if self.step < self.STEPS['accepted']:
+        if self.step.code < self.STEPS['accepted']:
             raise Exception(_(u"This order has not been accepted yet."))
 
-        if self.step >= self.STEPS['processed']:
+        if self.step.code >= self.STEPS['processed']:
             raise Exception(_(u"This order has already been processed"))
 
     def process(self):
@@ -359,10 +362,10 @@ class Order(LazyConfigured):
         self.check_not_closed()
         self.check_no_errors()
 
-        if self.step < self.STEPS['processed']:
+        if self.step.code < self.STEPS['processed']:
             raise Exception(_(u"This order has not been processed yet."))
 
-        if self.step >= self.STEPS['sent']:
+        if self.step.code >= self.STEPS['sent']:
             raise Exception(_(u"This order has already been sent"))
 
     def send(self):
@@ -372,10 +375,10 @@ class Order(LazyConfigured):
     def can_cancel(self):
         self.check_not_closed()
 
-        if self.error == 'cancelled':
+        if self.error.code == 'cancelled':
             raise Exception(_(u"This order is already cancelled."))
 
-        if self.step >= STEP['sent']:
+        if self.step.code >= STEP['sent']:
             raise Exception(_(u"This order has already been sent."))
 
     def cancel(self):
@@ -385,7 +388,10 @@ class Order(LazyConfigured):
         self.closed = True
 
     def add_item(self, product, quantity):
-        pass
+        self.items.append(get_model('Item')(
+            product=product,
+            qty=quantity
+        ))
 
 class OrderedItem(LazyConfigured):
     __abstract__ = True
