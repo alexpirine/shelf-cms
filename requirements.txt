@@ -3,9 +3,9 @@ bcrypt==2.0.0
 blinker==1.4
 cffi==1.6.0
 cryptography==1.4
-decorator==4.0.9
+decorator==4.0.10
 enum34==1.1.6
-Flask==0.11
+Flask==0.11.1
 Flask-Admin==1.4.0
 Flask-Babel==0.11.1
 Flask-Login==0.3.2
