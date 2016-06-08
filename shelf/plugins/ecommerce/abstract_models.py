@@ -382,7 +382,7 @@ class Order(LazyConfigured):
         if self.error.code == 'cancelled':
             raise Exception(_(u"This order is already cancelled."))
 
-        if self.step.code >= STEPS['sent']:
+        if self.step.code >= self.STEPS['sent']:
             raise Exception(_(u"This order has already been sent."))
 
     def cancel(self):
