@@ -1,7 +1,7 @@
 # coding: utf-8
 
-from flask.ext.script import Manager
-from flask.ext.security import script as security_script
+from flask_script import Manager
+from flask_security import script as security_script
 
 MANAGER_DESC = "Shelf management commands"
 

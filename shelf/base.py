@@ -2,10 +2,10 @@ import admin
 import sqlalchemy
 
 from flask import Blueprint
-from flask.ext.security import SQLAlchemyUserDatastore
-from flask.ext.security import Security
-from flask.ext.sqlalchemy import SQLAlchemy
-from flask.ext.wtf import Form
+from flask_security import SQLAlchemyUserDatastore
+from flask_security import Security
+from flask_sqlalchemy import SQLAlchemy
+from flask_wtf import Form
 from security.view import UserModelView
 from sqlalchemy_defaults import make_lazy_configured
 from werkzeug.utils import import_string

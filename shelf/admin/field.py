@@ -1,6 +1,6 @@
 from .widget import ShelfInlineFieldListWidget, ShelfInlineFormWidget
-from flask.ext.admin.contrib.sqla.fields import InlineModelFormList
-from flask.ext.admin.model.fields import InlineModelFormField
+from flask_admin.contrib.sqla.fields import InlineModelFormList
+from flask_admin.model.fields import InlineModelFormField
 
 _unset_value = object()
 

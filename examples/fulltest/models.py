@@ -1,6 +1,6 @@
 # coding: utf-8
 
-from flask.ext.babel import lazy_gettext as _
+from flask_babel import lazy_gettext as _
 from shelf import LazyConfigured
 from shelf import ModelForm
 from shelf.base import db

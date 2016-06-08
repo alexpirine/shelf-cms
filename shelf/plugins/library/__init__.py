@@ -16,10 +16,10 @@ from flask import current_app
 from flask import flash
 from flask import redirect
 from flask import request
-from flask.ext.admin import helpers
-from flask.ext.admin.babel import gettext
-from flask.ext.admin.form import RenderTemplateWidget
-from flask.ext.babel import lazy_gettext as _
+from flask_admin import helpers
+from flask_admin.babel import gettext
+from flask_admin.form import RenderTemplateWidget
+from flask_babel import lazy_gettext as _
 from flask_admin.base import expose
 from flask_admin.contrib import fileadmin
 from operator import itemgetter

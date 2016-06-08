@@ -1,7 +1,7 @@
 from flask import Blueprint
 from shelf.admin.view import SQLAModelView
-from flask.ext.admin.contrib.sqla import form as contribform
-from flask.ext.admin.helpers import get_form_data
+from flask_admin.contrib.sqla import form as contribform
+from flask_admin.helpers import get_form_data
 
 config = {
     "name": "Page",

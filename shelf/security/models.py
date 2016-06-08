@@ -1,7 +1,7 @@
 # coding: utf-8
 
-from flask.ext.babel import lazy_gettext as _
-from flask.ext.security import UserMixin, RoleMixin
+from flask_babel import lazy_gettext as _
+from flask_security import UserMixin, RoleMixin
 from sqlalchemy_defaults import Column
 
 from ..base import LazyConfigured

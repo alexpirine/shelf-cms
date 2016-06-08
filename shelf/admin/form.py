@@ -1,4 +1,4 @@
-from flask.ext.admin.contrib.sqla import form
+from flask_admin.contrib.sqla import form
 from flask_admin._backwards import get_property
 from flask_admin.model.helpers import prettify_name
 from shelf.plugins.order import OrderingInlineFieldList

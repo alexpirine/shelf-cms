@@ -1,7 +1,7 @@
 # coding: utf-8
 
 from flask import Blueprint
-from flask.ext.babel import lazy_gettext as _
+from flask_babel import lazy_gettext as _
 from shelf.admin.view import SQLAModelView
 from shelf.base import db
 

@@ -1,10 +1,10 @@
 from flask import request
-from flask.ext.admin.babel import lazy_gettext as _
-from flask.ext.security import current_user
-from flask.ext.security.forms import PasswordField
-from flask.ext.security.forms import EqualTo
-from flask.ext.security.forms import password_required, password_length
-from flask.ext.security.recoverable import update_password
+from flask_admin.babel import lazy_gettext as _
+from flask_security import current_user
+from flask_security.forms import PasswordField
+from flask_security.forms import EqualTo
+from flask_security.forms import password_required, password_length
+from flask_security.recoverable import update_password
 from shelf.admin.view import SQLAModelView
 
 class UserModelView(SQLAModelView):

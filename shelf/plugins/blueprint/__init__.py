@@ -1,5 +1,5 @@
 from flask import Blueprint as FlaskBlueprint
-from flask.ext.sqlalchemy import before_models_committed
+from flask_sqlalchemy import before_models_committed
 from flask_security.core import current_user
 from shelf import LazyConfigured
 from shelf.base import db

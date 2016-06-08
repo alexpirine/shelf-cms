@@ -2,7 +2,7 @@
 # coding: utf-8
 
 from flask import Flask
-from flask.ext.babel import Babel
+from flask_babel import Babel
 
 from shelf import Shelf
 from shelf.base import db

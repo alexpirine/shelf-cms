@@ -1,8 +1,8 @@
-from flask.ext.admin.form import RenderTemplateWidget
+from flask_admin.form import RenderTemplateWidget
 from flask import Blueprint
-from flask.ext.admin.contrib.sqla.fields import InlineModelFormList
-from flask.ext.admin.model.fields import InlineModelFormField
-from flask.ext.admin.form.fields import Select2Field
+from flask_admin.contrib.sqla.fields import InlineModelFormList
+from flask_admin.model.fields import InlineModelFormField
+from flask_admin.form.fields import Select2Field
 
 _unset_value = object()
 

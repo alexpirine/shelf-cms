@@ -1,4 +1,4 @@
-from flask.ext.babel import lazy_gettext as _
+from flask_babel import lazy_gettext as _
 from shelf import LazyConfigured
 from shelf import db
 from shelf.plugins.library import PictureModelMixin

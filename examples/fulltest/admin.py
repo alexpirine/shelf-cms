@@ -2,7 +2,7 @@
 
 from wtforms.fields import TextField
 
-from flask.ext.admin.form import DateTimePickerWidget
+from flask_admin.form import DateTimePickerWidget
 
 from shelf.admin.view import SQLAModelView
 from shelf.plugins.page import PageModelView

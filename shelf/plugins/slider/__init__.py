@@ -1,7 +1,7 @@
 from flask import Blueprint
 from os.path import basename
 from wtforms.fields import TextField
-from flask.ext.admin.form import RenderTemplateWidget
+from flask_admin.form import RenderTemplateWidget
 try:
     from wtforms.utils import unset_value
 except ImportError:

@@ -1,10 +1,10 @@
 from actions import ActionsMixin
 from flask import flash, request
 from flask import redirect
-from flask.ext.admin.actions import action
-from flask.ext.admin.babel import lazy_gettext, ngettext, gettext
-from flask.ext.admin.base import AdminIndexView
-from flask.ext.admin.contrib.sqla import tools
+from flask_admin.actions import action
+from flask_admin.babel import lazy_gettext, ngettext, gettext
+from flask_admin.base import AdminIndexView
+from flask_admin.contrib.sqla import tools
 from flask_admin.contrib import sqla
 from form import ModelConverter, InlineModelConverter
 from shelf.security.mixin import LoginMixin

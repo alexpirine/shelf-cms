@@ -1,5 +1,5 @@
-from flask.ext.admin import actions
-from flask.ext.admin.contrib.sqla.tools import get_query_for_ids
+from flask_admin import actions
+from flask_admin.contrib.sqla.tools import get_query_for_ids
 from flask import request, url_for, redirect
 
 

@@ -1,4 +1,4 @@
-from flask.ext.admin.form import RenderTemplateWidget
+from flask_admin.form import RenderTemplateWidget
 
 class ShelfInlineFieldListWidget(RenderTemplateWidget):
     def __init__(self):

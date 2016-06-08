@@ -4,8 +4,8 @@ import sqlalchemy as sa
 import sqlalchemy_utils as su
 
 from decimal import Decimal
-from flask.ext.babel import lazy_gettext as _
-from flask.ext.security import UserMixin, RoleMixin
+from flask_babel import lazy_gettext as _
+from flask_security import UserMixin, RoleMixin
 from prices import Price
 from sqlalchemy.ext.declarative import declared_attr
 from sqlalchemy.orm import backref, relationship

@@ -5,7 +5,7 @@ import datetime
 import random
 
 from flask import current_app
-from flask.ext.script import Manager
+from flask_script import Manager
 from flask_security.utils import encrypt_password
 
 from jinja2.utils import generate_lorem_ipsum
