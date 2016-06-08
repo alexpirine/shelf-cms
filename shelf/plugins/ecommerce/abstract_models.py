@@ -397,6 +397,15 @@ class Order(LazyConfigured):
             qty=quantity
         ))
 
+    def __call__(self, value):
+        if value[:4] != 'can_':
+            raise NotImplementedError
+
+        try:
+            return getattr(self, value)()
+        except Exception:
+            return False
+
 class OrderedItem(LazyConfigured):
     __abstract__ = True
     __table_args__ = (
