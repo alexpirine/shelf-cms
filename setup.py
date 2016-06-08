@@ -45,6 +45,7 @@ if __name__ == '__main__':
             'bcrypt',
             'google-api-python-client',
             'humanize',
+            'prices',
             'pyOpenSSL',
         ],
         classifiers=[
