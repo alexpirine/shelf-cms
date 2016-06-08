@@ -108,9 +108,9 @@ class Shelf(object):
                 instance.init_app(self.app)
                 self.plugins.append(instance)
 
-            except ImportError:
+            except ImportError as error:
                 raise ImportError(
-                    "Could not import {0} plugin".format((plugin,))
+                    "Could not import {0} plugin: {1}".format(plugin, error)
                 )
 
     def setup_plugins(self):

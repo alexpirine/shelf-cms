@@ -42,6 +42,10 @@ class PriceDecimal(sa.types.TypeDecorator):
     def process_bind_param(self, value, dialect):
         if value is None:
             return 0
+
+        if type(value) is int:
+            return value
+
         return value.gross
 
     def process_result_value(self, value, dialect):
@@ -378,7 +382,7 @@ class Order(LazyConfigured):
         if self.error.code == 'cancelled':
             raise Exception(_(u"This order is already cancelled."))
 
-        if self.step.code >= STEP['sent']:
+        if self.step.code >= STEPS['sent']:
             raise Exception(_(u"This order has already been sent."))
 
     def cancel(self):
@@ -496,7 +500,7 @@ class Variation(LazyConfigured):
         return Column(sa.Integer, db.ForeignKey('variation_type.id'), nullable=False)
 
     def __unicode__(self):
-        return self.name
+        return self.value
 
 class Product(LazyConfigured):
     __abstract__ = True
@@ -535,6 +539,21 @@ class Product(LazyConfigured):
             ),
             backref='products',
             info={'label': _(u"categories")}
+        )
+
+    @declared_attr
+    def variations(cls):
+        return db.relationship(
+            'Variation',
+            secondary=db.Table(
+                'product_variations',
+                Column('product_id', db.Integer, db.ForeignKey('product.id'), nullable=False),
+                Column('variation_id', db.Integer, db.ForeignKey('variation.id'), nullable=False),
+                sa.UniqueConstraint('product_id', 'variation_id'),
+                extend_existing=True,
+            ),
+            backref='products',
+            info={'label': _(u"variations")}
         )
 
     @declared_attr

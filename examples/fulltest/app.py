@@ -45,13 +45,13 @@ def create_app():
 
         shlf.load_plugins((
             "shelf.plugins.dashboard",
-            "shelf.plugins.ecommerce",
             "shelf.plugins.i18n",
             "shelf.plugins.library",
             "shelf.plugins.page",
             "shelf.plugins.preview",
             "shelf.plugins.workflow",
             "shelf.plugins.wysiwyg",
+            "shelf.plugins.ecommerce",
         ))
         init_admin(shlf.admin, db.session)
         shlf.setup_plugins()
