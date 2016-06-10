@@ -3,6 +3,7 @@
 from flask_babel import lazy_gettext as _
 from flask_security import UserMixin, RoleMixin
 from flask_security.utils import encrypt_password
+from flask_security.utils import verify_and_update_password
 from sqlalchemy_defaults import Column
 
 from ..base import LazyConfigured
@@ -34,3 +35,6 @@ class User(LazyConfigured, UserMixin):
     def set_password(self, new_password):
         self.password = encrypt_password(new_password)
         return self
+
+    def check_password(self, password):
+        return verify_and_update_password(password, self)
