@@ -2,6 +2,7 @@
 
 from flask_babel import lazy_gettext as _
 from flask_security import UserMixin, RoleMixin
+from flask_security.utils import encrypt_password
 from sqlalchemy_defaults import Column
 
 from ..base import LazyConfigured
@@ -29,3 +30,7 @@ class User(LazyConfigured, UserMixin):
 
     def __unicode__(self):
         return self.email
+
+    def set_password(self, new_password):
+        self.password = encrypt_password(new_password)
+        return self

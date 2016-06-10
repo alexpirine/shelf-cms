@@ -42,7 +42,6 @@ class Shelf(object):
                             static_folder="static")
         app.register_blueprint(self.bp)
         app.shelf = self
-
     def init_admin(self, *args, **kwargs):
         adm = admin.Admin(self.app, *args, **kwargs)
         self.admin = adm
