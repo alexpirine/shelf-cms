@@ -510,7 +510,7 @@ class Variation(LazyConfigured):
     )
 
     id = Column(sa.Integer, primary_key=True)
-    value = Column(sa.Unicode(255), unique=True, label=_(u"value"))
+    value = Column(sa.Unicode(255), label=_(u"value"))
 
     @declared_attr
     def variation_type(cls):
