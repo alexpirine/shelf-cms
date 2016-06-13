@@ -82,7 +82,7 @@ class VariationView(SQLAModelView):
     pass
 
 class ProductView(SQLAModelView):
-    pass
+    column_list = ('code', 'name', 'price', 'qty')
 
 class ProductVariationView(SQLAModelView):
     pass

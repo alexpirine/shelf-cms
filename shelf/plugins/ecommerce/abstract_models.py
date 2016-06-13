@@ -36,6 +36,13 @@ __all__ = [
     'ProductPicture',
 ]
 
+class PrettyPrice(Price):
+    def __unicode__(self):
+        return u" ".join(filter(None, (unicode(self.gross), self.currency)))
+
+    def __str__(self):
+        return unicode(self).encode('utf-8')
+
 class PriceDecimal(sa.types.TypeDecorator):
     impl = sa.types.NUMERIC
 
@@ -50,7 +57,7 @@ class PriceDecimal(sa.types.TypeDecorator):
 
     def process_result_value(self, value, dialect):
         try:
-            return Price(value / Decimal(1.2), gross=value, currency="EUR").quantize('0.01')
+            return PrettyPrice(value / Decimal(1.2), gross=value, currency="EUR")
         except TypeError:
             return Price(0)
 
@@ -385,7 +392,7 @@ class Order(LazyConfigured):
     def can_cancel(self):
         self.check_not_closed()
 
-        if self.error.code == 'cancelled':
+        if self.error == 'cancelled':
             raise Exception(_(u"This order is already cancelled."))
 
         if self.step.code >= self.STEPS['sent']:
@@ -440,7 +447,7 @@ class OrderedItem(LazyConfigured):
         return Column(sa.Integer, sa.ForeignKey('product.id'), nullable=False)
 
     def __unicode__(self):
-        return u"Order No.%d for %s" % (self.id, self.client)
+        return u"Ordered product %s for order No.%d" % (self.product.code, self.order.id)
 
     def get_total_price(self):
         return self.qty * self.price
