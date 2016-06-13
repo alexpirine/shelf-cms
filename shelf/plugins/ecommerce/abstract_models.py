@@ -297,7 +297,7 @@ class Order(LazyConfigured):
     )
 
     id = Column(sa.Integer, primary_key=True)
-    date = Column(sa.DateTime, auto_now=True, , default=datetime.utcnow(), label=_(u"date"))
+    date = Column(sa.DateTime, auto_now=True, default=datetime.utcnow(), label=_(u"date"))
     tracknb = Column(sa.String(30), nullable=True, label=_(u"tracking number"))
     shipping_fee = Column(PriceDecimal(11, 2), label=_(u"shipping fee"))
     discount = Column(PriceDecimal(11, 2), label=_(u"discount"))
