@@ -4,6 +4,7 @@ import sqlalchemy as sa
 import sqlalchemy_utils as su
 
 from decimal import Decimal
+from datetime import datetime
 from flask_babel import lazy_gettext as _
 from flask_security import UserMixin, RoleMixin
 from prices import Price
@@ -67,7 +68,7 @@ class Client(LazyConfigured):
     __abstract__ = True
 
     id = Column(sa.Integer, primary_key=True)
-    created_on = Column(sa.DateTime, auto_now=True, label=_(u"registration date"))
+    created_on = Column(sa.DateTime, auto_now=True, default=datetime.utcnow(), label=_(u"registration date"))
     first_name = Column(sa.Unicode(255), label=_(u"first name"))
     last_name = Column(sa.Unicode(255), label=_(u"last name"))
     tel = Column(sa.Unicode(20), nullable=True, label=_(u"telephone number"))
@@ -296,7 +297,7 @@ class Order(LazyConfigured):
     )
 
     id = Column(sa.Integer, primary_key=True)
-    date = Column(sa.DateTime, auto_now=True, label=_(u"date"))
+    date = Column(sa.DateTime, auto_now=True, , default=datetime.utcnow(), label=_(u"date"))
     tracknb = Column(sa.String(30), nullable=True, label=_(u"tracking number"))
     shipping_fee = Column(PriceDecimal(11, 2), label=_(u"shipping fee"))
     discount = Column(PriceDecimal(11, 2), label=_(u"discount"))
