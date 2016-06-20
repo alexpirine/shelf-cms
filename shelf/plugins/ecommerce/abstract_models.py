@@ -37,7 +37,34 @@ __all__ = [
     'ProductPicture',
 ]
 
+DEFAULT_CURRENCY = 'EUR'
+
 class PrettyPrice(Price):
+    def __add__(self, other):
+        r = super(PrettyPrice, self).__add__(other)
+        r.__class__ = self.__class__
+        return r
+
+    def __sub__(self, other):
+        r = super(PrettyPrice, self).__sub__(other)
+        r.__class__ = self.__class__
+        return r
+
+    def __mul__(self, other):
+        r = super(PrettyPrice, self).__mul__(other)
+        r.__class__ = self.__class__
+        return r
+
+    def __truediv__(self, other):
+        r = super(PrettyPrice, self).__truediv__(other)
+        r.__class__ = self.__class__
+        return r
+
+    def quantize(self, *args, **kwargs):
+        r = super(PrettyPrice, self).quantize(*args, **kwargs)
+        r.__class__ = self.__class__
+        return r
+
     def __unicode__(self):
         return u" ".join(filter(None, (unicode(self.gross), self.currency)))
 
@@ -58,9 +85,9 @@ class PriceDecimal(sa.types.TypeDecorator):
 
     def process_result_value(self, value, dialect):
         try:
-            return PrettyPrice(value / Decimal(1.2), gross=value, currency="EUR")
+            return PrettyPrice(value / Decimal(1.2), gross=value, currency=DEFAULT_CURRENCY)
         except TypeError:
-            return Price(0)
+            return PrettyPrice(0, currency=DEFAULT_CURRENCY)
 
 
 class Client(LazyConfigured):
@@ -84,6 +111,17 @@ class Client(LazyConfigured):
     def __unicode__(self):
         return u"%s %s" % (self.first_name, self.last_name)
 
+    @property
+    def orders_nb(self):
+        return len(self.orders)
+
+    @property
+    def total_payed(self):
+        prices = [order.get_total_price() for order in self.orders]
+        if prices:
+            return reduce(lambda x,y: x + y, prices)
+        else:
+            return PrettyPrice(0, currency=DEFAULT_CURRENCY)
 
 class Address(LazyConfigured):
     __tablename__ = 'address'
@@ -151,6 +189,36 @@ class Address(LazyConfigured):
         address2 = u'\n'.join(address[-3:]).upper()
 
         return u'\n'.join(filter(None, [address1, address2]))
+
+    @property
+    def lines(self):
+        # ligne 5 : localité et code postal
+        line5 = []
+        if self.zip_code:
+            line5.append(self.zip_code)
+        if self.city:
+            line5.append(self.city)
+        line5 = u' '.join(line5)
+
+        # ligne 6 : pays destinataire
+        line6 = self.country
+
+        # adresse complète
+        address = []
+        if self.line1:
+            address.append(self.line1)
+        if self.line2:
+            address.append(self.line2)
+        if self.line3:
+            address.append(self.line3)
+        if self.line4:
+            address.append(self.line4)
+        if line5:
+            address.append(line5)
+        if line6:
+            address.append(line6)
+
+        return filter(None, address)
 
     @property
     def short(self):
@@ -341,7 +409,11 @@ class Order(LazyConfigured):
         return u"Order No.%d for %s" % (self.id, self.client)
 
     def get_total_price(self):
-        return sum([item.get_total_price() for item in self.items])
+        prices = [item.get_total_price() for item in self.items]
+        if prices:
+            return reduce(lambda x, y: x + y, prices)
+        else:
+            return PrettyPrice(0, currency=DEFAULT_CURRENCY)
 
     def check_no_errors(self):
         if self.error:
@@ -647,3 +719,13 @@ class ProductPicture(LazyConfigured, PictureModelMixin):
 
     def __unicode__(self):
         return self.parent
+
+class PromoCode(LazyConfigured):
+    __tablename__ = 'promo_code'
+    __abstract__ = True
+
+    id = Column(sa.Integer, primary_key=True)
+    code = Column(sa.Unicode(255), unique=True, label=_(u"code"))
+    description = Column(sa.Unicode(255), label=_(u"description"))
+    price_formula = Column(sa.UnicodeText, label=_("price reduction formula"))
+    deleted = Column(sa.Boolean, default=False, label=_("deleted"))
