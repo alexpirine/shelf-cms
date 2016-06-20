@@ -57,7 +57,7 @@
   <div class="widget text" style="width: 500px; margin-bottom: 12px; background-color: #505050; color: white">
     <i class="fa fa-user pull-right"></i>
     <div class="title">INFORMATIONS CLIENT</div>
-    <div class="data"><a href="{{ url_for('client.details_view', id=client.id) }}"
+    <div class="data"><a href="{#{ url_for('client.detail', id=client.id) }#}"
                          style="font-size:30px;">{{ client.first_name|upper }} {{ client.last_name|upper }}</a>
     </div>
     <div class="legend" style="margin-bottom: 30px; font-weight: 300">{{ client.email }}</div>
