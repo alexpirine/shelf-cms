@@ -63,7 +63,17 @@ class ShippingInfoView(SQLAModelView):
     pass
 
 class OrderView(SQLAModelView):
-    pass
+    column_list = ('id', 'date', "step")
+    list_template = "order-list.html"
+
+    @expose("/detail/<int:id>")
+    def detail(self, id):
+        return self.render(
+            "order.html",
+            model=get_model('Order').query.get(id),
+            admin_view=self,
+            admin_base_template=self.admin.base_template,
+        )
 
 class OrderedItemView(SQLAModelView):
     pass

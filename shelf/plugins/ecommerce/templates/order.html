@@ -1,0 +1,128 @@
+{% extends admin_base_template %}
+
+{% set order = model %}
+{% set client = order.client %}
+{% set delivery_address = order.shipping_info.address %}
+{% set billing_address = order.billing_address %}
+
+{% set shipping_fee = order.shipping_option.price %}
+
+{% block head %}
+  {{ super() }}
+  <link href="{{ url_for('dashboard.static', filename='dashboard.css') }}" rel="stylesheet">
+  <link rel="stylesheet" href="{{ url_for('dashboard.static', filename='morris.css') }}">
+{% endblock %}
+
+{% block body %}
+  <div class="widget text" style="width: 1012px; margin-bottom: 12px; background: white">
+    <i class="fa fa-user pull-right"></i>
+    <div class="title"></div>
+    <div class="data">COMMANDE N°{{ order.id }}</div>
+    <div class="legend">Statut : {{ order.step }}</div>
+    <div class="legend">Date : {% if order.date %}{{ order.date.strftime("%d/%m/%Y") }}{% endif %}</div>
+  </div>
+  <div class="widget text" style="width: 500px; margin-bottom: 12px; background: white">
+    <i class="fa fa-user pull-right"></i>
+    <div class="title">DÉTAIL DE LA COMMANDE</div>
+    <div class="list"
+         style="margin-right: -18px; margin-left: -18px; border-top: 1px solid #e4e4e4; border-bottom: 1px solid #e4e4e4; padding: 18px; background-color: #fafafa; font-size: 12px; font-weight: 300">
+      Produits
+      {% for item in order.items %}
+        {% set product = item.product %}
+        <div style="color: #9f9f9f;padding-left:15px">{{ item.qty }} x {{ product.name }} -
+          Réf: {{ product.code }} <span class="pull-right">{{ item.get_total_price()|ttc }}€</span></div>
+      {% endfor %}
+
+      <div style="margin-top: 20px">Transport<span class="pull-right">{{ shipping_fee|ttc }}€</span></div>
+      <div>Total<span class="pull-right">{{ order.get_total(with_shipping=True)|ttc }}€</span></div>
+    </div>
+    <div style="margin-top: 20px; font-size: 12px">Mode de Paiement<span
+            class="pull-right">{{ order.payment_mean|upper }}</span></div>
+  </div>
+  <div class="widget text" style="width: 500px; margin-bottom: 12px; background: white">
+    <i class="fa fa-user pull-right"></i>
+    <div class="title">ADRESSE DE FACTURATION</div>
+    <div class="adresse"
+         style="margin-right: -18px; margin-left: -18px; border-top: 1px solid #e4e4e4; padding: 18px; font-size: 12px; font-weight: 300">
+      <p>
+      <p>
+        {% for line in billing_address.lines %}
+          {{ line }}<br>
+        {% endfor %}
+      </p>
+      </p>
+    </div>
+  </div>
+
+  <div class="widget text" style="width: 500px; margin-bottom: 12px; background-color: #505050; color: white">
+    <i class="fa fa-user pull-right"></i>
+    <div class="title">INFORMATIONS CLIENT</div>
+    <div class="data"><a href="{{ url_for('client.details_view', id=client.id) }}"
+                         style="font-size:30px;">{{ client.first_name|upper }} {{ client.last_name|upper }}</a>
+    </div>
+    <div class="legend" style="margin-bottom: 30px; font-weight: 300">{{ client.email }}</div>
+    <div class="adresse"
+         style="margin-right: -18px; margin-left: -18px; padding-left: 18px; padding-right: 18px; font-size: 12px; font-weight: 300">
+      Compte créé le {% if client.created_on %}{{ client.created_on.strftime("%d/%m/%Y") }}{% endif %}<br>
+      Commandes validées: {{ client.orders_nb }} <br>
+      Total payé depuis la création du compte: {{ client.total_payed|ttc }}€
+    </div>
+  </div>
+
+  <div class="widget text" style="width: 500px; margin-bottom: 12px; background: white">
+    <i class="fa fa-user pull-right"></i>
+    <div class="title">INFORMATIONS TRANSPORT</div>
+    <div class="adresse"
+         style="margin-right: -18px; margin-left: -18px; border-top: 1px solid #e4e4e4; padding: 18px; font-size: 12px; font-weight: 300">
+
+    <div class="data">{{ order.shipping_option }}</div>
+      <b>ADRESSE DE LIVRAISON</b><br><br>
+      <p>
+        {% for line in delivery_address.lines %}
+          {{ line }}<br>
+        {% endfor %}
+      </p>
+    </div>
+  </div>
+{% endblock %}
+
+
+{% block tail %}
+  {{ super() }}
+  <script type="text/javascript" src="{{ url_for('dashboard.static', filename='masonry.min.js') }}"></script>
+  <script src="{{ url_for('dashboard.static', filename='morris.min.js') }}"></script>
+  <script language="javascript">
+    (function ($) {
+      console.log($("#wrap > .contrainer").length)
+      Masonry.prototype.measureColumns = function () {
+        this.getContainerWidth();
+        // if columnWidth is 0, default to outerWidth of first item
+        if (!this.columnWidth) {
+          var firstItem = this.items[0];
+          var firstItemElem = firstItem && firstItem.element;
+          // columnWidth fall back to item of first element
+          this.columnWidth = firstItemElem && getSize(firstItemElem).outerWidth ||
+                  // if first elem has no width, default to size of container
+                  this.containerWidth;
+        }
+        this.columnWidth += this.gutter;
+        this.cols = Math.floor(( this.containerWidth + this.gutter ) / this.columnWidth);
+        console.log("cols =>", this.cols)
+        if (this.cols >= 7)
+          this.cols = 8;
+        else if (this.cols > 4)
+          this.cols = 4;
+        this.cols = Math.max(this.cols, 1);
+      };
+
+      $('#wrap > .container').masonry({
+        itemSelector: '.widget',
+        gutter: 12,
+        columnWidth: 116,
+        transitionDuration: 0,
+        isFitWidth: true
+      });
+    })(jQuery);
+  </script>
+
+{% endblock %}
