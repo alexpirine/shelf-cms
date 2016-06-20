@@ -95,7 +95,7 @@ class Client(LazyConfigured):
     __abstract__ = True
 
     id = Column(sa.Integer, primary_key=True)
-    created_on = Column(sa.DateTime, auto_now=True, default=datetime.utcnow(), label=_(u"registration date"))
+    created_on = Column(sa.DateTime, nullable=False, auto_now=True, default=datetime.utcnow(), label=_(u"registration date"))
     first_name = Column(sa.Unicode(255), label=_(u"first name"))
     last_name = Column(sa.Unicode(255), label=_(u"last name"))
     tel = Column(sa.Unicode(20), nullable=True, label=_(u"telephone number"))

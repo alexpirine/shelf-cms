@@ -1,0 +1,5 @@
+{% extends "shelf/model/list.html" %}
+{% block list_row_actions %}
+{{ super() }}
+<a href="{{ url_for('.detail', id=get_pk_value(row)) }}"><i class="fa fa-bar-chart-o"></i></a>
+{% endblock %}

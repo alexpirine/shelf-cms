@@ -43,6 +43,17 @@ class ClientModelView(SQLAModelView):
         }
     }
 
+    list_template = 'client.list-actions.html'
+
+    @expose('/detail/<int:id>')
+    def detail(self, id):
+        return self.render(
+            'client.html',
+            model=get_model('Client').query.get(id),
+            admin_view=self,
+            admin_base_template=self.admin.base_template,
+        )
+
 class AddressModelView(SQLAModelView):
     pass
 
@@ -94,7 +105,15 @@ class VariationView(SQLAModelView):
     pass
 
 class ProductView(SQLAModelView):
-    column_list = ('code', 'name', 'price', 'qty')
+    column_list = ('active', 'code', 'name', 'price', 'qty')
+
+    column_labels = {
+        'active': _(u"Active"),
+    }
+
+    column_formatters = {
+        'active': lambda v, c, m, p: not m.deleted,
+    }
 
 class ProductVariationView(SQLAModelView):
     pass
@@ -122,7 +141,7 @@ class Ecommerce(object):
         app.shelf.admin.add_view(DeliveryZoneView(get_model('DeliveryZone'), db.session, name="DeliveryZones", category="e-Commerce"))
         app.shelf.admin.add_view(ShippingOptionView(get_model('ShippingOption'), db.session, name="ShippingOptions", category="e-Commerce"))
         app.shelf.admin.add_view(ShippingInfoView(get_model('ShippingInfo'), db.session, name="ShippingInfos", category="e-Commerce"))
-        app.shelf.admin.add_view(OrderView(get_model('Order'), db.session, name="Orders", endpoint="orders", category="e-Commerce"))
+        app.shelf.admin.add_view(OrderView(get_model('Order'), db.session, name="Orders", endpoint="client_order", category="e-Commerce"))
         app.shelf.admin.add_view(OrderedItemView(get_model('OrderedItem'), db.session, name="OrderedItems", category="e-Commerce"))
         app.shelf.admin.add_view(CategoryTypeView(get_model('CategoryType'), db.session, name="CategoryTypes", category="e-Commerce"))
         app.shelf.admin.add_view(CategoryView(get_model('Category'), db.session, name="Categories", category="e-Commerce"))

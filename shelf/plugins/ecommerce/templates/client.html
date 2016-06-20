@@ -1,0 +1,118 @@
+{% extends admin_base_template %}
+
+{% block head %}
+{{ super() }}
+<link href="{{ url_for('dashboard.static', filename='dashboard.css') }}" rel="stylesheet">
+<link rel="stylesheet" href="{{ url_for('dashboard.static', filename='morris.css') }}">
+{% endblock %}
+
+{% block body %}
+<div class="widget text" style="width: 1012px; margin-bottom: 12px; background: white">
+    <i class="fa fa-user pull-right"></i>
+    <div class="title"></div>
+    <div class="data">Client N°{{ model.id }}</div>
+</div>
+
+<div class="widget text" style="width: 500px; margin-bottom: 12px; background-color: #505050; color: white">
+    <i class="fa fa-user pull-right"></i>
+    <div class="title">INFORMATIONS CLIENT</div>
+    <div class="data">{{ model.first_name.upper() }} {{ model.last_name.upper() }}</div>
+    <div class="legend" style="margin-bottom: 30px; font-weight: 300">
+        <i class="fa fa-envelope-o" aria-hidden="true"></i> {{ model.user.email }}<br/>
+        {% if model.tel %}<i class="fa fa-phone" aria-hidden="true"></i> {{ model.tel }}{% endif %}
+    </div>
+    <div class="adresse" style="margin-right: -18px; margin-left: -18px; padding-left: 18px; padding-right: 18px; font-size: 12px; font-weight: 300">
+        Compte créé le {{ model.created_on.strftime("%d/%m/%Y") }} à {{ model.created_on.strftime("%H:%M") }}<br>
+        {% if model.orders_nb %}
+            Total des commandes depuis la création du compte : {{ model.orders_nb }} / {{ model.total_payed }}
+        {% endif %}
+    </div>
+</div>
+
+{% if model.addresses[0] %}
+    <div class="widget text" style="width: 500px; margin-bottom: 12px; background: white">
+        <i class="fa fa-user pull-right"></i>
+        <div class="title">
+            INFORMATIONS POSTALES
+        </div>
+        <div class="adresse" style="margin-right: -18px; margin-left: -18px; border-top: 1px solid #e4e4e4; padding: 18px; font-size: 12px; font-weight: 300">
+            <b>Dernière adresse de livraison utilisée</b><br><br>
+                {% for line in model.addresses[0].lines %}
+                {{ line }}<br/>
+                {% endfor %}
+        </div>
+    </div>
+{% endif %}
+
+<div class="widget text" style="width: 1012px; margin-bottom: 12px; background: white">
+  {% if model.orders %}
+    <div class="data">Liste des commandes</div>
+    <br/>
+    <table style="width:100%" class="table table-bordered">
+      <thead>
+        <tr>
+          <th>N°</th>
+          <th>Date</th>
+          <th>Statut</th>
+          <th>N° Panier</th>
+          <th>Total</th>
+        </tr>
+      </thead>
+      <tbody>
+        {% for order in model.orders %}
+        <tr>
+          <td><a href="{{ url_for('client_order.detail', id=order.id) }}">{{ order.id }}</a></td>
+          <td>{{ order.date.strftime('%d/%m/%Y') }}</td>
+          <td>{{ order.step }}</td>
+          <td>{{ order.id }}</td>
+          <td>{{ order.get_total_price() }} </td>
+        </tr>
+        {% endfor %}
+      </tbody>
+    </table>
+  {% else %}
+    <div class="title">{{ _("Ce client n'a pas encore passé commande.")}}</div>
+  {% endif %}
+</div>
+{% endblock %}
+
+
+{% block tail %}
+{{ super() }}
+<script type="text/javascript" src="{{ url_for('dashboard.static', filename='masonry.min.js') }}"></script>
+<script src="{{ url_for('dashboard.static', filename='morris.min.js') }}"></script>
+<script language="javascript">
+  (function($) {
+   console.log($("#wrap > .contrainer").length)
+   Masonry.prototype.measureColumns = function () {
+    this.getContainerWidth();
+                // if columnWidth is 0, default to outerWidth of first item
+                if ( !this.columnWidth ) {
+              var firstItem = this.items[0];
+              var firstItemElem = firstItem && firstItem.element;
+                  // columnWidth fall back to item of first element
+                  this.columnWidth = firstItemElem && getSize( firstItemElem ).outerWidth ||
+                  // if first elem has no width, default to size of container
+                  this.containerWidth;
+                }
+                this.columnWidth += this.gutter;
+                this.cols = Math.floor( ( this.containerWidth + this.gutter ) / this.columnWidth );
+                console.log("cols =>", this.cols)
+                if (this.cols >= 7)
+              this.cols = 8;
+            else if (this.cols > 4)
+              this.cols = 4;
+            this.cols = Math.max( this.cols, 1 );
+          };
+
+          $('#wrap > .container').masonry({
+            itemSelector : '.widget',
+            gutter: 12,
+            columnWidth: 116,
+            transitionDuration: 0,
+            isFitWidth: true
+          });
+        })(jQuery);
+      </script>
+
+      {% endblock %}
