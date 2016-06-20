@@ -1,6 +1,7 @@
 # coding: utf-8
 
 from flask import Blueprint
+from flask_admin.base import expose
 from flask_babel import lazy_gettext as _
 from shelf.admin.view import SQLAModelView
 from shelf.base import db
@@ -14,10 +15,11 @@ def get_model(model_name):
     return getattr(models, model_name)
 
 class ClientModelView(SQLAModelView):
-    column_list = ('user', 'first_name', 'last_name', 'created_on')
+    column_list = ('user', 'first_name', 'last_name', 'orders_nb', 'created_on')
 
     column_labels = {
         'user': _(u"E-mail"),
+        'orders_nb': _(u"Orders"),
     }
 
     form_shortcuts = (
@@ -100,8 +102,8 @@ class Ecommerce(object):
         self.config = config
 
     def init_app(self, app):
-        self.bp = Blueprint('ecommerce', __name__)
-        app.register_blueprint(self.bp, url_prefix='/ecommerce')
+        self.bp = Blueprint('ecommerce', __name__, url_prefix='/ecommerce', template_folder='templates')
+        app.register_blueprint(self.bp)
 
         app.shelf.admin.add_view(ClientModelView(get_model('Client'), db.session, name="Clients", category="e-Commerce"))
         app.shelf.admin.add_view(AddressModelView(get_model('Address'), db.session, name="Addresses", category="e-Commerce"))

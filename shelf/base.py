@@ -94,6 +94,12 @@ class Shelf(object):
         if "SECURITY_RECOVERABLE" not in self.app.config:
             self.app.config["SECURITY_RECOVERABLE"] = True
 
+        if "BABEL_DEFAULT_LOCALE" not in self.app.config:
+            self.app.config["BABEL_DEFAULT_LOCALE"] = 'fr'
+
+        if "BABEL_DEFAULT_TIMEZONE" not in self.app.config:
+            self.app.config["BABEL_DEFAULT_TIMEZONE"] = 'Europe/Paris'
+
         self.security = Security(self.app, self.user_datastore)
 
     def load_plugins(self, plugins):
