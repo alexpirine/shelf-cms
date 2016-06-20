@@ -62,9 +62,17 @@ class ShippingOptionView(SQLAModelView):
 class ShippingInfoView(SQLAModelView):
     pass
 
+
 class OrderView(SQLAModelView):
-    column_list = ('id', 'date', "step")
+    can_delete = False
+    can_edit = False
+    column_list = ('id', "client", 'date', "step", "total")
     list_template = "order-list.html"
+
+    column_formatters = {
+        "total": lambda view, context, model, name: u"%s €" % model.get_total().gross,
+        "date": lambda view, context, model, name: model.date.strftime("%d/%m/%Y")
+    }
 
     @expose("/detail/<int:id>")
     def detail(self, id):
