@@ -61,7 +61,7 @@
       <tbody>
         {% for order in model.orders %}
         <tr>
-          <td><a href="{{ url_for('client_order.detail', id=order.id) }}">{{ order.id }}</a></td>
+          <td><a href="{{ url_for('OrderView.detail', id=order.id) }}">{{ order.id }}</a></td>
           <td>{{ order.date.strftime('%d/%m/%Y') }}</td>
           <td>{{ order.step }}</td>
           <td>{{ order.id }}</td>
