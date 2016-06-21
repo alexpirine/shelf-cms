@@ -36,6 +36,7 @@ __all__ = [
     'Product',
     'ProductVariation',
     'ProductPicture',
+    'PromoCode',
 ]
 
 DEFAULT_CURRENCY = 'EUR'
@@ -742,11 +743,11 @@ class PromoCode(LazyConfigured):
     id = Column(sa.Integer, primary_key=True)
     code = Column(sa.Unicode(255), unique=True, label=_(u"code"))
     description = Column(sa.Unicode(255), label=_(u"description"))
-    min_amount = Column(PriceDecimal(11, 2), default=0, label=_(u"minimum purchase amount"))
-    discount_fixed = Column(PriceDecimal(11, 2), default=0, label=_(u"discount fixed value"))
-    discount_per100 = Column(sa.SmallInteger, min=0, default=0, label=_(u"discount percentage value"))
-    offer_shipping = Column(sa.Boolean, default=False, label=_(u"offer shipping price"))
-    unique = Column(sa.Boolean, default=false, label=_(u"for unique usage"))
+    min_amount = Column(PriceDecimal(11, 2), default=0, label=_(u"minimum amount"))
+    discount_fixed = Column(PriceDecimal(11, 2), default=0, label=_(u"fixed discount"))
+    discount_per100 = Column(sa.SmallInteger, min=0, default=0, label=_(u"discount percentage"))
+    offer_shipping = Column(sa.Boolean, default=False, label=_(u"offer shipping"))
+    unique = Column(sa.Boolean, default=False, label=_(u"for unique usage"))
     deleted = Column(sa.Boolean, default=False, label=_(u"deleted"))
 
     def __unicode__(self):

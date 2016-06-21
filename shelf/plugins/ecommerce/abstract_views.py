@@ -27,6 +27,7 @@ __all__ = [
     'ProductView',
     'ProductVariationView',
     'ProductPictureView',
+    'PromoCodeView',
 ]
 
 class InlinePictureForm(InlineFormAdmin):
@@ -245,3 +246,12 @@ class ProductPictureView(SQLAModelView):
     @classmethod
     def get_default_model(cls):
         return get_model('ProductPicture')
+
+class PromoCodeView(SQLAModelView):
+    name = _(u"Promo codes")
+
+    @classmethod
+    def get_default_model(cls):
+        return get_model('PromoCode')
+
+    column_list = ('code', 'min_amount', 'discount_fixed', 'discount_per100', 'offer_shipping', 'unique')
