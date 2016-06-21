@@ -742,5 +742,32 @@ class PromoCode(LazyConfigured):
     id = Column(sa.Integer, primary_key=True)
     code = Column(sa.Unicode(255), unique=True, label=_(u"code"))
     description = Column(sa.Unicode(255), label=_(u"description"))
-    price_formula = Column(sa.UnicodeText, label=_("price reduction formula"))
-    deleted = Column(sa.Boolean, default=False, label=_("deleted"))
+    min_amount = Column(PriceDecimal(11, 2), default=0, label=_(u"minimum purchase amount"))
+    discount_fixed = Column(PriceDecimal(11, 2), default=0, label=_(u"discount fixed value"))
+    discount_per100 = Column(sa.SmallInteger, min=0, default=0, label=_(u"discount percentage value"))
+    offer_shipping = Column(sa.Boolean, default=False, label=_(u"offer shipping price"))
+    unique = Column(sa.Boolean, default=false, label=_(u"for unique usage"))
+    deleted = Column(sa.Boolean, default=False, label=_(u"deleted"))
+
+    def __unicode__(self):
+        return self.code
+
+    def apply(self, amount):
+        if self.deleted:
+            raise Exception(_(u"This promo code is no longer active."))
+
+        if self.min_amount > amount:
+            raise Exception(_(u"This promo code can only by used if you purchase for more than %s.") % self.min_amount)
+
+        if self.unique:
+            self.deleted = True
+
+        discount = 0
+        discount += discount_fixed
+        discount += amount * self.discount_per100
+        discount = max(amount, discount)
+
+        return {
+            'discount': discount,
+            'offer_shipping': self.offer_shipping,
+        }
