@@ -165,8 +165,6 @@ class Ecommerce(object):
         self.config = config
 
     def init_app(self, app):
-        from shelf.plugins.ecommerce import forms
-
         self.bp = Blueprint('ecommerce', __name__, url_prefix='/ecommerce', template_folder='templates')
         app.register_blueprint(self.bp)
 
