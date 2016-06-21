@@ -92,7 +92,7 @@ class DeliveryZoneView(SQLAModelView):
     pass
 
 class ShippingOptionView(SQLAModelView):
-    pass
+    column_list = ('name', 'price', 'delivery_time', "deleted")
 
 class ShippingInfoView(SQLAModelView):
     pass
