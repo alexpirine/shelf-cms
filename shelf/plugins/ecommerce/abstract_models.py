@@ -11,6 +11,7 @@ from prices import Price
 from sqlalchemy.ext.declarative import declared_attr
 from sqlalchemy.orm import backref, relationship
 from sqlalchemy_defaults import Column
+from sqlalchemy.ext.orderinglist import ordering_list
 
 from shelf import LazyConfigured
 from shelf.base import db
@@ -408,8 +409,10 @@ class Order(LazyConfigured):
     def __unicode__(self):
         return u"Order No.%d for %s" % (self.id, self.client)
 
-    def get_total_price(self):
+    def get_total_price(self, with_shipping=True):
         prices = [item.get_total_price() for item in self.items]
+        if with_shipping and self.shipping_option:
+            prices.append(self.shipping_option.price)
         if prices:
             return reduce(lambda x, y: x + y, prices)
         else:
@@ -704,9 +707,12 @@ class ProductVariation(LazyConfigured):
 class ProductPicture(LazyConfigured, PictureModelMixin):
     __tablename__ = 'product_picture'
     __abstract__ = True
+    __table_args__ = (
+        sa.UniqueConstraint('id', 'product_id'),
+    )
 
     id = Column(sa.Integer, primary_key=True)
-    name = Column(sa.Unicode(255), label=_(u"name"))
+    name = Column(sa.Unicode(255), label=_(u"title"))
     position = Column(sa.SmallInteger, min=0, default=0, label=_(u"position"))
 
     @declared_attr
@@ -715,10 +721,19 @@ class ProductPicture(LazyConfigured, PictureModelMixin):
 
     @declared_attr
     def product_id(cls):
-        return Column(sa.Integer, sa.ForeignKey('product.id'), unique=True, nullable=False)
+        return Column(sa.Integer, sa.ForeignKey('product.id'), nullable=False)
 
     def __unicode__(self):
         return self.parent
+
+    def get_inline_title(self):
+            return ""
+
+    def get_inline_thumbnail(self):
+        try:
+            return self.get_url()
+        except:
+            return None
 
 class PromoCode(LazyConfigured):
     __tablename__ = 'promo_code'

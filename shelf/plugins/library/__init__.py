@@ -174,6 +174,19 @@ class PictureWidget(RenderTemplateWidget):
     def __init__(self):
         RenderTemplateWidget.__init__(self, "shelf-field-picture.html")
 
+class PicturePathWidget(RenderTemplateWidget):
+    def __init__(self):
+        RenderTemplateWidget.__init__(self, "shelf-field-picture-path.html")
+
+class PicturePathField(TextField):
+    widget = PicturePathWidget()
+
+    def __init__(self, label='', validators=None, **kwargs):
+        if "allow_blank" in kwargs:
+            del kwargs["allow_blank"]
+
+        super(PicturePathField, self).__init__(label, validators, **kwargs)
+
 
 class PictureField(TextField):
     widget = PictureWidget()

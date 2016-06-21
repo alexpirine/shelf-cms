@@ -1,0 +1,30 @@
+<!-- field data: field.data -->
+{% if field.data %}
+    {% set path = field.data %}
+    <input type="hidden" class="picture" id="{{ field.id }}" name="{{ field.name }}" value="{{ path }}">
+    <div class="thumbnail">
+        <img src="{{ config.MEDIA_URL }}{{ field.data }}" alt="{{ field.id }}"{% if field.width %} width="{{ field.width }}"{% endif %}{% if field.height %} height="{{ field.height }}"{% endif %}/>
+    </div>
+{% else %}
+    <input type="hidden" class="picture" id="{{ field.id }}" name="{{ field.name }}" value="">
+    <div class="thumbnail">
+        <img src="{{ url_for('shelf.static', filename='shelf/img/missing-picture.png') }}" alt="{{ field.id }}"{% if field.width and field.height %} width="{{ field.width }}" height="{{ field.height }}"{% endif %}></img>
+    </div>
+{% endif %}
+</div>
+<div class="col-xs-2">
+  <button class="btn btn-default modal-open side-btn" type="button">{{ _("EDIT") }}</button>
+  <button class="btn btn-default remove side-btn" type="button">{{ _("REMOVE") }}</button>
+</div>
+<div class="modal fade modalBiblio">
+    <div class="modal-dialog">
+        <div style="border-radius: 0px" class="modal-content">
+            <div class="modal-header">
+                <button aria-hidden="true" data-dismiss="modal" class="close" type="button"><i class="fa fa-times fa-lg"></i></button>
+                <h3>{{ _("Please select a picture") }}</h3>
+            </div>
+            <div class="modal-body">
+            </div>
+        </div>
+    </div>
+{# div.modal.fade.modalBiblio est fermée ailleurs #}
