@@ -233,6 +233,8 @@ class ProductView(SQLAModelView, OrderViewMixin, LibraryViewMixin):
         'active': lambda v, c, m, p: not m.deleted,
     }
 
+    column_searchable_list = ("name", "code")
+
 
 class ProductVariationView(SQLAModelView):
     name = _(u"Product variations")
