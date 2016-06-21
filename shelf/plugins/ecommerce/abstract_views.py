@@ -130,6 +130,8 @@ class ShippingOptionView(SQLAModelView):
     def get_default_model(cls):
         return get_model('ShippingOption')
 
+    column_list = ('name', 'price', 'delivery_time', "deleted")
+
 class ShippingInfoView(SQLAModelView):
     name = _(u"Shipping infos")
 
