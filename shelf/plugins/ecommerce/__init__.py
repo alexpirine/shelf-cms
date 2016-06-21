@@ -183,7 +183,7 @@ class Ecommerce(object):
         # app.shelf.admin.add_view(OrderedItemView(get_model('OrderedItem'), db.session, name="OrderedItems", category="e-Commerce"))
         # app.shelf.admin.add_view(CategoryTypeView(get_model('CategoryType'), db.session, name="CategoryTypes", category="e-Commerce"))
         # app.shelf.admin.add_view(CategoryView(get_model('Category'), db.session, name="Categories", category="e-Commerce"))
-        app.shelf.admin.add_view(ProductTypeView(get_model('ProductType'), db.session, name="ProductTypes", category="e-Commerce"))
+        #app.shelf.admin.add_view(ProductTypeView(get_model('ProductType'), db.session, name="ProductTypes", category="e-Commerce"))
         # app.shelf.admin.add_view(VariationTypeView(get_model('VariationType'), db.session, name="VariationTypes", category="e-Commerce"))
         # app.shelf.admin.add_view(VariationView(get_model('Variation'), db.session, name="Variations", category="e-Commerce"))
         # app.shelf.admin.add_view(ProductView(get_model('Product'), db.session, name="Products", endpoint="products", category="e-Commerce"))
