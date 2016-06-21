@@ -1,13 +1,65 @@
 from flask_admin.contrib.sqla import form
+from flask_admin.contrib.sqla import fields
 from flask_admin._backwards import get_property
 from flask_admin.model.helpers import prettify_name
+from flask_admin.model.form import converts
 from shelf.plugins.order import OrderingInlineFieldList
+from wtforms import fields
+from prices import Price
 
 class ShortcutValidator(object):
     field_flags = ('shortcut',)
 
     def __init__(self, *args, **kwargs):
         pass
+
+
+class PrettyPrice(Price):
+    def __add__(self, other):
+        r = super(PrettyPrice, self).__add__(other)
+        r.__class__ = self.__class__
+        return r
+
+    def __sub__(self, other):
+        r = super(PrettyPrice, self).__sub__(other)
+        r.__class__ = self.__class__
+        return r
+
+    def __mul__(self, other):
+        r = super(PrettyPrice, self).__mul__(other)
+        r.__class__ = self.__class__
+        return r
+
+    def __truediv__(self, other):
+        r = super(PrettyPrice, self).__truediv__(other)
+        r.__class__ = self.__class__
+        return r
+
+    def quantize(self, *args, **kwargs):
+        r = super(PrettyPrice, self).quantize(*args, **kwargs)
+        r.__class__ = self.__class__
+        return r
+
+    def __unicode__(self):
+        return u" ".join(filter(None, (unicode(self.gross), self.currency)))
+
+    def __str__(self):
+        return unicode(self).encode('utf-8')
+
+
+class DecimalPriceField(fields.DecimalField):
+    def process_formdata(self, valuelist):
+        if valuelist and len(valuelist[0]):
+            self.data = PrettyPrice(valuelist[0].replace(',', '.'))
+        else:
+            self.data = None
+
+    def process_data(self, value):
+        if value and value.gross:
+            super(DecimalPriceField, self).process_data(value.gross)
+        else:
+            super(DecimalPriceField, self).process_data(0)
+
 
 class ModelConverter(form.AdminModelConverter):
     def convert(self, model, mapper, prop, field_args, hidden_pk):
@@ -68,6 +120,13 @@ class ModelConverter(form.AdminModelConverter):
                 return "%s%s" % (model_field.info['description'][:1].upper(), model_field.info['description'][1:])
 
         return None
+
+    @converts('PriceDecimal')
+    def handle_decimal_price_types(self, column, field_args, **extra):
+        places = getattr(column.type, 'scale', 2)
+        if places is not None:
+            field_args['places'] = places
+        return DecimalPriceField(**field_args)
 
 class InlineModelConverter(form.InlineModelConverter):
     inline_field_list_type = OrderingInlineFieldList

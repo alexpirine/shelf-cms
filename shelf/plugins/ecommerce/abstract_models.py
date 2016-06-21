@@ -74,7 +74,7 @@ class PrettyPrice(Price):
         return unicode(self).encode('utf-8')
 
 class PriceDecimal(sa.types.TypeDecorator):
-    impl = sa.types.NUMERIC
+    impl = sa.types.Numeric
 
     def process_bind_param(self, value, dialect):
         if value is None:

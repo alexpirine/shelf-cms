@@ -1,5 +1,6 @@
 # coding: utf-8
 
+from wtforms import fields
 from flask_admin.base import expose
 from flask_admin.model.form import InlineFormAdmin
 from flask_babel import lazy_gettext as _
