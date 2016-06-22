@@ -763,10 +763,10 @@ class PromoCode(LazyConfigured):
         if self.unique:
             self.deleted = True
 
-        discount = PrettyPrice(0)
+        discount = PrettyPrice(0, currency=amount.currency)
         discount += self.discount_fixed
         discount += amount * self.discount_per100 / 100
-        discount = max(amount, discount)
+        discount = min(amount, discount)
 
         return {
             'discount': discount,
