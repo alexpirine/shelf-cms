@@ -764,7 +764,7 @@ class PromoCode(LazyConfigured):
             self.deleted = True
 
         discount = 0
-        discount += discount_fixed
+        discount += self.discount_fixed
         discount += amount * self.discount_per100
         discount = max(amount, discount)
 
