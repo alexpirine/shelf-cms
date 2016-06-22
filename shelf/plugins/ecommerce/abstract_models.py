@@ -758,7 +758,7 @@ class PromoCode(LazyConfigured):
             raise Exception(_(u"This promo code is no longer active."))
 
         if self.min_amount > amount:
-            raise Exception(_(u"This promo code can only by used if you purchase for more than %s.") % self.min_amount)
+            raise Exception(_(u"This promo code can only by used if you purchase for more than %s.") % unicode(self.min_amount))
 
         if self.unique:
             self.deleted = True
