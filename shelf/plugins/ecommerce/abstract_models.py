@@ -753,14 +753,14 @@ class PromoCode(LazyConfigured):
     def __unicode__(self):
         return self.code
 
-    def apply(self, amount):
+    def apply(self, amount, invalidate=False):
         if self.deleted:
             raise Exception(_(u"This promo code is no longer active."))
 
         if self.min_amount > amount:
             raise Exception(_(u"This promo code can only by used if you purchase for more than %s.") % unicode(self.min_amount))
 
-        if self.unique:
+        if self.unique and invalidate:
             self.deleted = True
 
         discount = PrettyPrice(0, currency=amount.currency)
