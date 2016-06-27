@@ -283,11 +283,11 @@ class FileAdmin(LoginMixin, fileadmin.FileAdmin):
 
             if self.is_accessible_path(rel_path) and not f.startswith('.'):
                 file_size = op.getsize(fp)
-                file_size = humanize.naturalsize(file_size, format = '%0.f')
+                file_size = humanize.naturalsize(file_size, format= '%0.f')
 
                 mimes[rel_path] = 'other'
                 for mime in self.mime_by_ext:
-                    if op.splitext(rel_path)[1] in self.mime_by_ext[mime]:
+                    if op.splitext(rel_path)[1].lower() in self.mime_by_ext[mime]:
                         mimes[rel_path] = mime
 
                 if mimes[rel_path] == 'image':
@@ -425,7 +425,7 @@ class FileAdmin(LoginMixin, fileadmin.FileAdmin):
                 items.append((f, rel_path, op.isdir(fp), file_size))
                 mimes[rel_path] = 'other'
                 for mime in self.mime_by_ext:
-                    if op.splitext(rel_path)[1] in self.mime_by_ext[mime]:
+                    if op.splitext(rel_path)[1].lower() in self.mime_by_ext[mime]:
                         mimes[rel_path] = mime
 
         # Sort by name
@@ -492,7 +492,7 @@ class FileAdmin(LoginMixin, fileadmin.FileAdmin):
 
                 mimes[rel_path] = 'other'
                 for mime in self.mime_by_ext:
-                    if op.splitext(rel_path)[1] in self.mime_by_ext[mime]:
+                    if op.splitext(rel_path)[1].lower() in self.mime_by_ext[mime]:
                         mimes[rel_path] = mime
 
                 if mimes[rel_path] == 'image':
@@ -628,7 +628,7 @@ class FileAdmin(LoginMixin, fileadmin.FileAdmin):
                 items.append((f, rel_path, op.isdir(fp), file_size))
                 mimes[rel_path] = 'other'
                 for mime in self.mime_by_ext:
-                    if op.splitext(rel_path)[1] in self.mime_by_ext[mime]:
+                    if op.splitext(rel_path)[1].lower() in self.mime_by_ext[mime]:
                         mimes[rel_path] = mime
 
 
@@ -695,7 +695,7 @@ class FileAdmin(LoginMixin, fileadmin.FileAdmin):
                 items.append((f, rel_path, op.isdir(fp), file_size))
                 mimes[rel_path] = 'other'
                 for mime in self.mime_by_ext:
-                    if op.splitext(rel_path)[1] in self.mime_by_ext[mime]:
+                    if op.splitext(rel_path)[1].lower() in self.mime_by_ext[mime]:
                         mimes[rel_path] = mime
 
 
