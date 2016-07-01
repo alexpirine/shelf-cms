@@ -28,7 +28,7 @@ Jinja2==2.8
 MarkupSafe==0.23
 oauth2client==2.2.0
 passlib==1.6.5
-Pillow==3.2.0
+Pillow==3.3.0
 prices==0.5.8
 pyasn1==0.1.9
 pyasn1-modules==0.0.8
