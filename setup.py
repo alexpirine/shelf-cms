@@ -29,6 +29,7 @@ if __name__ == '__main__':
             'Flask',
             'Flask-Admin',
             'Flask-Babel',
+            'Flask-Images',
             'Flask-Principal',
             'Flask-SQLAlchemy',
             'Flask-Script',

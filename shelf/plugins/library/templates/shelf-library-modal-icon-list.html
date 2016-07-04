@@ -28,7 +28,7 @@
                     {% elif mimes[path] == "image" %}
                         <div class="files files--image col-xs-6 modal_file_element" data-url="{{ get_file_url(path)|safe }}" data-path="{{ path }}"{% if dimensions[0] %} data-width="{{ dimensions[0] }}" data-height="{{ dimensions[1] }}"{% endif %}>
                             <div style="vertical-align: bottom;" class="thumbnail">
-                                <img src="{{ get_file_url(path)|safe }}">
+                                <img src="{{ url_for('images.fit', filename=('media/' + path).encode('utf-8'), width=250, height=72)|safe }}">
                                 <div class="caption">
                                     <span class="link-file">
                                         <span>{{ name }}</span>
