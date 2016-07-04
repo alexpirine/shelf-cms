@@ -18,10 +18,10 @@ from flask import redirect
 from flask import request
 from flask_admin import helpers
 from flask_admin.babel import gettext
-from flask_admin.form import RenderTemplateWidget
-from flask_babel import lazy_gettext as _
 from flask_admin.base import expose
 from flask_admin.contrib import fileadmin
+from flask_admin.form import RenderTemplateWidget
+from flask_babel import lazy_gettext as _
 from operator import itemgetter
 from shelf import LazyConfigured
 from shelf.base import db
@@ -734,4 +734,3 @@ class Library(object):
         self.bp = Blueprint("library", __name__, url_prefix="/library",
             static_folder="static", template_folder="templates")
         app.register_blueprint(self.bp)
-
