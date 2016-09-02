@@ -50,7 +50,7 @@ class ActionsMixin(actions.ActionsMixin):
         select_page = request.form.get('select-page', 0, type=int)
 
         if select_all:
-            count, query = self.get_list(None, sort, sort_desc, search, filters, False, nolimit=True)
+            count, query = self.get_list(None, sort, sort_desc, search, filters, False)
         elif select_page:
             count, query = self.get_list(page, sort, sort_desc, search, filters, False)
         else:
