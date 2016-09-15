@@ -64,7 +64,7 @@ $(function() {
 
         if ($(this).hasClass('modal_crop_required')) {
             var pvt = modal.find('.modal-body .model-icone').length ? 'icon' : 'list';
-            modal.load(modal.get(0).crop_base_url + $(this).data('path') + '?pvt=' + pvt);
+            modal.load(modal.get(0).crop_base_url + encodeURI($(this).data('path')) + '?pvt=' + pvt);
             return;
         }
 
