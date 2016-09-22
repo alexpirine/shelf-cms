@@ -9,7 +9,7 @@
             </div>
         </div>
 
-        <div class="image-cropper" data-url="{{ url_for('fileadmin.download', path=path) }}" data-path="{{ path }}">
+        <div class="image-cropper" data-url="{{ url_for('static', filename='media/'+path) }}" data-path="{{ path }}">
           <!-- This is where the preview image is displayed -->
           <div class="cropit-preview"></div>
 

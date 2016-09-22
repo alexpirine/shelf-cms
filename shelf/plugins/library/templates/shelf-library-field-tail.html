@@ -67,7 +67,7 @@
                     preview_height = thumb_el.attr('height') / preview_max_ratio;
 
                     $('.image-cropper').cropit({
-                        imageState: {src: "{{ url_for('fileadmin.download', path='') }}" + $(this).data('path')},
+                        imageState: {src: "{{ url_for('static', filename='media/') }}" + $(this).data('path')},
                         width: preview_width,
                         height: preview_height,
                         exportZoom: preview_max_ratio,
