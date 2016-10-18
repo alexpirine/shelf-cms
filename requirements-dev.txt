@@ -38,7 +38,7 @@ pillowcase==2.0.0
 prices==0.5.8
 pyasn1==0.1.9
 pyasn1-modules==0.0.8
-pycparser==2.15
+pycparser==2.16
 pyOpenSSL==16.2.0
 pytz==2016.7
 requests==2.11.1
