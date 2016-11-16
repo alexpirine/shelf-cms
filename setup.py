@@ -15,7 +15,7 @@ DEV_TOOLS = [
 if __name__ == '__main__':
     setup(
         name='ShelfCMS',
-        version='0.12.23',
+        version='0.12.25',
         url='https://github.com/iriahi/shelf-cms',
         license='BSD',
         author='Ismael Riahi',
