@@ -5,7 +5,11 @@
 {% set delivery_address = order.shipping_info.address %}
 {% set billing_address = order.billing_address %}
 
-{% set shipping_fee = order.shipping_option.price %}
+{% if order.offer_shipping %}
+  {% set shipping_fee = "0" %}
+{% else %}
+  {% set shipping_fee = order.shipping_option.price | ttc %}
+{% endif %}
 
 {% block head %}
   {{ super() }}
@@ -32,8 +36,15 @@
         <div style="color: #9f9f9f;padding-left:15px">{{ item.qty }} x {{ product.name }} -
           Réf: {{ product.code }} <span class="pull-right">{{ item.get_total_price()|ttc }}€</span></div>
       {% endfor %}
-
-      <div style="margin-top: 20px">Transport<span class="pull-right">{{ shipping_fee|ttc }}€</span></div>
+      {% if order.promo_code and order.discount | ttc > 0 %}
+        <div style="margin-top: 20px">{{ order.promo_code }}<span class="pull-right"> - {{ order.discount|ttc }}€</span>
+        </div>
+      {% endif %}
+      {% if order.promo_code and order.offer_shipping %}
+        <div style="margin-top: 20px">Code Promo : {{ order.promo_code }}<span class="pull-right"> Frais de port offert</span>
+        </div>
+      {% endif %}
+      <div style="margin-top: 20px">Transport<span class="pull-right">{{ shipping_fee }}€</span></div>
       <div>Total<span class="pull-right">{{ order.get_total(with_shipping=True)|ttc }}€</span></div>
     </div>
     <div style="margin-top: 20px; font-size: 12px">Mode de Paiement<span
@@ -75,7 +86,7 @@
     <div class="adresse"
          style="margin-right: -18px; margin-left: -18px; border-top: 1px solid #e4e4e4; padding: 18px; font-size: 12px; font-weight: 300">
 
-    <div class="data">{{ order.shipping_option }}</div>
+      <div class="data">{{ order.shipping_option }}</div>
       <b>ADRESSE DE LIVRAISON</b><br><br>
       <p>
         {% for line in delivery_address.lines %}
