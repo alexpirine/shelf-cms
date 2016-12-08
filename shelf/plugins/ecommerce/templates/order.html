@@ -8,7 +8,7 @@
 {% if order.offer_shipping %}
   {% set shipping_fee = "0" %}
 {% else %}
-  {% set shipping_fee = order.shipping_option.price | ttc %}
+  {% set shipping_fee = shipping_fee | ttc %}
 {% endif %}
 
 {% block head %}
