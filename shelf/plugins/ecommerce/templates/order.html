@@ -41,7 +41,8 @@
         </div>
       {% endif %}
       {% if order.promo_code and order.offer_shipping %}
-        <div style="margin-top: 20px">Code Promo : {{ order.promo_code }}<span class="pull-right"> Frais de port offert</span>
+        <div style="margin-top: 20px">Code Promo : {{ order.promo_code }}<span
+                class="pull-right"> Frais de port offert</span>
         </div>
       {% endif %}
       <div style="margin-top: 20px">Transport<span class="pull-right">{{ shipping_fee }}€</span></div>
@@ -80,21 +81,23 @@
     </div>
   </div>
 
-  <div class="widget text" style="width: 500px; margin-bottom: 12px; background: white">
-    <i class="fa fa-user pull-right"></i>
-    <div class="title">INFORMATIONS TRANSPORT</div>
-    <div class="adresse"
-         style="margin-right: -18px; margin-left: -18px; border-top: 1px solid #e4e4e4; padding: 18px; font-size: 12px; font-weight: 300">
+  {% block delivery_info %}
+    <div class="widget text" style="width: 500px; margin-bottom: 12px; background: white">
+      <i class="fa fa-user pull-right"></i>
+      <div class="title">INFORMATIONS TRANSPORT</div>
+      <div class="adresse"
+           style="margin-right: -18px; margin-left: -18px; border-top: 1px solid #e4e4e4; padding: 18px; font-size: 12px; font-weight: 300">
 
-      <div class="data">{{ order.shipping_option }}</div>
-      <b>ADRESSE DE LIVRAISON</b><br><br>
-      <p>
-        {% for line in delivery_address.lines %}
-          {{ line }}<br>
-        {% endfor %}
-      </p>
+        <div class="data">{{ order.shipping_option }}</div>
+        <b>ADRESSE DE LIVRAISON</b><br><br>
+        <p>
+          {% for line in delivery_address.lines %}
+            {{ line }}<br>
+          {% endfor %}
+        </p>
+      </div>
     </div>
-  </div>
+  {% endblock %}
 {% endblock %}
 
 
