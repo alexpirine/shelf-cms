@@ -19,7 +19,7 @@ Flask-Script==2.0.5
 Flask-Security==1.7.5
 Flask-SQLAlchemy==2.1
 Flask-WTF==0.14.2
-google-api-python-client==1.6.1
+google-api-python-client==1.6.2
 httplib2==0.10.3
 humanize==0.5.1
 idna==2.2
@@ -35,7 +35,7 @@ oauth2client==4.0.0
 passlib==1.7.1
 Pillow==4.0.0
 pillowcase==2.0.0
-prices==0.5.8
+prices==0.5.9
 pyasn1==0.2.2
 pyasn1-modules==0.0.8
 pycparser==2.17
