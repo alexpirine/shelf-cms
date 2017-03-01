@@ -4,23 +4,18 @@ from flask import redirect
 from flask_admin.actions import action
 from flask_admin.babel import lazy_gettext, ngettext, gettext
 from flask_admin.base import AdminIndexView
-from flask_admin.contrib.sqla import tools
 from flask_admin.contrib import sqla
 from form import ModelConverter, InlineModelConverter
 from shelf.security.mixin import LoginMixin
-from sqlalchemy import or_
-from sqlalchemy.orm import joinedload
+
 
 class IndexView(LoginMixin, AdminIndexView):
     def __init__(self, name=None, category=None,
                  endpoint=None, url=None,
                  template='admin/index.html'):
-        super(IndexView, self).__init__(name,
-                                        category,
-                                        endpoint or 'admin',
-                                        url or '/admin',
-                                        'static')
+        super(IndexView, self).__init__(name, category, endpoint or 'admin', url or '/admin', 'static')
         self._template = template
+
 
 class SQLAModelView(LoginMixin, sqla.ModelView, ActionsMixin):
     list_template = "shelf/model/list.html"
@@ -102,7 +97,7 @@ class SQLAModelView(LoginMixin, sqla.ModelView, ActionsMixin):
         view, method = request.endpoint.split('.')
         extensions = {}
         for view_name in (request.endpoint,
-                "modelview.{}".format(method)):
+                          "modelview.{}".format(method)):
             if view_name in self.extensions:
                 view_extensions = self.extensions[view_name]
                 for block in view_extensions:
@@ -117,9 +112,11 @@ class SQLAModelView(LoginMixin, sqla.ModelView, ActionsMixin):
 
     def create_blueprint(self, admin):
         bp = super(SQLAModelView, self).create_blueprint(admin)
+
         @bp.context_processor
         def add_user_panel():
             return self.additionnal_context()
+
         return bp
 
     # Default model actions

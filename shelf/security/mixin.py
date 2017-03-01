@@ -5,7 +5,7 @@ class LoginMixin(object):
     def _handle_view(self, name, **kwargs):
         if not self.is_accessible() and current_user.is_anonymous:
             return redirect(url_for_security('login', next=url_for(".%s" % name)))
-        if not self.is_accessible and current_user.is_authenticated:
+        if not self.is_accessible() and current_user.is_authenticated:
             abort(403)
 
     def is_accessible(self):
