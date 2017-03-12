@@ -9,7 +9,7 @@ cryptography==1.8.1
 decorator==4.0.11
 enum34==1.1.6
 Flask==0.12
-Flask-Admin==1.4.2
+Flask-Admin==1.5.0
 Flask-Babel==0.11.1
 Flask-Images==2.1.2
 Flask-Login==0.4.0
