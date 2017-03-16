@@ -1,3 +1,4 @@
+SHELL := /bin/bash
 NAME := $(shell python setup.py --name)
 VERSION := $(shell python setup.py --version)
 DEV_TOOLS := ($(shell python -c 'import setup; print "|".join(setup.DEV_TOOLS)'))
@@ -52,7 +53,7 @@ requirements: uninstall requirements_std requirements_dev
 
 test: develop
 	coverage erase
-	coverage run --source=shelf -p --concurrency=multiprocessing setup.py test
+	coverage run --source=shelf -p setup.py test
 	coverage combine
 
 uninstall:
