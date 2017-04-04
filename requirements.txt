@@ -29,7 +29,7 @@ Jinja2==2.9.6
 MarkupSafe==1.0
 oauth2client==4.0.0
 passlib==1.7.1
-Pillow==4.0.0
+Pillow==4.1.0
 pillowcase==2.0.0
 prices==0.5.9
 pyasn1==0.2.3
@@ -40,7 +40,7 @@ pytz==2017.2
 rsa==3.4.2
 simplejson==3.10.0
 six==1.10.0
-SQLAlchemy==1.1.8
+SQLAlchemy==1.1.9
 SQLAlchemy-Defaults==0.4.4
 SQLAlchemy-Utils==0.32.14
 uritemplate==3.0.0
