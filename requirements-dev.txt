@@ -8,7 +8,7 @@ coverage==4.4.1
 cryptography==1.8.1
 decorator==4.0.11
 enum34==1.1.6
-Flask==0.12.1
+Flask==0.12.2
 Flask-Admin==1.5.0
 Flask-Babel==0.11.2
 Flask-Images==2.1.2
@@ -52,7 +52,7 @@ SQLAlchemy-Defaults==0.4.4
 SQLAlchemy-Utils==0.32.14
 uritemplate==3.0.0
 validators==0.11.3
-Werkzeug==0.12.1
+Werkzeug==0.12.2
 WTForms==2.1
 WTForms-Alchemy==0.16.2
 WTForms-Components==0.10.3
