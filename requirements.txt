@@ -38,7 +38,7 @@ pycparser==2.17
 pyOpenSSL==17.0.0
 pytz==2017.2
 rsa==3.4.2
-simplejson==3.10.0
+simplejson==3.11.1
 six==1.10.0
 SQLAlchemy==1.1.11
 SQLAlchemy-Defaults==0.4.4
