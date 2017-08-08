@@ -22,7 +22,7 @@ Flask-WTF==0.14.2
 google-api-python-client==1.6.2
 httplib2==0.10.3
 humanize==0.5.1
-idna==2.5
+idna==2.6
 imgurpython==1.1.7
 infinity==1.4
 intervals==0.8.0
