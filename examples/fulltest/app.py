@@ -1,19 +1,18 @@
 #!/usr/bin/env python
 # coding: utf-8
 
+from admin import init_admin, IndexPageModelView, ContactPageModelView
+from filters import init_filters
 from flask import Flask
 from flask_babel import Babel
-
+from models import IndexPage, ContactPage
 from shelf import Shelf
 from shelf.base import db
 from shelf.plugins.dashboard import DashboardView
 from shelf.plugins.page import Page as PagePlugin
 from shelf.security.models import User, Role
-
-from admin import init_admin, IndexPageModelView, ContactPageModelView
-from models import IndexPage, ContactPage
 from view import init_views
-from filters import init_filters
+
 
 def create_app():
     app = Flask(__name__)
@@ -63,6 +62,7 @@ def create_app():
         init_filters(app)
 
     return app
+
 
 if __name__ == "__main__":
     app = create_app()

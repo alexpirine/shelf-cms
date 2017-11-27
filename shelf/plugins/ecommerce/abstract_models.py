@@ -725,10 +725,10 @@ class ProductPicture(LazyConfigured, PictureModelMixin):
         return Column(sa.Integer, sa.ForeignKey('product.id'), nullable=False)
 
     def __unicode__(self):
-        return self.parent
+        return self.name
 
     def get_inline_title(self):
-            return ""
+        return ""
 
     def get_inline_thumbnail(self):
         try:
