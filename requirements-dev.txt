@@ -44,7 +44,7 @@ pytz==2017.3
 requests==2.18.4
 rsa==3.4.2
 scripttest==1.3
-selenium==3.7.0
+selenium==3.8.0
 simplejson==3.13.2
 six==1.11.0
 SQLAlchemy==1.1.15
