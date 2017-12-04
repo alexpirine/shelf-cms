@@ -67,7 +67,7 @@
                         </div>
                 {% else %}
                     {% if mimes[path] == "image" %}
-                        <img src="{{ url_for('images.fit', filename=('media/' + path).encode('utf-8'), width=100, height=100)|safe }}" style="max-height: 100px; min-height: 100px; padding-top: 10px"/>
+                        <img src="{{ url_for('images.fit', filename=(path).encode('utf-8'), width=100, height=100)|safe }}" style="max-height: 100px; min-height: 100px; padding-top: 10px"/>
                         <div class="caption">
                             <a class="link-file" style="color: #4c4c4c" href="{{ get_file_url(path)|safe }}" target="_new"><span class="filename">{{ name }}</span></a>
                         </div>
