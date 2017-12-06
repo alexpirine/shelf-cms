@@ -22,7 +22,7 @@ httplib2==0.10.3
 humanize==0.5.1
 idna==2.6
 infinity==1.4
-intervals==0.8.0
+intervals==0.8.1
 ipaddress==1.0.18
 itsdangerous==0.24
 Jinja2==2.10
