@@ -40,7 +40,7 @@ pytz==2017.3
 rsa==3.4.2
 simplejson==3.13.2
 six==1.11.0
-SQLAlchemy==1.1.15
+SQLAlchemy==1.2.0
 SQLAlchemy-Defaults==0.4.4
 SQLAlchemy-Utils==0.32.21
 uritemplate==3.0.0
