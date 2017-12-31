@@ -52,7 +52,7 @@ SQLAlchemy-Defaults==0.4.4
 SQLAlchemy-Utils==0.32.21
 uritemplate==3.0.0
 validators==0.12.0
-Werkzeug==0.14
+Werkzeug==0.14.1
 WTForms==2.1
 WTForms-Alchemy==0.16.5
 WTForms-Components==0.10.3
