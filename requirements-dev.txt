@@ -49,7 +49,7 @@ simplejson==3.13.2
 six==1.11.0
 SQLAlchemy==1.2.3
 SQLAlchemy-Defaults==0.4.4
-SQLAlchemy-Utils==0.32.21
+SQLAlchemy-Utils==0.33.0
 uritemplate==3.0.0
 validators==0.12.1
 Werkzeug==0.14.1
