@@ -20,7 +20,7 @@ Flask-Security==3.0.0
 Flask-SQLAlchemy==2.3.2
 Flask-WTF==0.14.2
 google-api-python-client==1.6.5
-httplib2==0.10.3
+httplib2==0.11.0
 humanize==0.5.1
 idna==2.6
 imgurpython==1.1.7
