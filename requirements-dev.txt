@@ -26,7 +26,7 @@ idna==2.6
 imgurpython==1.1.7
 infinity==1.4
 intervals==0.8.1
-ipaddress==1.0.21
+ipaddress==1.0.22
 itsdangerous==0.24
 Jinja2==2.10
 MarkupSafe==1.0
